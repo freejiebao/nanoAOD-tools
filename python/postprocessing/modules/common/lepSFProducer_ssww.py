@@ -84,7 +84,7 @@ class lepSFProducer(Module):
         sf = []
         sf_err = []
         for i in range(0,len(lep)):
-            print ("lepton_pdg_id:    "+lep[i].pdg_id + "    lepton_pt:    "+lep[i].pt)
+            # print ("lepton_pdg_id:    "+str(lep[i].pdg_id) + "    lepton_pt:    "+str(lep[i].pt))
             if abs(event.lepton_pdg_id[i]) == 11:
                 if event.lepton_pt[i] < 20.:
                     sf.append(self._worker_el_low.getSF(lep[i].pdg_id, lep[i].pt, lep[i].eta))

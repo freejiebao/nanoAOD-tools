@@ -137,7 +137,7 @@ class sswwProducer(Module):
         if self.year == '2016':
 
             # fakeable electron
-            print leptons[i][0].pdgId, leptons[i][0].cutBased_HLTPreSel, leptons[i][0].mvaFall17V2Iso_WP80, leptons[i][0].tightCharge,leptons[i][0].eta
+            # print leptons[i][0].pdgId, leptons[i][0].cutBased_HLTPreSel, leptons[i][0].mvaFall17V2Iso_WP80, leptons[i][0].tightCharge,leptons[i][0].eta
             if leptons[i][0].cutBased_HLTPreSel == 1:
                 is_fakeable_id = True
                 n_fakeable_leptons += 1
