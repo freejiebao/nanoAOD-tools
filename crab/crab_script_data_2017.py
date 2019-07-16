@@ -6,7 +6,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import *
 from PhysicsTools.NanoAODTools.postprocessing.framework.crabhelper import inputFiles,runsAndLumis
 
 from  PhysicsTools.NanoAODTools.postprocessing.modules.ssww.sswwModule_copy import *
-from  PhysicsTools.NanoAODTools.postprocessing.examples.countHistogramsModule import *
+from  PhysicsTools.NanoAODTools.postprocessing.modules.common.countHistogramsModule import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.PrefireCorr import *
 # from  PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties import *
