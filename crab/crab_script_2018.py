@@ -12,7 +12,7 @@ from  PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer i
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.PrefireCorr import *
 # from  PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties import *
 
-p=PostProcessor(".",inputFiles(),None,"%s/src/PhysicsTools/NanoAODTools/scripts/ssww_keep_and_drop_2018.txt",modules=[countHistogramsModule(),puWeight_2018(),PrefCorr(),sswwModule2018(),lepSF_2018()],provenance=True,justcount=False,noOut=False,fwkJobReport=True,outputbranchsel = "%s/src/PhysicsTools/NanoAODTools/scripts/ssww_output_branch_selection_2018.txt") %(os.environ['CMSSW_BASE'],os.environ['CMSSW_BASE'])
+p=PostProcessor(".",inputFiles(),None,os.environ['CMSSW_BASE']+"/src/PhysicsTools/NanoAODTools/scripts/ssww_keep_and_drop_2018.txt",modules=[countHistogramsModule(),puWeight_2018(),PrefCorr(),sswwModule2018(),lepSF_2018()],provenance=True,justcount=False,noOut=False,fwkJobReport=True,outputbranchsel = os.environ['CMSSW_BASE']+"/src/PhysicsTools/NanoAODTools/scripts/ssww_output_branch_selection_2018.txt")
 p.run()
 
 print "DONE"
