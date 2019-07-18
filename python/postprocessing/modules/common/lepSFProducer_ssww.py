@@ -41,10 +41,10 @@ class lepSFProducer(Module):
         else:
             return
 
-        mu_f_tight = ["%s/src/PhysicsTools/NanoAODTools/python/postprocessing/data/leptonSF/%s/muon/" % (os.environ['CMSSW_BASE'],year) + f for f in mu_f_tight]
-        mu_f_loose = ["%s/src/PhysicsTools/NanoAODTools/python/postprocessing/data/leptonSF/%s/muon/" % (os.environ['CMSSW_BASE'],year) + f for f in mu_f_loose]
-        el_f_low = ["%s/src/PhysicsTools/NanoAODTools/python/postprocessing/data/leptonSF/%s/electron/" % (os.environ['CMSSW_BASE'],year) + f for f in el_f_low]
-        el_f_high = ["%s/src/PhysicsTools/NanoAODTools/python/postprocessing/data/leptonSF/%s/electron/" % (os.environ['CMSSW_BASE'],year) + f for f in el_f_high]
+        mu_f_tight = ["%s/python/PhysicsTools/NanoAODTools/postprocessing/data/leptonSF/%s/muon/" % (os.environ['CMSSW_BASE'],year) + f for f in mu_f_tight]
+        mu_f_loose = ["%s/python/PhysicsTools/NanoAODTools/postprocessing/data/leptonSF/%s/muon/" % (os.environ['CMSSW_BASE'],year) + f for f in mu_f_loose]
+        el_f_low = ["%s/python/PhysicsTools/NanoAODTools/postprocessing/data/leptonSF/%s/electron/" % (os.environ['CMSSW_BASE'],year) + f for f in el_f_low]
+        el_f_high = ["%s/python/PhysicsTools/NanoAODTools/postprocessing/data/leptonSF/%s/electron/" % (os.environ['CMSSW_BASE'],year) + f for f in el_f_high]
 
         self.mu_f_tight = ROOT.std.vector(str)(len(mu_f_tight))
         self.mu_h_tight = ROOT.std.vector(str)(len(mu_f_tight))
@@ -64,7 +64,9 @@ class lepSFProducer(Module):
 
         if "/LeptonEfficiencyCorrector_cc.so" not in ROOT.gSystem.GetLibraries():
             print "Load C++ Worker"
-            ROOT.gROOT.ProcessLine(".L %s/src/PhysicsTools/NanoAODTools/python/postprocessing/helpers/LeptonEfficiencyCorrector.cc+" % os.environ['CMSSW_BASE'])
+            # ROOT.gROOT.ProcessLine(".L %s/PhysicsTools/NanoAODTools/python/postprocessing/helpers/LeptonEfficiencyCorrector.cc+" % os.environ['CMSSW_BASE'])
+            # It's strange the correct path of LeptonEfficiencyCorrector.cc on crab worker sever is following path
+            ROOT.gROOT.ProcessLine(".L %s/python/PhysicsTools/NanoAODTools/postprocessing/helpers/LeptonEfficiencyCorrector.cc+" % os.environ['CMSSW_BASE'])
     def beginJob(self):
         self._worker_mu_tight = ROOT.LeptonEfficiencyCorrector(self.mu_f_tight,self.mu_h_tight)
         self._worker_mu_loose = ROOT.LeptonEfficiencyCorrector(self.mu_f_loose,self.mu_h_loose)
