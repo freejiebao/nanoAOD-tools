@@ -71,7 +71,7 @@ def new_py(year):
         file_content += "config.JobType.pluginName = \'Analysis\'\n"
         file_content += "config.JobType.psetName = \'PSet.py\'\n"
         file_content += "config.JobType.scriptExe = \'%s\'\n" % bsh
-        file_content += "config.JobType.inputFiles = [\'%s\',\'%s/src/PhysicsTools/NanoAODTools/scripts/haddnano.py\',\'%s/src/PhysicsTools/NanoAODTools/interface/\',\'%s/src/PhysicsTools/NanoAODTools/src/\'] #hadd nano will not be needed once nano tools are in cmssw\n" % (script, os.environ['CMSSW_BASE'])
+        file_content += "config.JobType.inputFiles = [\'%s\',\'%s/src/PhysicsTools/NanoAODTools/scripts/haddnano.py\',\'%s/src/PhysicsTools/NanoAODTools/interface/\',\'%s/src/PhysicsTools/NanoAODTools/src/\'] #hadd nano will not be needed once nano tools are in cmssw\n" % (script, os.environ['CMSSW_BASE'], os.environ['CMSSW_BASE'], os.environ['CMSSW_BASE'])
         file_content += "config.JobType.sendPythonFolder  = True\n"
         file_content += "config.section_(\"Data\")\nconfig.Data.inputDataset = \'%s\'\n" % _Samples[iSample][iiSample]
         file_content += "#config.Data.inputDBS = \'phys03\'\n"
