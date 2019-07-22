@@ -198,8 +198,8 @@ class sswwProducer(Module):
         if hasattr(event, 'nGenPart'):
             genparts = Collection(event, "GenPart")
 
-        if hasattr(event, 'nLHEPart'):
-            lheparts = Collection(event, "LHEPart")
+        # if hasattr(event, 'nLHEPart'):
+        #     lheparts = Collection(event, "LHEPart")
 
         loose_leptons = []
 

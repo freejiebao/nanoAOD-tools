@@ -21,3 +21,13 @@ keep HLT_Mu17_TrkIsoVVL
 keep HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30
 keep HLT_Ele17_CaloIdL_TrackIdL_IsoVL_PFJet30
 keep HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30
+keep nGenJet
+keep GenJet_*
+keep nGenPart
+keep GenPart_*
+keep nGenDressedLepton
+keep GenDressedLepton_*
+keep nLHEPdfWeight
+keep LHEPdfWeight
+keep nLHEScaleWeight
+keep LHEScaleWeight
