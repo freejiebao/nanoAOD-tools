@@ -13,10 +13,10 @@ class PrefCorr(Module):
 
         cmssw_base = os.getenv('CMSSW_BASE')
 
-        self.photon_file = self.open_root(cmssw_base + "/src/PhysicsTools/NanoAODTools/data/prefire_maps/" + photonroot)
+        self.photon_file = self.open_root(cmssw_base + "/python/PhysicsTools/NanoAODTools/postprocessing/data/prefire_maps/" + photonroot)
         self.photon_map = self.get_root_obj(self.photon_file, photonmapname)
 
-        self.jet_file = self.open_root(cmssw_base + "/src/PhysicsTools/NanoAODTools/data/prefire_maps/" + jetroot)
+        self.jet_file = self.open_root(cmssw_base + "/python/PhysicsTools/NanoAODTools/postprocessing/data/prefire_maps/" + jetroot)
         self.jet_map = self.get_root_obj(self.jet_file, jetmapname)
 
         self.UseEMpT = ("jetempt" in jetroot)
