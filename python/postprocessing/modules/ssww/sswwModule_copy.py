@@ -53,6 +53,9 @@ class sswwProducer(Module):
         self.out.branch("lepton_tkIsoId", "I", lenVar="nlepton")
         self.out.branch("lepton_softmu", "B", lenVar="nlepton")
         self.out.branch("lepton_zep", "F", lenVar="nlepton")
+        self.out.branch("lepton_corrected_pt", "F", lenVar="nlepton")
+        self.out.branch("lepton_correctedUp_pt", "F", lenVar="nlepton")
+        self.out.branch("lepton_correctedDown_pt", "F", lenVar="nlepton")
         self.out.branch("mll", "F")
         self.out.branch("mll02", "F")
         self.out.branch("mll12", "F")
@@ -326,6 +329,9 @@ class sswwProducer(Module):
         lepton_tkIsoId = []
         lepton_softmu = []
         lepton_zep = []
+        lepton_corrected_pt = []
+        lepton_correctedUp_pt = []
+        lepton_correctedDown_pt = []
 
         detajj = jets[loose_jets[0]].eta - jets[loose_jets[1]].eta
 
@@ -345,11 +351,17 @@ class sswwProducer(Module):
                 lepton_tkIsoId.append(leptons[loose_leptons[i]][0].tkIsoId)
                 lepton_softmu.append(leptons[loose_leptons[i]][0].softId)
                 lepton_mishits.append(-9999)
+                lepton_corrected_pt.append(leptons[loose_leptons[i]][0].corrected_pt)
+                lepton_correctedUp_pt.append(leptons[loose_leptons[i]][0].correctedUp_pt)
+                lepton_correctedDown_pt.append(leptons[loose_leptons[i]][0].correctedDown_pt)
             elif abs(leptons[loose_leptons[i]][0].pdgId) == 11:
                 PID = 11
                 lepton_tkIsoId.append(-9999)
                 lepton_softmu.append(False)
                 lepton_mishits.append(leptons[loose_leptons[i]][0].lostHits)
+                lepton_corrected_pt.append(leptons[loose_leptons[i]][0].eCorr)
+                lepton_correctedUp_pt.append(leptons[loose_leptons[i]][0].energyErr)
+                lepton_correctedDown_pt.append(leptons[loose_leptons[i]][0].energyErr)
 
             lepton_pdg_id.append(leptons[loose_leptons[i]][0].pdgId)
             lepton_tight.append(is_tight[i])
@@ -437,6 +449,9 @@ class sswwProducer(Module):
         self.out.fillBranch("lepton_tkIsoId", lepton_tkIsoId)
         self.out.fillBranch("lepton_softmu", lepton_softmu)
         self.out.fillBranch("lepton_zep", lepton_zep)
+        self.out.fillBranch("lepton_corrected_pt", lepton_corrected_pt)
+        self.out.fillBranch("lepton_correctedUp_pt", lepton_correctedUp_pt)
+        self.out.fillBranch("lepton_correctedDown_pt", lepton_correctedDown_pt)
         mll = -9999.
         if len(loose_leptons) > 1:
             mll = (leptons[loose_leptons[0]][0].p4() + leptons[loose_leptons[1]][0].p4()).M()
