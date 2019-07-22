@@ -10,10 +10,10 @@ from  PhysicsTools.NanoAODTools.postprocessing.modules.common.lepSFProducer_ssww
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.countHistogramsModule import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.PrefireCorr import *
-from  PhysicsTools.NanoAODTools.postprocessing.modules.common.muonScaleResProducer import *
-# from  PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties import *
+# from  PhysicsTools.NanoAODTools.postprocessing.modules.common.muonScaleResProducer import *
+from  PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties import *
 
-p=PostProcessor(".",inputFiles(),None,os.environ['CMSSW_BASE']+"/python/PhysicsTools/NanoAODTools/postprocessing/scripts/ssww_keep_and_drop_2017.txt",modules=[countHistogramsModule(),puWeight_2017(),PrefCorr(),sswwModule2017(),lepSF_2017()],provenance=True,justcount=False,noOut=False,fwkJobReport=True,outputbranchsel = os.environ['CMSSW_BASE']+"/python/PhysicsTools/NanoAODTools/postprocessing/scripts/ssww_output_branch_selection_2017.txt")
+p=PostProcessor(".",inputFiles(),None,os.environ['CMSSW_BASE']+"/python/PhysicsTools/NanoAODTools/postprocessing/scripts/ssww_keep_and_drop_2017.txt",modules=[countHistogramsModule(),puWeight_2017(),PrefCorr(),sswwModule2017(),lepSF_2017(),jetmetUncertainties2017()],provenance=True,justcount=False,noOut=False,fwkJobReport=True,outputbranchsel = os.environ['CMSSW_BASE']+"/python/PhysicsTools/NanoAODTools/postprocessing/scripts/ssww_output_branch_selection_2017.txt")
 p.run()
 
 print "DONE"
