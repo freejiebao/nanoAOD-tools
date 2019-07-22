@@ -1,8 +1,8 @@
-#include "PhysicsTools/NanoAODTools/interface/PyJetResolutionWrapper.h"
-#include "PhysicsTools/NanoAODTools/interface/PyJetResolutionScaleFactorWrapper.h"
-#include "PhysicsTools/NanoAODTools/interface/PyJetParametersWrapper.h"
-#include "PhysicsTools/NanoAODTools/interface/WeightCalculatorFromHistogram.h"
-#include "PhysicsTools/NanoAODTools/interface/ReduceMantissa.h"
+#include "../python/PhysicsTools/NanoAODTools/postprocessing/interface/PyJetResolutionWrapper.h"
+#include "../python/PhysicsTools/NanoAODTools/postprocessing/interface/PyJetResolutionScaleFactorWrapper.h"
+#include "../python/PhysicsTools/NanoAODTools/postprocessing/interface/PyJetParametersWrapper.h"
+#include "../python/PhysicsTools/NanoAODTools/postprocessing/interface/WeightCalculatorFromHistogram.h"
+#include "../python/PhysicsTools/NanoAODTools/postprocessing/interface/ReduceMantissa.h"
 
 PyJetResolutionWrapper jetRes;
 PyJetResolutionScaleFactorWrapper jetResScaleFactor;
