@@ -60,8 +60,6 @@ class sswwProducer(Module):
         self.out.branch("mll_z0", "F")
         self.out.branch("mll_z1", "F")
         self.out.branch("mllll", "F")
-        self.out.branch("bveto", "F")
-        self.out.branch("n_loose_jets", "I")
         self.out.branch("detajj", "F")
         self.out.branch("jet_idx", "I", lenVar="njet")
         self.out.branch("jet_id", "I", lenVar="njet")
@@ -69,7 +67,10 @@ class sswwProducer(Module):
         self.out.branch("jet_eta", "F", lenVar="njet")
         self.out.branch("jet_phi", "F", lenVar="njet")
         self.out.branch("jet_mass", "F", lenVar="njet")
-        self.out.branch("jet_btag", "F", lenVar="njet")
+        self.out.branch("jet_btagCSVV2", "F", lenVar="njet")
+        self.out.branch("jet_btagDeepB", "F", lenVar="njet")
+        self.out.branch("jet_hadronFlavour", "I", lenVar="njet")
+        self.out.branch("jet_partonFlavour", "I", lenVar="njet")
         self.out.branch("mjj", "F")
         self.out.branch("met", "F")
         self.out.branch("met_phi", "F")
@@ -278,34 +279,23 @@ class sswwProducer(Module):
         # jets
         if len(jets) < 2:
             return False
-        bveto = 0.
         for i in range(0, len(jets)):
-            # clean from identified leptons
-            for j in range(0, len(loose_leptons)):
-                if (is_fakeable[j] or is_tight[j]) and deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, jets[i].eta, jets[i].phi) < 0.4:
-                    continue
-            # b jet veto
-            if jets[i].pt > 20 and abs(jets[i].eta) < 2.4:
-                if self.year == 2016:
-                    if jets[i].btagCSVV2 > bveto:
-                        bveto = jets[i].btagCSVV2
-                else:
-                    if jets[i].btagDeepB > bveto:
-                        bveto = jets[i].btagDeepB
-
             if jets[i].pt < 30:
                 continue
 
             if abs(jets[i].eta) > 4.7:
                 continue
 
+            # clean from identified leptons
+            for j in range(0, len(loose_leptons)):
+                if (is_fakeable[j] or is_tight[j]) and deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, jets[i].eta, jets[i].phi) < 0.4:
+                    continue
+
             # actually jet related lepton maybe not loose
             loose_jets.append(i)
 
         if len(loose_jets) < 2:
             return False
-        else:
-            n_loose_jets = len(loose_jets)
 
         # decide whether lepton real
         isprompt_mask = (1 << 0)  # isPrompt
@@ -381,22 +371,21 @@ class sswwProducer(Module):
         jet_eta = []
         jet_phi = []
         jet_mass = []
-        jet_btag = []
-
+        jet_btagCSVV2 = []
+        jet_btagDeepB = []
+        jet_hadronFlavour = []
+        jet_partonFlavour = []
         for i in range(0, len(loose_jets)):
-            if i < 3:
-                jet_idx.append(loose_jets[i])
-                jet_id.append(jets[loose_jets[i]].jetId)
-                jet_pt.append(jets[loose_jets[i]].pt)
-                jet_eta.append(jets[loose_jets[i]].eta)
-                jet_phi.append(jets[loose_jets[i]].phi)
-                jet_mass.append(jets[loose_jets[i]].mass)
-                if self.year == 2016:
-                    jet_btag.append(jets[loose_jets[i]].btagCSVV2)
-                else:
-                    jet_btag.append(jets[loose_jets[i]].btagDeepB)
-            else:
-                break
+            jet_idx.append(loose_jets[i])
+            jet_id.append(jets[loose_jets[i]].jetId)
+            jet_pt.append(jets[loose_jets[i]].pt)
+            jet_eta.append(jets[loose_jets[i]].eta)
+            jet_phi.append(jets[loose_jets[i]].phi)
+            jet_mass.append(jets[loose_jets[i]].mass)
+            jet_btagCSVV2.append(jets[loose_jets[i]].btagCSVV2)
+            jet_btagDeepB.append(jets[loose_jets[i]].btagDeepB)
+            jet_hadronFlavour.append(jets[loose_jets[i]].hadronFlavour)
+            jet_partonFlavour.append(jets[loose_jets[i]].partonFlavour)
 
         self.out.fillBranch("run", event.run)
         self.out.fillBranch("lumi", event.luminosityBlock)
@@ -466,8 +455,6 @@ class sswwProducer(Module):
         self.out.fillBranch("mll_z0", mll_z0)
         self.out.fillBranch("mll_z1", mll_z1)
         self.out.fillBranch("mllll", mllll)
-        self.out.fillBranch("bveto", bveto)
-        self.out.fillBranch("n_loose_jets", n_loose_jets)
         self.out.fillBranch("detajj", detajj)
         self.out.fillBranch("jet_idx", jet_idx)
         self.out.fillBranch("jet_id", jet_id)
@@ -475,7 +462,10 @@ class sswwProducer(Module):
         self.out.fillBranch("jet_eta", jet_eta)
         self.out.fillBranch("jet_phi", jet_phi)
         self.out.fillBranch("jet_mass", jet_mass)
-        self.out.fillBranch("jet_btag", jet_btag)
+        self.out.fillBranch("jet_btagCSVV2", jet_btagCSVV2)
+        self.out.fillBranch("jet_btagDeepB", jet_btagDeepB)
+        self.out.fillBranch("jet_hadronFlavour", jet_hadronFlavour)
+        self.out.fillBranch("jet_partonFlavour", jet_partonFlavour)
         self.out.fillBranch("mjj", mjj)
         self.out.fillBranch("met", event.MET_pt)
         self.out.fillBranch("met_phi", event.MET_phi)
