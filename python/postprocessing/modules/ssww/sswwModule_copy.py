@@ -384,8 +384,15 @@ class sswwProducer(Module):
             jet_mass.append(jets[loose_jets[i]].mass)
             jet_btagCSVV2.append(jets[loose_jets[i]].btagCSVV2)
             jet_btagDeepB.append(jets[loose_jets[i]].btagDeepB)
-            jet_hadronFlavour.append(jets[loose_jets[i]].hadronFlavour)
-            jet_partonFlavour.append(jets[loose_jets[i]].partonFlavour)
+            if hasattr(jets[loose_jets[i]], 'hadronFlavour'):
+                jet_hadronFlavour.append(jets[loose_jets[i]].hadronFlavour)
+            else:
+                jet_hadronFlavour.append(-9999)
+
+            if hasattr(jets[loose_jets[i]], 'partonFlavour'):
+                jet_partonFlavour.append(jets[loose_jets[i]].partonFlavour)
+            else:
+                jet_partonFlavour.append(-9999)
 
         self.out.fillBranch("run", event.run)
         self.out.fillBranch("lumi", event.luminosityBlock)
