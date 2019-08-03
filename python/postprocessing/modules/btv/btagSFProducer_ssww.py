@@ -337,3 +337,4 @@ class btagSFProducer(Module):
 
 btagSF2016 = lambda : btagSFProducer("2016")
 btagSF2017 = lambda : btagSFProducer("2017")
+btagSF2018 = lambda : btagSFProducer("2018")
