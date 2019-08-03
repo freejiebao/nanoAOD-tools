@@ -46,8 +46,10 @@ class muonScaleResProducer(Module):
 
     def analyze(self, event):
         leptons = Collection(event, "lepton")
-        electrons = Collection(event, "Electron")
-        muons = Collection(event, "Muon")
+        input = ["Electron", "Muon"]
+        coll = [Collection(event, x) for x in input]
+        merge = [(coll[j][i], j, i) for j in xrange(len(input)) for i in xrange(len(coll[j]))]
+        merge.sort(key=self.sortkey, reverse=self.reverse)
         if self.is_mc:
             genparticles = Collection(event, "GenPart")
         roccor = self._roccor
@@ -56,21 +58,21 @@ class muonScaleResProducer(Module):
             pt_err=[]
             for lep in leptons:
                 if abs(lep.pdg_id) == 13:
-                    genIdx = muons[lep.idx].genPartIdx
+                    genIdx = merge[lep.idx][0].genPartIdx
                     if genIdx >= 0 and genIdx < len(genparticles):
                         genMu = genparticles[genIdx]
-                        pt_corr.append(lep.pt * mk_safe(roccor.kSpreadMC, lep.charge, lep.pt, lep.eta, lep.phi, genMu.pt))
-                        pt_err.append(lep.pt*mk_safe(roccor.kSpreadMCerror, lep.charge, lep.pt, lep.eta, lep.phi, genMu.pt))
+                        pt_corr.append(lep.pt * mk_safe(roccor.kSpreadMC, merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi, genMu.pt))
+                        pt_err.append(lep.pt*mk_safe(roccor.kSpreadMCerror, merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi, genMu.pt))
                     else:
                         u1 = random.uniform(0.0, 1.0)
-                        pt_corr.append(lep.pt*mk_safe(roccor.kSmearMC, lep.charge, lep.pt, lep.eta, lep.phi, lep.nTrackerLayers, u1))
-                        pt_err.append(lep.pt*mk_safe(roccor.kSmearMCerror, lep.charge, lep.pt, lep.eta, lep.phi, lep.nTrackerLayers, u1))
+                        pt_corr.append(lep.pt*mk_safe(roccor.kSmearMC, merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi, lep.nTrackerLayers, u1))
+                        pt_err.append(lep.pt*mk_safe(roccor.kSmearMCerror, merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi, lep.nTrackerLayers, u1))
                 elif abs(lep.pdg_id) == 11:
                     try:
-                        pt_corr.append(lep.pt/electrons[lep.idx].eCorr)
+                        pt_corr.append(lep.pt/merge[lep.idx][0].eCorr)
                     except ZeroDivisionError:
                         pt_corr.append(-9999.)
-                    pt_err.append(electrons[lep.idx].energyErr)
+                    pt_err.append(merge[lep.idx][0].energyErr)
                 else:
                     continue
         else:
@@ -82,10 +84,10 @@ class muonScaleResProducer(Module):
                     pt_err.append(lep.pt * mk_safe(roccor.kScaleDTerror,lep.charge, lep.pt, lep.eta, lep.phi))
                 elif abs(lep.pdg_id) == 11:
                     try:
-                        pt_corr.append(lep.pt/electrons[lep.idx].eCorr)
+                        pt_corr.append(lep.pt/merge[lep.idx][0].eCorr)
                     except ZeroDivisionError:
                         pt_corr.append(-9999.)
-                    pt_err.append(electrons[lep.idx].energyErr)
+                    pt_err.append(merge[lep.idx][0].energyErr)
                 else:
                     continue
 
