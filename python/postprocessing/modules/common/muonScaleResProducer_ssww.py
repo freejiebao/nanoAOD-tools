@@ -45,53 +45,54 @@ class muonScaleResProducer(Module):
         pass
 
     def analyze(self, event):
-        muons = Collection(event, "lepton")
+        leptons = Collection(event, "lepton")
         electrons = Collection(event, "Electron")
+        muons = Collection(event, "Muon")
         if self.is_mc:
             genparticles = Collection(event, "GenPart")
         roccor = self._roccor
         if self.is_mc:
             pt_corr=[]
             pt_err=[]
-            for mu in muons:
-                if abs(mu.pdg_id) == 13:
-                    genIdx = mu.genPartIdx
+            for lep in leptons:
+                if abs(lep.pdg_id) == 13:
+                    genIdx = muons[lep.idx].genPartIdx
                     if genIdx >= 0 and genIdx < len(genparticles):
                         genMu = genparticles[genIdx]
-                        pt_corr.append(mu.pt * mk_safe(roccor.kSpreadMC, mu.charge, mu.pt, mu.eta, mu.phi, genMu.pt))
-                        pt_err.append(mu.pt*mk_safe(roccor.kSpreadMCerror, mu.charge, mu.pt, mu.eta, mu.phi, genMu.pt))
+                        pt_corr.append(lep.pt * mk_safe(roccor.kSpreadMC, lep.charge, lep.pt, lep.eta, lep.phi, genMu.pt))
+                        pt_err.append(lep.pt*mk_safe(roccor.kSpreadMCerror, lep.charge, lep.pt, lep.eta, lep.phi, genMu.pt))
                     else:
                         u1 = random.uniform(0.0, 1.0)
-                        pt_corr.append(mu.pt*mk_safe(roccor.kSmearMC, mu.charge, mu.pt, mu.eta, mu.phi, mu.nTrackerLayers, u1))
-                        pt_err.append(mu.pt*mk_safe(roccor.kSmearMCerror, mu.charge, mu.pt, mu.eta, mu.phi, mu.nTrackerLayers, u1))
-                elif abs(mu.pdg_id) == 11:
+                        pt_corr.append(lep.pt*mk_safe(roccor.kSmearMC, lep.charge, lep.pt, lep.eta, lep.phi, lep.nTrackerLayers, u1))
+                        pt_err.append(lep.pt*mk_safe(roccor.kSmearMCerror, lep.charge, lep.pt, lep.eta, lep.phi, lep.nTrackerLayers, u1))
+                elif abs(lep.pdg_id) == 11:
                     try:
-                        pt_corr.append(mu.pt/electrons[mu.idx].eCorr)
+                        pt_corr.append(lep.pt/electrons[lep.idx].eCorr)
                     except ZeroDivisionError:
                         pt_corr.append(-9999.)
-                    pt_err.append(electrons[mu.idx].energyErr)
+                    pt_err.append(electrons[lep.idx].energyErr)
                 else:
                     continue
         else:
             pt_corr=[]
             pt_err=[]
-            for mu in muons:
-                if abs(mu.pdg_id) == 13:
-                    pt_corr.append(mu.pt * mk_safe(roccor.kScaleDT,mu.charge, mu.pt, mu.eta, mu.phi))
-                    pt_err.append(mu.pt * mk_safe(roccor.kScaleDTerror,mu.charge, mu.pt, mu.eta, mu.phi))
-                elif abs(mu.pdg_id) == 11:
+            for lep in leptons:
+                if abs(lep.pdg_id) == 13:
+                    pt_corr.append(lep.pt * mk_safe(roccor.kScaleDT,lep.charge, lep.pt, lep.eta, lep.phi))
+                    pt_err.append(lep.pt * mk_safe(roccor.kScaleDTerror,lep.charge, lep.pt, lep.eta, lep.phi))
+                elif abs(lep.pdg_id) == 11:
                     try:
-                        pt_corr.append(mu.pt/electrons[mu.idx].eCorr)
+                        pt_corr.append(lep.pt/electrons[lep.idx].eCorr)
                     except ZeroDivisionError:
                         pt_corr.append(-9999.)
-                    pt_err.append(electrons[mu.idx].energyErr)
+                    pt_err.append(electrons[lep.idx].energyErr)
                 else:
                     continue
 
 
         self.out.fillBranch("lepton_corrected_pt", pt_corr)
-        pt_corr_up = list( max(pt_corr[imu]+pt_err[imu], 0.0) for imu,mu in enumerate(muons) )
-        pt_corr_down = list( max(pt_corr[imu]-pt_err[imu], 0.0) for imu,mu in enumerate(muons) )
+        pt_corr_up = list( max(pt_corr[ilep]+pt_err[ilep], 0.0) for ilep,lep in enumerate(leptons) )
+        pt_corr_down = list( max(pt_corr[ilep]-pt_err[ilep], 0.0) for ilep,lep in enumerate(leptons) )
         self.out.fillBranch("lepton_correctedUp_pt",  pt_corr_up)
         self.out.fillBranch("lepton_correctedDown_pt",  pt_corr_down)
         return True
