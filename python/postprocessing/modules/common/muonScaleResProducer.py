@@ -64,16 +64,8 @@ class muonScaleResProducer(Module):
                     pt_err.append(mu.pt*mk_safe(roccor.kSmearMCerror, mu.charge, mu.pt, mu.eta, mu.phi, mu.nTrackerLayers, u1))
 
         else:
-            pt_corr = list(
-                mu.pt * mk_safe(
-                    roccor.kScaleDT,
-                    mu.charge, mu.pt, mu.eta, mu.phi
-                    ) for mu in muons)
-            pt_err = list(
-                mu.pt * mk_safe(
-                    roccor.kScaleDTerror,
-                    mu.charge, mu.pt, mu.eta, mu.phi
-                    ) for mu in muons)
+            pt_corr = list(mu.pt * mk_safe(roccor.kScaleDT,mu.charge, mu.pt, mu.eta, mu.phi) for mu in muons)
+            pt_err = list(mu.pt * mk_safe(roccor.kScaleDTerror,mu.charge, mu.pt, mu.eta, mu.phi) for mu in muons)
 
         self.out.fillBranch("Muon_corrected_pt", pt_corr)
         pt_corr_up = list( max(pt_corr[imu]+pt_err[imu], 0.0) for imu,mu in enumerate(muons) )
