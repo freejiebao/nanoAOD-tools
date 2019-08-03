@@ -16,9 +16,9 @@ class jetSmearer(Module):
         #--------------------------------------------------------------------------------------------
 
         # read jet energy resolution (JER) and JER scale factors and uncertainties
-        # (the txt files were downloaded from https://github.com/cms-jet/JRDatabase/tree/master/textFiles/Spring16_25nsV10_MC )
+        # (the txt files were downloaded from https://github.com/cms-jet/JRDatabase/tree/master/textFiles/ )
         # Text files are now tarred so must extract first
-        self.jerInputArchivePath = os.environ['CMSSW_BASE'] + "/src/PhysicsTools/NanoAODTools/data/jme/"
+        self.jerInputArchivePath = os.environ['CMSSW_BASE'] + "/python/PhysicsTools/NanoAODTools/postprocessing/data/jme/"
         self.jerTag = jerInputFileName[:jerInputFileName.find('_MC_')+len('_MC')]
         self.jerArchive = tarfile.open(self.jerInputArchivePath+self.jerTag+".tgz", "r:gz")
         self.jerInputFilePath = tempfile.mkdtemp()
@@ -41,8 +41,11 @@ class jetSmearer(Module):
                 print("Load Library '%s'" % library.replace("lib", ""))
                 ROOT.gSystem.Load(library)
 
-    def beginJob(self):
+        self.puppiJMRFile = ROOT.TFile.Open(os.environ['CMSSW_BASE'] + "/python/PhysicsTools/NanoAODTools/postprocessing/data/jme/puppiSoftdropResol.root")
+        self.puppisd_resolution_cen = self.puppiJMRFile.Get("massResolution_0eta1v3")
+        self.puppisd_resolution_for = self.puppiJMRFile.Get("massResolution_1v3eta2v5")
 
+    def beginJob(self):
         # initialize JER scale factors and uncertainties
         # (cf. PhysicsTools/PatUtils/interface/SmearedJetProducerT.h )
         print("Loading jet energy resolutions (JER) from file '%s'" % os.path.join(self.jerInputFilePath, self.jerInputFileName))
@@ -54,6 +57,17 @@ class jetSmearer(Module):
         pass
 
 
+    def setSeed(self,event):
+        """Set seed deterministically."""
+        # (cf. https://github.com/cms-sw/cmssw/blob/master/PhysicsTools/PatUtils/interface/SmearedJetProducerT.h)
+        runnum  = long(event.run) << 20
+        luminum = long(event.luminosityBlock) << 10
+        evtnum  = event.event
+        jet0eta = long(event.Jet_eta[0]/0.01 if event.nJet>0 else 0)
+        seed    = 1L + runnum + evtnum + luminum + jet0eta
+        self.rnd.SetSeed(seed)
+
+
     def getSmearedJetPt(self, jet, genJet, rho):
         ( jet_pt_nomVal, jet_pt_jerUpVal, jet_pt_jerDownVal ) = self.getSmearValsPt( jet, genJet, rho )
         return ( jet_pt_nomVal*jet.pt, jet_pt_jerUpVal*jet.pt, jet_pt_jerDownVal*jet.pt )
@@ -63,11 +77,11 @@ class jetSmearer(Module):
 
         if hasattr( jetIn, "p4"):
             jet = jetIn.p4()
-        else :
+        else:
             jet = jetIn
         if hasattr( genJetIn, "p4"):
             genJet = genJetIn.p4()
-        else :
+        else:
             genJet = genJetIn
 
         #--------------------------------------------------------------------------------------------
@@ -116,6 +130,7 @@ class jetSmearer(Module):
             self.params_resolution.setJetEta(jet.Eta())
             self.params_resolution.setRho(rho)
             jet_pt_resolution = self.jer.getResolution(self.params_resolution)
+
             rand = self.rnd.Gaus(0,jet_pt_resolution)
             for central_or_shift in [ enum_nominal, enum_shift_up, enum_shift_down ]:
                 if jet_pt_sf_and_uncertainty[central_or_shift] > 1.:
@@ -139,16 +154,20 @@ class jetSmearer(Module):
         return ( smear_vals[enum_nominal], smear_vals[enum_shift_up], smear_vals[enum_shift_down] )
 
 
-    def getSmearValsM(self, jetIn, genJetIn, rho):
+    def getSmearValsM(self, jetIn, genJetIn):
+
+        #--------------------------------------------------------------------------------------------
+        # LC: Procedure outline in https://twiki.cern.ch/twiki/bin/view/Sandbox/PUPPIJetMassScaleAndResolution
+        #--------------------------------------------------------------------------------------------
+
         if hasattr( jetIn, "p4"):
             jet = jetIn.p4()
-        else :
+        else:
             jet = jetIn
         if hasattr( genJetIn, "p4"):
             genJet = genJetIn.p4()
-        else :
+        else:
             genJet = genJetIn
-
 
         #--------------------------------------------------------------------------------------------
         # CV: Smear jet m to account for measured difference in JER between data and simulation.
@@ -189,10 +208,11 @@ class jetSmearer(Module):
                 smear_vals[central_or_shift] = smearFactor
 
         else:
-            self.params_resolution.setJetPt(jet.Perp())
-            self.params_resolution.setJetEta(jet.Eta())
-            self.params_resolution.setRho(rho)
-            jet_m_resolution = self.jer.getResolution(self.params_resolution) # is this correct ?
+            # Get mass resolution
+            if abs(jet.Eta()) <= 1.3:
+                jet_m_resolution = self.puppisd_resolution_cen.Eval( jet.Pt() )
+            else:
+                jet_m_resolution = self.puppisd_resolution_for.Eval( jet.Pt() )
             rand = self.rnd.Gaus(0,jet_m_resolution)
             for central_or_shift in [ enum_nominal, enum_shift_up, enum_shift_down ]:
                 if jet_m_sf_and_uncertainty[central_or_shift] > 1.:

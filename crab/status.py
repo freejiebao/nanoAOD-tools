@@ -5,7 +5,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description='manual to this script')
 parser.add_argument('-y','--year', help='run over which year', dest='chosenyear', default = '2022', choices=('2016','2017','2018','2022'))
-parser.add_argument('-m','--mode', help='original mode or simplified mode', dest='mode', default='simplified', choices=('original','simplified'))
+parser.add_argument('-m','--mode', help='original mode or simplified mode [o/s]', dest='mode', default='s', choices=('o','s'))
 args = parser.parse_args()
 
 path = '/pnfs/ihep.ac.cn/data/cms/store/user/jixiao/'
@@ -66,7 +66,7 @@ def status(year):
             pass
         else:
             continue
-        if args.mode == 'simplified':
+        if args.mode == 's':
             p = os.popen('crab status -d ' + file)
             pp = p.read()
             # pp = 'COMPLETED'
@@ -96,13 +96,12 @@ def status(year):
                     except KeyError:
                         tmp[iSample] = path + 'nano' + year + version + process[0] + '/' + iSample + '_' + year + '/' + pp[pp.index('Task name:\t\t\t') + 13:pp.index('Task name:\t\t\t') + 26] + '/0000/'
                         # tmp[iSample] = 'path'
-                        old = 'Success[\'' + sample_name + '\'] = '
-                        remove_text(old, year)
-                        new = 'Success[\'' + sample_name + '\'] = ' + str(tmp) + '\n'
-                        with open('crab_collection' + year + '.py', 'a+') as collect:
-                            collect.write(new)
-                    else:
-                        pass
+                # the structure of following lines are very import
+                old = 'Success[\'' + sample_name + '\'] = '
+                remove_text(old, year)
+                new = 'Success[\'' + sample_name + '\'] = ' + str(tmp) + '\n'
+                with open('crab_collection' + year + '.py', 'a+') as collect:
+                    collect.write(new)
                 '''
                 try:
                     old = 'Success[\'' + sample_name + '\'] = '
@@ -115,7 +114,7 @@ def status(year):
                 with open('crab_collection' + year + '.py', 'a+') as collect:
                     collect.write(new)
                 '''
-        elif args.mode == 'original':
+        elif args.mode == 'o':
             os.system('crab status -d ' + file)
 
         # print('crab status -d '+file)
