@@ -100,7 +100,6 @@ class muonScaleResProducer(Module):
         self.out.fillBranch("lepton_correctedDown_pt",  pt_corr_down)
         return True
 
-
-muonScaleRes2016 = lambda : muonScaleResProducer('roccor.Run2.v3', 'RoccoR2016.txt', 2016)
-muonScaleRes2017 = lambda : muonScaleResProducer('roccor.Run2.v3', 'RoccoR2017.txt', 2017)
-muonScaleRes2018 = lambda : muonScaleResProducer('roccor.Run2.v3', 'RoccoR2018.txt', 2018)
+muonScaleRes2016 = lambda : muonScaleResProducer(rc_dir = 'roccor.Run2.v3', rc_corrections = 'RoccoR2016.txt', dataYear = 2016)
+muonScaleRes2017 = lambda : muonScaleResProducer(rc_dir = 'roccor.Run2.v3', rc_corrections = 'RoccoR2017.txt', dataYear = 2017)
+muonScaleRes2018 = lambda : muonScaleResProducer(rc_dir = 'roccor.Run2.v3', rc_corrections = 'RoccoR2018.txt', dataYear = 2018)
