@@ -54,7 +54,7 @@ class muonScaleResProducer(Module):
             pt_corr=[]
             pt_err=[]
             for mu in muons:
-                if abs(mu.pdgId) == 13:
+                if abs(mu.pdg_id) == 13:
                     genIdx = mu.genPartIdx
                     if genIdx >= 0 and genIdx < len(genparticles):
                         genMu = genparticles[genIdx]
@@ -64,7 +64,7 @@ class muonScaleResProducer(Module):
                         u1 = random.uniform(0.0, 1.0)
                         pt_corr.append(mu.pt*mk_safe(roccor.kSmearMC, mu.charge, mu.pt, mu.eta, mu.phi, mu.nTrackerLayers, u1))
                         pt_err.append(mu.pt*mk_safe(roccor.kSmearMCerror, mu.charge, mu.pt, mu.eta, mu.phi, mu.nTrackerLayers, u1))
-                elif abs(mu.pdgId) == 11:
+                elif abs(mu.pdg_id) == 11:
                     try:
                         pt_corr.append(mu.pt/electrons[mu.idx].eCorr)
                     except ZeroDivisionError:
@@ -76,10 +76,10 @@ class muonScaleResProducer(Module):
             pt_corr=[]
             pt_err=[]
             for mu in muons:
-                if abs(mu.pdgId) == 13:
+                if abs(mu.pdg_id) == 13:
                     pt_corr.append(mu.pt * mk_safe(roccor.kScaleDT,mu.charge, mu.pt, mu.eta, mu.phi))
                     pt_err.append(mu.pt * mk_safe(roccor.kScaleDTerror,mu.charge, mu.pt, mu.eta, mu.phi))
-                elif abs(mu.pdgId) == 11:
+                elif abs(mu.pdg_id) == 11:
                     try:
                         pt_corr.append(mu.pt/electrons[mu.idx].eCorr)
                     except ZeroDivisionError:
