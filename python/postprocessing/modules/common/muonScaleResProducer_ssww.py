@@ -28,6 +28,7 @@ class muonScaleResProducer(Module):
             ROOT.gROOT.ProcessLine('.L ' + p_helper)
         self._roccor = ROOT.RoccoR(p_roccor + '/' + rc_corrections)
         self.sortkey = lambda (obj, j, i): sortkey(obj)
+        self.reverse = reverse
 
     def beginJob(self):
         pass
