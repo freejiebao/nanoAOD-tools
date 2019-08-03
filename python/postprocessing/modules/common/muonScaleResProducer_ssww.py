@@ -19,7 +19,7 @@ def mk_safe(fct, *args):
 
 
 class muonScaleResProducer(Module):
-    def __init__(self, rc_dir, rc_corrections, dataYear):
+    def __init__(self, rc_dir, rc_corrections, dataYear,sortkey=lambda x: x.pt):
         p_postproc = '%s/python/PhysicsTools/NanoAODTools/postprocessing' % os.environ['CMSSW_BASE']
         p_roccor = p_postproc + '/data/' + rc_dir
         if "/RoccoR_cc.so" not in ROOT.gSystem.GetLibraries():
@@ -27,6 +27,7 @@ class muonScaleResProducer(Module):
             print 'Loading C++ helper from ' + p_helper
             ROOT.gROOT.ProcessLine('.L ' + p_helper)
         self._roccor = ROOT.RoccoR(p_roccor + '/' + rc_corrections)
+        self.sortkey = lambda (obj, j, i): sortkey(obj)
 
     def beginJob(self):
         pass
