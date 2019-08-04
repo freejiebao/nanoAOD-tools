@@ -70,12 +70,9 @@ class muonScaleResProducer(Module):
                         pt_corr.append(lep.pt*mk_safe(roccor.kSmearMC, merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi, merge[lep.idx][0].nTrackerLayers, u1))
                         pt_err.append(lep.pt*mk_safe(roccor.kSmearMCerror, merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi, merge[lep.idx][0].nTrackerLayers, u1))
                 elif abs(lep.pdg_id) == 11:
-                    if hasattr(merge[lep.idx][0],"eCorr"):
-                        try:
-                            pt_corr.append(lep.pt/merge[lep.idx][0].eCorr)
-                        except:
-                            pt_corr.append(lep.pt)
-                    else:
+                    try:
+                        pt_corr.append(lep.pt/merge[lep.idx][0].eCorr)
+                    except:
                         pt_corr.append(lep.pt)
                     pt_err.append(merge[lep.idx][0].energyErr)
                 else:
@@ -88,12 +85,9 @@ class muonScaleResProducer(Module):
                     pt_corr.append(lep.pt * mk_safe(roccor.kScaleDT,merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi))
                     pt_err.append(lep.pt * mk_safe(roccor.kScaleDTerror,merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi))
                 elif abs(lep.pdg_id) == 11:
-                    if hasattr(merge[lep.idx][0],"eCorr"):
-                        try:
-                            pt_corr.append(lep.pt/merge[lep.idx][0].eCorr)
-                        except ZeroDivisionError:
-                            pt_corr.append(lep.pt)
-                    else:
+                    try:
+                        pt_corr.append(lep.pt/merge[lep.idx][0].eCorr)
+                    except ZeroDivisionError:
                         pt_corr.append(lep.pt)
                     pt_err.append(merge[lep.idx][0].energyErr)
                 else:
