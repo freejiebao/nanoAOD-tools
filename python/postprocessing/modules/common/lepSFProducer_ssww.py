@@ -75,10 +75,10 @@ class lepSFProducer(Module):
             ROOT.gROOT.ProcessLine(".L %s/src/PhysicsTools/NanoAODTools/python/postprocessing/helpers/LeptonEfficiencyCorrector.cc+" % os.environ['CMSSW_BASE'])
         '''
     def beginJob(self):
-        self._worker_mu_tight = ROOT.LeptonEfficiencyCorrector(self.mu_f_tight,self.mu_h_tight)
-        self._worker_mu_loose = ROOT.LeptonEfficiencyCorrector(self.mu_f_loose,self.mu_h_loose)
-        self._worker_el_low = ROOT.LeptonEfficiencyCorrector(self.el_f_low,self.el_h_low)
-        self._worker_el_high = ROOT.LeptonEfficiencyCorrector(self.el_f_high,self.el_h_high)
+        self._worker_mu_tight = ROOT.LeptonEfficiencyCorrectorCppWorker(self.mu_f_tight,self.mu_h_tight)
+        self._worker_mu_loose = ROOT.LeptonEfficiencyCorrectorCppWorker(self.mu_f_loose,self.mu_h_loose)
+        self._worker_el_low = ROOT.LeptonEfficiencyCorrectorCppWorker(self.el_f_low,self.el_h_low)
+        self._worker_el_high = ROOT.LeptonEfficiencyCorrectorCppWorker(self.el_f_high,self.el_h_high)
     def endJob(self):
         pass
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
