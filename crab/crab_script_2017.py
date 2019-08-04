@@ -9,7 +9,7 @@ from  PhysicsTools.NanoAODTools.postprocessing.modules.ssww.sswwModule_copy impo
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.lepSFProducer_ssww import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.countHistogramsModule import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer import *
-from  PhysicsTools.NanoAODTools.postprocessing.modules.common.PrefireCorr import *
+from  PhysicsTools.NanoAODTools.postprocessing.modules.common.PrefireCorr_ssww import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.muonScaleResProducer_ssww import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties_ssww import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.btv.btagSFProducer_ssww import *
