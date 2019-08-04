@@ -36,7 +36,8 @@ def new_py(year):
     exec (handle)
     _Samples = Samples
 
-    site = "T2_CN_Beijing"
+    #site = "T2_CN_Beijing"
+    site = "T2_CH_CERNBOX"
 
     print("Created directory:" + b)
     print("The created configuration files:")

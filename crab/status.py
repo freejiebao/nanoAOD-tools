@@ -9,7 +9,8 @@ parser.add_argument('-m','--mode', help='original mode or simplified mode [o/s]'
 parser.add_argument('-v','--version', help='which version should be? Need to be same version as create_cfg.py', default='4')
 args = parser.parse_args()
 
-path = '/pnfs/ihep.ac.cn/data/cms/store/user/jixiao/'
+#path = '/pnfs/ihep.ac.cn/data/cms/store/user/jixiao/'
+path = '/eos/user/j/jixiao/'
 version = '_v%s/' % args.version
 
 
