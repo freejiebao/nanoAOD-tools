@@ -67,8 +67,8 @@ class muonScaleResProducer(Module):
                         pt_err.append(lep.pt*mk_safe(roccor.kSpreadMCerror, merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi, genMu.pt))
                     else:
                         u1 = random.uniform(0.0, 1.0)
-                        pt_corr.append(lep.pt*mk_safe(roccor.kSmearMC, merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi, lep.nTrackerLayers, u1))
-                        pt_err.append(lep.pt*mk_safe(roccor.kSmearMCerror, merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi, lep.nTrackerLayers, u1))
+                        pt_corr.append(lep.pt*mk_safe(roccor.kSmearMC, merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi, merge[lep.idx][0].nTrackerLayers, u1))
+                        pt_err.append(lep.pt*mk_safe(roccor.kSmearMCerror, merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi, merge[lep.idx][0].nTrackerLayers, u1))
                 elif abs(lep.pdg_id) == 11:
                     try:
                         pt_corr.append(lep.pt/merge[lep.idx][0].eCorr)
@@ -82,8 +82,8 @@ class muonScaleResProducer(Module):
             pt_err=[]
             for lep in leptons:
                 if abs(lep.pdg_id) == 13:
-                    pt_corr.append(lep.pt * mk_safe(roccor.kScaleDT,lep.charge, lep.pt, lep.eta, lep.phi))
-                    pt_err.append(lep.pt * mk_safe(roccor.kScaleDTerror,lep.charge, lep.pt, lep.eta, lep.phi))
+                    pt_corr.append(lep.pt * mk_safe(roccor.kScaleDT,merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi))
+                    pt_err.append(lep.pt * mk_safe(roccor.kScaleDTerror,merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi))
                 elif abs(lep.pdg_id) == 11:
                     try:
                         pt_corr.append(lep.pt/merge[lep.idx][0].eCorr)
