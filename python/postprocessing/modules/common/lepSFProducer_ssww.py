@@ -62,12 +62,18 @@ class lepSFProducer(Module):
         self.el_h_high = ROOT.std.vector(str)(len(el_f_high))
         for i in range(len(el_f_high)): self.el_f_high[i] = el_f_high[i]; self.el_h_high[i] = el_h_high[i];
 
+        for library in [ "libCondFormatsJetMETObjects", "libPhysicsToolsNanoAODTools" ]:
+            if library not in ROOT.gSystem.GetLibraries():
+                print("Load Library '%s'" % library.replace("lib", ""))
+                ROOT.gSystem.Load(library)
+        '''
         if "/LeptonEfficiencyCorrector_cc.so" not in ROOT.gSystem.GetLibraries():
             print "Load C++ Worker"
             # ROOT.gROOT.ProcessLine(".L %s/PhysicsTools/NanoAODTools/python/postprocessing/helpers/LeptonEfficiencyCorrector.cc+" % os.environ['CMSSW_BASE'])
             # It's strange the correct path of LeptonEfficiencyCorrector.cc on crab worker sever is following path
             # ROOT.gROOT.ProcessLine(".L %s/python/PhysicsTools/NanoAODTools/postprocessing/helpers/LeptonEfficiencyCorrector.cc+" % os.environ['CMSSW_BASE'])
             ROOT.gROOT.ProcessLine(".L %s/src/PhysicsTools/NanoAODTools/python/postprocessing/helpers/LeptonEfficiencyCorrector.cc+" % os.environ['CMSSW_BASE'])
+        '''
     def beginJob(self):
         self._worker_mu_tight = ROOT.LeptonEfficiencyCorrector(self.mu_f_tight,self.mu_h_tight)
         self._worker_mu_loose = ROOT.LeptonEfficiencyCorrector(self.mu_f_loose,self.mu_h_loose)
