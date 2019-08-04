@@ -1,6 +1,15 @@
+import argparse
 import os
 
-version = '_v4'
+parser = argparse.ArgumentParser(description='manual to this script')
+parser.add_argument('-v','--version', help='which version should be', default='4')
+group = parser.add_mutually_exclusive_group()  # type: _MutuallyExclusiveGroup
+group.add_argument('-y','--year', help='run on which year', choices=('2016','2017','2018'))
+group.add_argument('-a','--all', help='chose all jobs',action='store_true', default= False)
+args = parser.parse_args()
+
+path = '/pnfs/ihep.ac.cn/data/cms/store/user/jixiao/'
+version = '_v%s/' %args.version
 
 
 def new_py(year):
@@ -94,6 +103,9 @@ def new_py(year):
 
 
 if __name__ == '__main__':
-    new_py('2016')
-    new_py('2017')
-    new_py('2018')
+    if args.all:
+        new_py('2016')
+        new_py('2017')
+        new_py('2018')
+    else:
+        new_py(args.year)

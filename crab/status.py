@@ -6,10 +6,11 @@ import argparse
 parser = argparse.ArgumentParser(description='manual to this script')
 parser.add_argument('-y','--year', help='run over which year', dest='chosenyear', default = '2022', choices=('2016','2017','2018','2022'))
 parser.add_argument('-m','--mode', help='original mode or simplified mode [o/s]', dest='mode', default='s', choices=('o','s'))
+parser.add_argument('-v','--version', help='which version should be? Need to be same version as create_cfg.py', default='4')
 args = parser.parse_args()
 
 path = '/pnfs/ihep.ac.cn/data/cms/store/user/jixiao/'
-version = '_v1/'
+version = '_v%s/' % args.version
 
 
 def remove_text(a, year):
