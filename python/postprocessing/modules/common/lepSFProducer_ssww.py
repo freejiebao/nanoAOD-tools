@@ -8,7 +8,6 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
 class lepSFProducer(Module):
     def __init__(self, year):
-        self.year =year
         if year=='2016':
             mu_f_tight= ["combine_SF_ID.root","combine_SF_ISO_tight.root"]
             mu_h_tight = ["pt_abseta_ratio", "pt_abseta_ratio"]
@@ -56,7 +55,7 @@ class lepSFProducer(Module):
         for i in range(len(mu_f_loose)): self.mu_f_loose[i] = mu_f_loose[i]; self.mu_h_loose[i] = mu_h_loose[i];
 
         self.el_f_low = ROOT.std.vector(str)(len(el_f_low))
-        self.el_h_low = ROOT.std.vector(str)(len(el_h_low))
+        self.el_h_low = ROOT.std.vector(str)(len(el_f_low))
         for i in range(len(el_f_low)): self.el_f_low[i] = el_f_low[i]; self.el_h_low[i] = el_h_low[i];
 
         self.el_f_high = ROOT.std.vector(str)(len(el_f_high))
@@ -67,15 +66,13 @@ class lepSFProducer(Module):
             print "Load C++ Worker"
             # ROOT.gROOT.ProcessLine(".L %s/PhysicsTools/NanoAODTools/python/postprocessing/helpers/LeptonEfficiencyCorrector.cc+" % os.environ['CMSSW_BASE'])
             # It's strange the correct path of LeptonEfficiencyCorrector.cc on crab worker sever is following path
-            ROOT.gROOT.ProcessLine(".L %s/python/PhysicsTools/NanoAODTools/postprocessing/helpers/LeptonEfficiencyCorrector.cc+" % os.environ['CMSSW_BASE'])
+            # ROOT.gROOT.ProcessLine(".L %s/python/PhysicsTools/NanoAODTools/postprocessing/helpers/LeptonEfficiencyCorrector.cc+" % os.environ['CMSSW_BASE'])
+            ROOT.gROOT.ProcessLine(".L %s/src/PhysicsTools/NanoAODTools/python/postprocessing/helpers/LeptonEfficiencyCorrector.cc+" % os.environ['CMSSW_BASE'])
     def beginJob(self):
         self._worker_mu_tight = ROOT.LeptonEfficiencyCorrector(self.mu_f_tight,self.mu_h_tight)
         self._worker_mu_loose = ROOT.LeptonEfficiencyCorrector(self.mu_f_loose,self.mu_h_loose)
         self._worker_el_low = ROOT.LeptonEfficiencyCorrector(self.el_f_low,self.el_h_low)
-        if self.year == '2018':
-            self._worker_el_high = self._worker_el_low
-        else:
-            self._worker_el_high = ROOT.LeptonEfficiencyCorrector(self.el_f_high,self.el_h_high)
+        self._worker_el_high = ROOT.LeptonEfficiencyCorrector(self.el_f_high,self.el_h_high)
     def endJob(self):
         pass
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):

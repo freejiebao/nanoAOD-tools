@@ -7,7 +7,8 @@
 #include <TH2.h>
 #include <TFile.h>
 
-#include "../python/PhysicsTools/NanoAODTools/postprocessing/src/WeightCalculatorFromHistogram.cc"
+#include "PhysicsTools/NanoAODTools/src/WeightCalculatorFromHistogram.cc"
+//#include "../python/PhysicsTools/NanoAODTools/postprocessing/src/WeightCalculatorFromHistogram.cc"
 
 class LeptonEfficiencyCorrector {
  public:
