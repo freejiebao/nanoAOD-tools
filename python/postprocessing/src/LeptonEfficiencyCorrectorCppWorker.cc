@@ -1,4 +1,4 @@
-#include "../interface/LeptonEfficiencyCorrectorCppWorker.h"
+#include "../python/PhysicsTools/NanoAODTools/postprocessing/interface/LeptonEfficiencyCorrectorCppWorker.h"
 
 LeptonEfficiencyCorrectorCppWorker::LeptonEfficiencyCorrectorCppWorker(std::vector<std::string> files, std::vector<std::string> histos) {
   effmaps_.clear();
