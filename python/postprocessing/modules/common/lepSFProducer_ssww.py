@@ -8,6 +8,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
 class lepSFProducer(Module):
     def __init__(self, year):
+        self.year =year
         if year=='2016':
             mu_f_tight= ["combine_SF_ID.root","combine_SF_ISO_tight.root"]
             mu_h_tight = ["pt_abseta_ratio", "pt_abseta_ratio"]
@@ -71,7 +72,10 @@ class lepSFProducer(Module):
         self._worker_mu_tight = ROOT.LeptonEfficiencyCorrector(self.mu_f_tight,self.mu_h_tight)
         self._worker_mu_loose = ROOT.LeptonEfficiencyCorrector(self.mu_f_loose,self.mu_h_loose)
         self._worker_el_low = ROOT.LeptonEfficiencyCorrector(self.el_f_low,self.el_h_low)
-        self._worker_el_high = ROOT.LeptonEfficiencyCorrector(self.el_f_high,self.el_h_high)
+        if self.year == '2018':
+            self._worker_el_high = self._worker_el_low
+        else:
+            self._worker_el_high = ROOT.LeptonEfficiencyCorrector(self.el_f_high,self.el_h_high)
     def endJob(self):
         pass
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
