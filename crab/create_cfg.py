@@ -1,6 +1,6 @@
 import os
 
-version = '_v2'
+version = '_v4'
 
 
 def new_py(year):
