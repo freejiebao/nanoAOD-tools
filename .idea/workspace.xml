@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="608f19c0-e35a-4ca5-b9bb-e7fc39aef6d9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crab/PSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/PSet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/common/muonScaleResProducer_ssww.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/common/muonScaleResProducer_ssww.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -95,7 +95,7 @@
       <workItem from="1564282490002" duration="2561000" />
       <workItem from="1564410913179" duration="741000" />
       <workItem from="1564496979504" duration="454000" />
-      <workItem from="1564849184514" duration="11331000" />
+      <workItem from="1564849184514" duration="11451000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <created>1563462938308</created>
@@ -335,7 +335,14 @@
       <option name="project" value="LOCAL" />
       <updated>1564904259831</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="update">
+      <created>1564904316460</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1564904316460</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
