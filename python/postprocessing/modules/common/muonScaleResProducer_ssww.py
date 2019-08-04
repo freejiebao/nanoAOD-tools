@@ -88,10 +88,13 @@ class muonScaleResProducer(Module):
                     pt_corr.append(lep.pt * mk_safe(roccor.kScaleDT,merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi))
                     pt_err.append(lep.pt * mk_safe(roccor.kScaleDTerror,merge[lep.idx][0].charge, lep.pt, lep.eta, lep.phi))
                 elif abs(lep.pdg_id) == 11:
-                    try:
-                        pt_corr.append(lep.pt/merge[lep.idx][0].eCorr)
-                    except ZeroDivisionError:
-                        pt_corr.append(-9999.)
+                    if hasattr(merge[lep.idx][0],"eCorr"):
+                        try:
+                            pt_corr.append(lep.pt/merge[lep.idx][0].eCorr)
+                        except ZeroDivisionError:
+                            pt_corr.append(lep.pt)
+                    else:
+                        pt_corr.append(lep.pt)
                     pt_err.append(merge[lep.idx][0].energyErr)
                 else:
                     continue
