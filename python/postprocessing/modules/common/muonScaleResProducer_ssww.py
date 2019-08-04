@@ -87,7 +87,7 @@ class muonScaleResProducer(Module):
                 elif abs(lep.pdg_id) == 11:
                     try:
                         pt_corr.append(lep.pt/merge[lep.idx][0].eCorr)
-                    except ZeroDivisionError:
+                    except:
                         pt_corr.append(lep.pt)
                     pt_err.append(merge[lep.idx][0].energyErr)
                 else:
