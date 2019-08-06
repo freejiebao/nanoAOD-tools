@@ -2,9 +2,10 @@ import ROOT
 import os
 import argparse
 import SAMPLE
+from array import array
 
 parser = argparse.ArgumentParser(description='manual to this script')
-parser.add_argument('-s','--subtract', help='subtract real lepton',action='store_false', default= True)
+parser.add_argument('-s','--subtract', help='subtract real lepton, default is true',action='store_false', default= True)
 group = parser.add_mutually_exclusive_group()  # type: _MutuallyExclusiveGroup
 group.add_argument('-c','--channel', help='muon/electron fake rate', choices=('muon','electron'),default='muon')
 group.add_argument('-a','--all', help='muon and electron fake rate',action='store_true', default= False)
@@ -14,7 +15,7 @@ args = parser.parse_args()
 ROOT.ROOT.EnableImplicitMT()
 
 def add_files(samples, chain, exclude):
-    path = '/path/to/ntuple/'
+    path = './'
     files = []
     for isample in chain:
         if not isample in exclude:
@@ -24,6 +25,8 @@ def add_files(samples, chain, exclude):
 
 def get_plot(name, trigger, PID, files, isdata):
 
+    eta_bin = array('f',[0., 0.5, 1., 1.479, 2., 2.5])
+    pt_bin = array('f',[20, 25, 30, 35])
     fake_cut = trigger + '&& lepton_fakeable[0] && lepton_pdg_id[0] ==' + PID + '&& met < 30'
     tight_cut = trigger + '&& lepton_tight[0] && lepton_pdg_id[0] ==' + PID + '&& met < 30'
     real_fake = trigger + '&& lepton_real[0] && lepton_fakeable[0] && lepton_pdg_id[0] ==' + PID + '&& met < 30'
@@ -37,16 +40,16 @@ def get_plot(name, trigger, PID, files, isdata):
 
     df = ROOT.ROOT.RDataFrame("Events", files)
     # For simplicity, select only events with exactly two muons and require opposite charge
-    fake_template = df.Filter('nLepton == 1').Filter(fake_selections) \
-        .Define('mt','sqrt(2*lepton_pt[0]*event.met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
+    fake_template = df.Filter('nlepton == 1').Filter(fake_selections) \
+        .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
         .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];') \
-        .Histo2D({"fake_"+name, "fake;|#eta|;p_{T} (GeV)", 5, {0., 0.5, 1., 1.479, 2., 2.5}, 3, {20, 25, 30, 35}}, "abs_eta", "pt_tmp")
+        .Histo2D(("fake_"+name, "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp")
     fake_template.Sumw2()
 
-    tight_template = df.Filter('nLepton == 1').Filter(true_selections) \
-        .Define('mt','sqrt(2*lepton_pt[0]*event.met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
+    tight_template = df.Filter('nlepton == 1').Filter(true_selections) \
+        .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
         .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];') \
-        .Histo2D({"tight_"+name, "tight;|#eta|;p_{T} (GeV)", 5, {0., 0.5, 1., 1.479, 2., 2.5}, 3, {20, 25, 30, 35}}, "abs_eta", "pt_tmp")
+        .Histo2D(("tight_"+name, "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp")
     tight_template.Sumw2()
 
     return fake_template, tight_template
@@ -63,6 +66,7 @@ def calc(_channel):
         trigger = 'HLT_Mu17_TrkIsoVVL'
         PID = '13'
         files = add_files(samples, data_chain,['SingleMuon','SingleElectron','MuonEG','DoubleEG'])
+        files = ['DoubleMuon_Run2017C.root']
         sig = ROOT.std.vector("string")(len(files))
         for i in range(0,len(files)):
             sig[i]=files[i]
@@ -81,7 +85,7 @@ def calc(_channel):
     h2_ratio= h2_true_data
     h2_ratio.SetName('fakerate')
     h2_ratio.SetTitle('fakerate')
-    h2_ratio.Divide(h2_fake_data)
+    h2_ratio.Divide(h2_fake_data.GetPtr())
 
     ROOT.gStyle.SetPaintTextFormat("4.2f")
     c1=ROOT.TCanvas("c1", "c1", 1200, 900)
@@ -102,14 +106,14 @@ def calc(_channel):
             h2_fake_mc, h2_true_mc = get_plot(imc,trigger, PID, bkg, False)
             h2_fake_mc.Write()
             h2_true_mc.Write()
-            h2_fake_tmp.Add(h2_fake_mc,-1)
-            h2_true_tmp.Add(h2_true_mc,-1)
+            h2_fake_tmp.Add(h2_fake_mc.GetPtr(),-1)
+            h2_true_tmp.Add(h2_true_mc.GetPtr(),-1)
         h2_fake_tmp.Write()
         h2_true_tmp.Write()
         h2_ratio_subtract= h2_true_tmp
         h2_ratio_subtract.SetName('fakerate_subtract')
         h2_ratio_subtract.SetTitle('fakerate_subtract')
-        h2_ratio_subtract.Divide(h2_fake_tmp)
+        h2_ratio_subtract.Divide(h2_fake_tmp.GetPtr())
         h2_ratio_subtract.Write()
 
         c2=ROOT.TCanvas("c2", "c2", 1200, 900)
