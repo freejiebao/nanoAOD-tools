@@ -39,8 +39,8 @@ def new_py(year):
     #site = "T2_CN_Beijing"
     site = "T2_CH_CERNBOX"
 
-    print("Created directory:" + b)
-    print("The created configuration files:")
+    print(">>>>>>>>>>>>>>>>>>>> created directory for %s :" + b) % year
+    print(">>>>>>>>>>>>>>>>>>>> the created configuration files:")
     if not os.path.exists(b):
         os.makedirs(b)
     for iSample in _Samples:
@@ -53,7 +53,7 @@ def new_py(year):
         unitsPerJob = '20'
         lumiMask = "config.Data.totalUnits = -1"
         for iiSample in _Samples[iSample]:
-            print(iiSample)
+            # print(iiSample)
             if iiSample == "nanoAOD":
                 bsh = 'crab_script_data_%s.sh' % year
                 script = 'crab_script_data_%s.py' % year
