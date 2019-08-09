@@ -67,7 +67,6 @@ Samples["DYJetsToLL_Pt-650ToInf_ext1"]      = {'nanoAODSIM': '/DYJetsToLL_Pt-650
 Samples["DYJetsToLL_Pt-650ToInf_ext2"]      = {'nanoAODSIM': '/DYJetsToLL_Pt-650ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16NanoAODv4-PUMoriond17_Nano14Dec2018_102X_mcRun2_asymptotic_v6_ext2-v2/NANOAODSIM'}
 Samples["DYJetsToTauTau_ForcedMuEleDecay_M-50"]      = {'nanoAODSIM': '/DYJetsToTauTau_ForcedMuEleDecay_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16NanoAODv4-PUMoriond17_Nano14Dec2018_102X_mcRun2_asymptotic_v6-v1/NANOAODSIM'}
 Samples["DYJetsToTauTau_ForcedMuEleDecay_M-50_ext1"]      = {'nanoAODSIM': '/DYJetsToTauTau_ForcedMuEleDecay_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_ext1/RunIISummer16NanoAODv4-PUMoriond17_Nano14Dec2018_102X_mcRun2_asymptotic_v6_ext1-v1/NANOAODSIM'}
-Samples["DYJetsToTauTau_ForcedMuEleDecay_M-50_ext1"]      = {'nanoAODSIM': '/DYJetsToTauTau_ForcedMuEleDecay_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_ext1/RunIISummer16NanoAODv4-PUMoriond17_Nano14Dec2018_102X_mcRun2_asymptotic_v6_ext1-v1/NANOAODSIM'}
 # another way to choose DY sample
 Samples["DYJetsToLL_M-50_ext1"]      = {'nanoAODSIM': '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16NanoAODv4-PUMoriond17_Nano14Dec2018_102X_mcRun2_asymptotic_v6_ext1-v1/NANOAODSIM'}
 Samples["DYJetsToLL_M-50_ext2"]      = {'nanoAODSIM': '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16NanoAODv4-PUMoriond17_Nano14Dec2018_102X_mcRun2_asymptotic_v6_ext2-v1/NANOAODSIM'}

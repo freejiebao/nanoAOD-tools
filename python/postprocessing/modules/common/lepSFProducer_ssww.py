@@ -30,9 +30,9 @@ class lepSFProducer(Module):
 
         elif year=='2018':
             mu_f_tight= ["RunABCD_SF_ID.root","RunABCD_SF_ISO_tight.root"]
-            mu_h_tight = ["NUM_TightID_DEN_genTracks_pt_abseta", "NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta"]
+            mu_h_tight = ["NUM_TightID_DEN_TrackerMuons_pt_abseta", "NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta"]
             mu_f_loose= ["RunABCD_SF_ID.root","RunABCD_SF_ISO_loose.root"]
-            mu_h_loose = ["NUM_TightID_DEN_genTracks_pt_abseta", "NUM_LooseRelIso_DEN_TightIDandIPCut_pt_abseta"]
+            mu_h_loose = ["NUM_TightID_DEN_TrackerMuons_pt_abseta", "NUM_LooseRelIso_DEN_TightIDandIPCut_pt_abseta"]
             el_f_low = ["2018_ElectronMVA80.root","egammaEffi.txt_EGM2D_updatedAll.root"]
             el_h_low = ["EGamma_SF2D", "EGamma_SF2D"]
             el_f_high = ["2018_ElectronMVA80.root","egammaEffi.txt_EGM2D_updatedAll.root"]
