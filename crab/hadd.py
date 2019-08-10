@@ -58,11 +58,11 @@ def submit(year):
                 tmp_str = _Success[iSample][iiSample]  # dataset
                 hadd_all += tmp_str + '*.root '
             os.system(hadd_all)
-            size = get_FileSize(iSample + '.root')
+            size = get_FileSize(tmp_path+iSample + '.root')
             if args.transfer:
                 os.system('ssh ' + server + ' mkdir -p ' + destiny)
                 os.system('scp ' + tmp_path+iSample + '.root ' + server + ':' + destiny)
-                os.remove(iSample + '.root')
+                os.remove(tmp_path+iSample + '.root')
             else:
                 os.system('mv ' + tmp_path+iSample + '.root '+destiny)
             new = 'Hadd[\'' + iSample + '\'] = ' + str(size) + '\n'
