@@ -38,7 +38,7 @@ def xs_weight(_year, sample, df, n_weighted_events):
     except:
         print("==================== Error: cannot find %s in XSDB") % sample
         assert False
-    df_xsweight=df.Define(weight)
+    df_xsweight=df.Define('xsweight','return '+str(weight)+';')
     return df_xsweight
 
 
