@@ -26,7 +26,7 @@ def theory_unc(df):
 
 
 def xs_weight(_year, sample, df, n_weighted_events):
-    print(">>>>>>>>>>>>>>>>>>>> xs weight of ") % sample
+    print(">>>>>>>>>>>>>>>>>>>> xs weight of %s") % sample
     input='../../../../crab/'
     sample.strip('.root')
     lumi=SAMPLE.get_lumi(_year)
