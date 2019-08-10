@@ -15,6 +15,10 @@ ROOT.ROOT.EnableImplicitMT()
 def theory_unc(df):
     #df = ROOT.ROOT.RDataFrame("Events", files)
     print(">>>>>>>>>>>>>>>>>>>> theoretic uncertainty")
+    # some samples doesn't have theoretic uncertainty
+    branch_list=df.GetColumnNames()
+    if not "nLHEPdfWeight" in branch_list:
+        return df
     df_unc=df.Define('qcd_unc','float sum=0;for(int i=0; i < nLHEPdfWeight; i++){sum += LHEPdfWeight[i];};\
                       float mean=sum/nLHEPdfWeight;sum=0;for(int i=0; i < nLHEPdfWeight; i++){sum+=LHEPdfWeight[i]*LHEPdfWeight[i];};\
                       return sqrt((sum-nLHEPdfWeight*mean*mean)/(nLHEPdfWeight-1));')\
