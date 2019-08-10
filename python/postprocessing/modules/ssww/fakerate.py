@@ -1,27 +1,27 @@
 import ROOT
-import os
 import argparse
 import SAMPLE
 from array import array
 
 parser = argparse.ArgumentParser(description='manual to this script')
 parser.add_argument('-s','--subtract', help='subtract real lepton, default is true',action='store_false', default= True)
+parser.add_argument('-i','--input', help='input path', default= '/eos/user/l/llinwei/jie/ssww_ntuple/')
+parser.add_argument('-y','--year', help='which year, default is 2016', default= '2016', choices=('2016','2017','2018'))
 group = parser.add_mutually_exclusive_group()  # type: _MutuallyExclusiveGroup
 group.add_argument('-c','--channel', help='muon/electron fake rate', choices=('muon','electron'),default='muon')
 group.add_argument('-a','--all', help='muon and electron fake rate',action='store_true', default= False)
+'''
+group_data = parser.add_mutually_exclusive_group()  # type: _MutuallyExclusiveGroup
+group_data.add_argument('-in','--include', help='include samples only',nargs='*',default=[])
+group_data.add_argument('-ex','--exclude', help='exclude samples',nargs='*',default=['SingleMuon','SingleElectron','MuonEG','DoubleEG'])
+'''
+group_mc = parser.add_mutually_exclusive_group()  # type: _MutuallyExclusiveGroup
+group_mc.add_argument('-in','--include', help='include samples only',nargs='*',default=[])
+group_mc.add_argument('-ex','--exclude', help='exclude samples',nargs='*',default=['WZ1','WZ2'])
 args = parser.parse_args()
 
 
 ROOT.ROOT.EnableImplicitMT()
-
-def add_files(samples, chain, exclude):
-    path = './'
-    files = []
-    for isample in chain:
-        if not isample in exclude:
-            for i in range(0,len(samples[isample])):
-                files.append(path+samples[isample][i])
-    return files
 
 def get_plot(name, trigger, PID, files, isdata):
 
@@ -54,18 +54,18 @@ def get_plot(name, trigger, PID, files, isdata):
 
     return fake_template, tight_template
 
-def calc(_channel):
+def calc(_channel,_year):
     # Enable multi-threading
     # Create dataframe from NanoAOD files
 
     # include = []
     # exclude = []
-    fout = ROOT.TFile('fakerate_'+_channel+'.root','recreate')
-    samples, data_chain, mc_chain = SAMPLE.set_samples()
+    fout = ROOT.TFile(_year+'_'+'fakerate_'+_channel+'.root','recreate')
+    samples, data_chain, mc_chain = SAMPLE.set_samples(_year)
     if _channel == 'muon':
         trigger = 'HLT_Mu17_TrkIsoVVL'
         PID = '13'
-        files = add_files(samples, data_chain,['SingleMuon','SingleElectron','MuonEG','DoubleEG'])
+        files = SAMPLE.add_files(_year,args.input, samples, data_chain,['SingleMuon','SingleElectron','MuonEG','DoubleEG'],[])
         files = ['DoubleMuon_Run2017C.root']
         sig = ROOT.std.vector("string")(len(files))
         for i in range(0,len(files)):
@@ -73,7 +73,7 @@ def calc(_channel):
     elif _channel == 'electron':
         trigger = 'HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30 && HLT_Ele17_CaloIdL_TrackIdL_IsoVL_PFJet30 && HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30'
         PID = '11'
-        files = add_files(samples, data_chain,['SingleMuon','SingleElectron','MuonEG','DoubleMuon'])
+        files = SAMPLE.add_files(_year,args.input, samples, data_chain,['SingleMuon','SingleElectron','MuonEG','DoubleMuon'],[])
         sig = ROOT.std.vector("string")(len(files))
         for i in range(0,len(files)):
             sig[i]=files[i]
@@ -99,7 +99,7 @@ def calc(_channel):
         for imc in mc_chain:
             mc_chain_single = []
             mc_chain_single.append(imc)
-            files = add_files(samples, mc_chain_single,['WZ1','WZ2'])
+            files = SAMPLE.add_files(_year,args.input, samples, mc_chain_single,args.exlcude,args.inlcude)
             bkg = ROOT.std.vector("string")(len(files))
             for i in range(0,len(files)):
                 bkg[i]=files[i]
@@ -143,8 +143,13 @@ def calc(_channel):
 
 
 if __name__ == '__main__':
+
+    #print ('>>>>>>>>>>>>>>>>>>>> exclude: ',args.exclude)
+    #print ('>>>>>>>>>>>>>>>>>>>> include: ',args.include)
+
     if args.all:
-        calc('muon')
-        calc('electron')
+        calc('muon',args.year)
+        calc('electron',args.year)
     else:
-        calc(args.channel)
+        calc(args.channel,args.year)
+

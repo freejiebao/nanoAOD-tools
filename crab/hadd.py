@@ -40,6 +40,11 @@ def submit(year):
     exec (handle)
     _Success = Success
 
+    #tmp path for hadd, in order to avoid not enough storage
+    tmp_path='/tmp/jixiao/'
+    if not os.path.exists(tmp_path):
+        os.mkdir(tmp_path)
+
     for iSample in _Success:
         with open('hadd_collection' + year + '.py', 'a+') as collect:
             exec(collect)
@@ -48,7 +53,7 @@ def submit(year):
         try:
             _Hadd[iSample]
         except KeyError:
-            hadd_all = 'haddnano.py ' + iSample + '.root '
+            hadd_all = 'haddnano.py ' + tmp_path+iSample + '.root '
             for iiSample in _Success[iSample]:
                 tmp_str = _Success[iSample][iiSample]  # dataset
                 hadd_all += tmp_str + '*.root '
@@ -56,10 +61,10 @@ def submit(year):
             size = get_FileSize(iSample + '.root')
             if args.transfer:
                 os.system('ssh ' + server + ' mkdir -p ' + destiny)
-                os.system('scp ' + iSample + '.root ' + server + ':' + destiny)
+                os.system('scp ' + tmp_path+iSample + '.root ' + server + ':' + destiny)
                 os.remove(iSample + '.root')
             else:
-                os.system('mv ' + iSample + '.root '+destiny)
+                os.system('mv ' + tmp_path+iSample + '.root '+destiny)
             new = 'Hadd[\'' + iSample + '\'] = ' + str(size) + '\n'
             with open('hadd_collection' + year + '.py', 'a+') as collect:
                 collect.write(new)
