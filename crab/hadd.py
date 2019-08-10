@@ -41,7 +41,7 @@ def submit(year):
     _Success = Success
 
     #tmp path for hadd, in order to avoid not enough storage
-    tmp_path='/tmp/jixiao/'
+    tmp_path='/tmp/jixiao%s/' % year
     if not os.path.exists(tmp_path):
         os.mkdir(tmp_path)
 

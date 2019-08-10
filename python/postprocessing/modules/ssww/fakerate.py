@@ -34,22 +34,26 @@ def get_plot(name, trigger, PID, files, isdata):
     if isdata:
         fake_selections = fake_cut
         true_selections = tight_cut
+        weight='1.'
     else:
         fake_selections = real_fake
         true_selections = real_tight
+        weight='xsweight*gen_weight/abs(gen_weight)'
 
     df = ROOT.ROOT.RDataFrame("Events", files)
     # For simplicity, select only events with exactly two muons and require opposite charge
     fake_template = df.Filter('nlepton == 1').Filter(fake_selections) \
         .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
-        .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];') \
-        .Histo2D(("fake_"+name, "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp")
+        .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];')\
+        .Define('weight',weight) \
+        .Histo2D(("fake_"+name, "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
     fake_template.Sumw2()
 
     tight_template = df.Filter('nlepton == 1').Filter(true_selections) \
         .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
         .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];') \
-        .Histo2D(("tight_"+name, "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp")
+        .Define('weight',weight) \
+        .Histo2D(("tight_"+name, "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
     tight_template.Sumw2()
 
     return fake_template, tight_template

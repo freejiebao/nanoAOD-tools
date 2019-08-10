@@ -1,5 +1,12 @@
 import sys
 
+def get_lumi(_year):
+    if _year=='2016':
+        return 35.9
+    elif _year == '2017':
+        return 41.5
+    else:
+        return 59.74
 
 def set_samples(_year):
     sample = {}
