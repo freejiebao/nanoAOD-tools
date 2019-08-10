@@ -28,13 +28,13 @@ def theory_unc(df):
 def xs_weight(_year, sample, df, n_weighted_events):
     print(">>>>>>>>>>>>>>>>>>>> xs weight of %s") % sample
     input='../../../../crab/'
-    sample.strip('.root')
+    sample_sub=sample.strip('.root')
     lumi=SAMPLE.get_lumi(_year)
     with open(input+'xs_' + _year + '_nano_v4.py', 'r') as collect:
         exec (collect)
     _XSDB = XSDB
     try:
-        weight=_XSDB[sample]['xs']*_XSDB[sample]['kFactor']*lumi*1000/n_weighted_events
+        weight=_XSDB[sample_sub]['xs']*_XSDB[sample_sub]['kFactor']*lumi*1000/n_weighted_events
     except:
         print("==================== Error: cannot find %s in XSDB") % sample
         assert False
