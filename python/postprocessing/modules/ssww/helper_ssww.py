@@ -44,13 +44,13 @@ def xs_weight(_year, sample, df, n_weighted_events):
 
 if __name__ == '__main__':
     samples, data_chain, mc_chain = SAMPLE.set_samples(args.year)
-    for isample in samples:
-        for i in range(len(samples[isample])):
-            f=ROOT.TFile(args.input+args.year+'/'+samples[isample][i])
+    for imc in mc_chain:
+        for i in range(len(samples[imc])):
+            f=ROOT.TFile(args.input+args.year+'/'+samples[imc][i])
             df = ROOT.ROOT.RDataFrame("Events", f)
             if args.theory:
                 df = theory_unc(df)
             if args.xsweight:
-                df = xs_weight(args.year,samples[isample][i],df,f.Get("nEventsGenWeighted").GetBinContent(1))
+                df = xs_weight(args.year,samples[imc][i],df,f.Get("nEventsGenWeighted").GetBinContent(1))
 
-            df.Snapshot("Events", args.input+args.year+'/'+"new"+samples[isample][i])
+            df.Snapshot("Events", args.input+args.year+'/'+"new"+samples[imc][i])
