@@ -18,7 +18,6 @@ if __name__ == '__main__':
         for i in range(len(samples[imc])):
             # xs weight must go the first, or the input name will change
             if args.xsweight:
-                print '>>>>>>>>>>>>>>>>>>>> xs weight for %s' % samples[imc][i]
                 f=ROOT.TFile(args.input+args.year+'/'+samples[imc][i],'update')
                 xs_file_path='../../../../crab/'
                 sample_sub=samples[imc][i].strip('.root')
@@ -31,6 +30,7 @@ if __name__ == '__main__':
                 else:
                     try:
                         weight=_XSDB[sample_sub]['xs']*_XSDB[sample_sub]['kFactor']*lumi*1000/(f.Get("nEventsGenWeighted").GetBinContent(1))
+                        print '>>>>>>>>>>>>>>>>>>>> xs weight for %s: %s' % (samples[imc][i],weight)
                     except:
                         print("==================== Error: cannot find %s in XSDB") % samples[imc][i]
                         assert False
