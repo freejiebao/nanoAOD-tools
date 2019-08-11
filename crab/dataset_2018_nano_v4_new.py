@@ -60,7 +60,6 @@ Samples["GluGluToWWToMNTN"] = {'nanoAODSIM': '/GluGluToWWToMNTN_TuneCP5_13TeV_MC
 Samples["GluGluToWWToTNEN"] = {'nanoAODSIM': '/GluGluToWWToTNEN_TuneCP5_13TeV_MCFM701_pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16-v1/NANOAODSIM'}
 Samples["GluGluToWWToTNMN"] = {'nanoAODSIM': '/GluGluToWWToTNMN_TuneCP5_13TeV_MCFM701_pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16-v1/NANOAODSIM'}
 Samples["GluGluToWWToTNTN"] = {'nanoAODSIM': '/GluGluToWWToTNTN_TuneCP5_13TeV_MCFM701_pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16-v1/NANOAODSIM'}
-
 Samples["WZTo3LNu"]      = {'nanoAODSIM': '/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16-v1/NANOAODSIM'}
 Samples["WZTo3LNu_ext1"]      = {'nanoAODSIM': '/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16_ext1-v1/NANOAODSIM'}
 Samples["WZTo2L2Q"]      = {'nanoAODSIM': '/WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16-v1/NANOAODSIM'}
