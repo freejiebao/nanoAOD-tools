@@ -35,7 +35,7 @@ class sswwProducer(Module):
         #df = ROOT.ROOT.RDataFrame("Events", files)
         sum=0.
         sum_squre=0.
-        if event.hasattr('nLHEPdfWeight'):
+        if hasattr(event,'nLHEPdfWeight'):
             for i in range(0,event.nLHEPdfWeight):
                 sum+=event.LHEPdfWeight[i]
                 sum_squre+=event.LHEPdfWeight[i]*event.LHEPdfWeight[i]
@@ -44,7 +44,7 @@ class sswwProducer(Module):
         else:
             QCD_unc=0
 
-        if event.hasattr('nLHEScaleWeight'):
+        if event.hasattr(event,'nLHEScaleWeight'):
             Max=event.LHEScaleWeight[0]
             Min=event.LHEScaleWeight[0]
             Cen=event.LHEScaleWeight[4]
