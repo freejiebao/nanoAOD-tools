@@ -41,8 +41,9 @@ if __name__ == '__main__':
 
             # theoretic uncertainties using nanoAOD framework
             if args.theory:
+                print '>>>>>>>>>>>>>>>>>>>> theoretic uncertainty for %s' % samples[imc][i]
                 run_command='python ../../../../scripts/nano_postproc.py '
-                run_command+=args.input+args.year+'/theoretic/ '
+                run_command+=args.input+args.year+' '
                 run_command+=args.input+args.year+'/'+samples[imc][i]
                 run_command+=' -I PhysicsTools.NanoAODTools.postprocessing.modules.ssww.helper_ssww helper_thoeretic --bi ../../scripts/keep_and_drop_theoretic.txt -s _thoeretic'
                 os.system(run_command)
