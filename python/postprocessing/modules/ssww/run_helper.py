@@ -28,11 +28,11 @@ if __name__ == '__main__':
                 try:
                     weight=_XSDB[sample_sub]['xs']*_XSDB[sample_sub]['kFactor']*lumi*1000/(f.Get("nEventsGenWeighted").GetBinContent(1))
                 except:
-                    print("==================== Error: cannot find %s in XSDB") % sample
+                    print("==================== Error: cannot find %s in XSDB") % samples[imc][i]
                     assert False
                 h_xsweight=ROOT.TH1D('xsweight','xsweight',1,0,1)
                 h_xsweight.SetBinContent(1,weight)
-                h_xsweight.Write()
+                h_xsweight.Write('xsweight',ROOT.TObject.kOverwrite)
                 f.Close()
 
             # theoretic uncertainties using nanoAOD framework
