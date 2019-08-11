@@ -44,7 +44,7 @@ class sswwProducer(Module):
         else:
             QCD_unc=0
 
-        if event.hasattr(event,'nLHEScaleWeight'):
+        if hasattr(event,'nLHEScaleWeight'):
             Max=event.LHEScaleWeight[0]
             Min=event.LHEScaleWeight[0]
             Cen=event.LHEScaleWeight[4]
