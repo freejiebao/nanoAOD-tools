@@ -1,0 +1,7 @@
+# this is a comment
+#keep *
+drop *
+keep nLHEPdfWeight
+keep LHEPdfWeight
+keep nLHEScaleWeight
+keep LHEScaleWeight
