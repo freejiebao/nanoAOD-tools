@@ -45,5 +45,6 @@ if __name__ == '__main__':
                 run_command='python ../../../../scripts/nano_postproc.py '
                 run_command+=args.input+args.year+' '
                 run_command+=args.input+args.year+'/'+samples[imc][i]
-                run_command+=' -I PhysicsTools.NanoAODTools.postprocessing.modules.ssww.helper_ssww helper_thoeretic --bi ../../scripts/keep_and_drop_theoretic.txt -s _thoeretic'
+                run_command+=' -I PhysicsTools.NanoAODTools.postprocessing.modules.ssww.helper_ssww helper_thoeretic -s _thoeretic'
                 os.system(run_command)
+                # python ../../../../scripts/nano_postproc.py . /afs/cern.ch/work/j/jixiao/nano/2016/CMSSW_10_2_13/src/PhysicsTools/NanoAODTools/2016_WZ_nanoAOD.root -I PhysicsTools.NanoAODTools.postprocessing.modules.ssww.helper_ssww helper_thoeretic -s _thoeretic
