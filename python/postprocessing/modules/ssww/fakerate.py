@@ -69,15 +69,24 @@ def calc(_channel,_year):
     if _channel == 'muon':
         trigger = 'HLT_Mu17_TrkIsoVVL'
         PID = '13'
-        files = SAMPLE.add_files(_year,args.input, samples, data_chain,['SingleMuon','SingleElectron','MuonEG','DoubleEG'],[])
-        files = ['DoubleMuon_Run2017C.root']
+        if _year=='2018':
+            exdata=['SingleMuon','EGamma','MuonEG']
+        else:
+            exdata=['SingleMuon','SingleElectron','MuonEG','DoubleEG']
+
+        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[])
+        # files = ['DoubleMuon_Run2017C.root']
         sig = ROOT.std.vector("string")(len(files))
         for i in range(0,len(files)):
             sig[i]=files[i]
     elif _channel == 'electron':
         trigger = 'HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30 && HLT_Ele17_CaloIdL_TrackIdL_IsoVL_PFJet30 && HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30'
         PID = '11'
-        files = SAMPLE.add_files(_year,args.input, samples, data_chain,['SingleMuon','SingleElectron','MuonEG','DoubleMuon'],[])
+        if _year=='2018':
+            exdata=['SingleMuon','DoubleMuon','MuonEG']
+        else:
+            exdata=['SingleMuon','SingleElectron','MuonEG','DoubleMuon']
+        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[])
         sig = ROOT.std.vector("string")(len(files))
         for i in range(0,len(files)):
             sig[i]=files[i]

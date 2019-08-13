@@ -30,7 +30,7 @@ def save_plot(df):
     for i in range(len(regions)):
         for j in range(len(regions[i])):
             df_tmp=df_os.Filter(regions[i][j])
-            histo=df_tmp.Histo1D(("os_etabin"+str(i)+"_etabin"+str(j)+"_mll", "mll", 40, 70, 110), "mll","weight")
+            histo=df_tmp.Histo1D(("os_etabin"+str(i)+"_etabin"+str(j)+"_mll", "mll", 30, 76.1876, 106.1876), "mll","weight")
             histo.Write()
     fout.Write()
     fout.Close()

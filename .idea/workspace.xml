@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="608f19c0-e35a-4ca5-b9bb-e7fc39aef6d9" name="Default Changelist" comment="">
+    <list default="true" id="608f19c0-e35a-4ca5-b9bb-e7fc39aef6d9" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/run_helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/run_helper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/SAMPLE.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/SAMPLE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/chargeflip_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/chargeflip_plot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/fakerate.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/fakerate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/helper_ssww.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/helper_ssww.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,6 +41,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/python/postprocessing/helpers/LeptonEfficiencyCorrector_ssww.cc" />
   </component>
@@ -107,14 +111,8 @@
       <workItem from="1565064272431" duration="11668000" />
       <workItem from="1565146445849" duration="400000" />
       <workItem from="1565148317759" duration="34602000" />
-      <workItem from="1565421922531" duration="24354000" />
-    </task>
-    <task id="LOCAL-00027" summary="update">
-      <created>1564855841897</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1564855841897</updated>
+      <workItem from="1565421922531" duration="29532000" />
+      <workItem from="1565663398391" duration="631000" />
     </task>
     <task id="LOCAL-00028" summary="update">
       <created>1564856066019</created>
@@ -452,7 +450,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565575483100</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="update">
+      <created>1565578138761</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1565578138761</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
