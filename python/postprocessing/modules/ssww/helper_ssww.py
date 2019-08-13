@@ -100,7 +100,7 @@ class sswwProducer(Module):
             QCD_unc, SCALE_unc=self.theory_unc(event)
             self.out.fillBranch("QCD_unc", QCD_unc)
             self.out.fillBranch("SCALE_unc", SCALE_unc)
-        if self.fake_wieght:
+        if self.fakelepton:
             muon_fr_file = ROOT.TFile("/afs/cern.ch/user/a/amlevin/wg/2016/muon_frs_data_subtract_wjets_zjets.root")
             electron_fr_file = ROOT.TFile("/afs/cern.ch/user/a/amlevin/wg/2016/electron_frs_data_subtract_wjets_zjets.root")
 
