@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="608f19c0-e35a-4ca5-b9bb-e7fc39aef6d9" name="Default Changelist" comment="update">
+    <list default="true" id="608f19c0-e35a-4ca5-b9bb-e7fc39aef6d9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/SAMPLE.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/SAMPLE.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/chargeflip_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/chargeflip_plot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/fakerate.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/fakerate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/helper_ssww.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/helper_ssww.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -112,14 +108,7 @@
       <workItem from="1565146445849" duration="400000" />
       <workItem from="1565148317759" duration="34602000" />
       <workItem from="1565421922531" duration="29532000" />
-      <workItem from="1565663398391" duration="631000" />
-    </task>
-    <task id="LOCAL-00028" summary="update">
-      <created>1564856066019</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1564856066019</updated>
+      <workItem from="1565663398391" duration="1571000" />
     </task>
     <task id="LOCAL-00029" summary="update">
       <created>1564887906335</created>
@@ -457,7 +446,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565578138761</updated>
     </task>
-    <option name="localTasksCounter" value="77" />
+    <task id="LOCAL-00077" summary="update">
+      <created>1565665537808</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1565665537809</updated>
+    </task>
+    <option name="localTasksCounter" value="78" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
