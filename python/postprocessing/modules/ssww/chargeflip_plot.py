@@ -2,7 +2,7 @@ import ROOT
 import SAMPLE
 import numpy as np
 
-ROOT.ROOT.EnableImplicitMT()
+ROOT.ROOT.EnableImplicitMT(8)
 
 zmass = '91.1876'
 def save_plot(df):
@@ -37,6 +37,7 @@ def save_plot(df):
 
 def fit():
     print('>>>>>>>>>>>>>>>>>>>> perform fit')
+    fin=ROOT.TFile('chargeflip_plots.root')
     nEvent=10000
     nHalf=0.5*nEvent
     w = ROOT.RooWorkspace("w")

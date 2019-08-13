@@ -21,7 +21,7 @@ group_mc.add_argument('-ex','--exclude', help='exclude samples',nargs='*',defaul
 args = parser.parse_args()
 
 
-ROOT.ROOT.EnableImplicitMT()
+ROOT.ROOT.EnableImplicitMT(8)
 
 def get_plot(name, trigger, PID, files, isdata):
 

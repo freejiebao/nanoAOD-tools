@@ -9,7 +9,7 @@ parser.add_argument('-t','--theory', help='get the theoretic un certainty',actio
 parser.add_argument('-x','--xsweight', help='get xs scale factor',action='store_false', default= True)
 args = parser.parse_args()
 
-ROOT.ROOT.EnableImplicitMT()
+ROOT.ROOT.EnableImplicitMT(8)
 
 
 def theory_unc(df):

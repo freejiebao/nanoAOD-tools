@@ -39,28 +39,28 @@ class sswwProducer(Module):
         #df = ROOT.ROOT.RDataFrame("Events", files)
         sum=0.
         sum_squre=0.
+        QCD_unc=0
         if hasattr(event,'nLHEPdfWeight'):
-            for i in range(0,event.nLHEPdfWeight):
-                sum+=event.LHEPdfWeight[i]
-                sum_squre+=event.LHEPdfWeight[i]*event.LHEPdfWeight[i]
-            mean=sum/event.nLHEPdfWeight
-            QCD_unc=sqrt((sum_squre- event.nLHEPdfWeight*mean*mean)/(event.nLHEPdfWeight-1))
-        else:
-            QCD_unc=0
+            if event.nLHEPdfWeight > 1:
+                for i in range(0,event.nLHEPdfWeight):
+                    sum+=event.LHEPdfWeight[i]
+                    sum_squre+=event.LHEPdfWeight[i]*event.LHEPdfWeight[i]
+                mean=sum/event.nLHEPdfWeight
+                QCD_unc=sqrt((sum_squre- event.nLHEPdfWeight*mean*mean)/(event.nLHEPdfWeight-1))
 
+        SCALE_unc = 0
         if hasattr(event,'nLHEScaleWeight'):
-            Max=event.LHEScaleWeight[0]
-            Min=event.LHEScaleWeight[0]
-            Cen=event.LHEScaleWeight[4]
-            for i in range(0,event.nLHEScaleWeight):
-                if (not i==2) or (not i==6):
-                    if Max<event.LHEScaleWeight[i]:
-                        Max=event.LHEScaleWeight[i]
-                    if Min>event.LHEScaleWeight[i]:
-                        Min=event.LHEScaleWeight[i]
-            SCALE_unc = max(abs(Max-Cen),abs(Min-Cen))/Cen
-        else:
-            SCALE_unc = 0
+            if event.nLHEScaleWeight > 1:
+                Max=event.LHEScaleWeight[0]
+                Min=event.LHEScaleWeight[0]
+                Cen=event.LHEScaleWeight[4]
+                for i in range(0,event.nLHEScaleWeight):
+                    if (not i==2) or (not i==6):
+                        if Max<event.LHEScaleWeight[i]:
+                            Max=event.LHEScaleWeight[i]
+                        if Min>event.LHEScaleWeight[i]:
+                            Min=event.LHEScaleWeight[i]
+                SCALE_unc = max(abs(Max-Cen),abs(Min-Cen))/Cen
 
         return QCD_unc,SCALE_unc
 
