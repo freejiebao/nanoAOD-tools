@@ -47,7 +47,7 @@ def get_plot(name, trigger, PID, files, isdata):
             tmpfile.Close()
 
         df = ROOT.ROOT.RDataFrame("Events", files[i])
-        print ('>>>>>>>>>>>>>>>>>>>> the opened file: ',files[i])
+        print '>>>>>>>>>>>>>>>>>>>> the opened file: ',files[i]
         # For simplicity, select only events with exactly two muons and require opposite charge
         tmpplot=df.Filter('nlepton == 1').Filter(fake_selections) \
             .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
@@ -127,13 +127,14 @@ def calc(_channel,_year):
             mc_chain_single.append(imc)
             files = SAMPLE.add_files(_year,args.input, samples, mc_chain_single,args.exclude,args.include,'_thoeretic')
             bkg = ROOT.std.vector("string")(len(files))
-            for i in range(0,len(files)):
-                bkg[i]=files[i]
-            h2_fake_mc, h2_true_mc = get_plot(imc,trigger, PID, bkg, False)
-            h2_fake_mc.Write()
-            h2_true_mc.Write()
-            h2_fake_tmp.Add(h2_fake_mc.GetPtr(),-1)
-            h2_true_tmp.Add(h2_true_mc.GetPtr(),-1)
+            if not len(files)==0:
+                for i in range(0,len(files)):
+                    bkg[i] = files[i]
+                h2_fake_mc, h2_true_mc = get_plot(imc,trigger, PID, bkg, False)
+                h2_fake_mc.Write()
+                h2_true_mc.Write()
+                h2_fake_tmp.Add(h2_fake_mc.GetPtr(),-1)
+                h2_true_tmp.Add(h2_true_mc.GetPtr(),-1)
         h2_fake_tmp.Write()
         h2_true_tmp.Write()
         h2_ratio_subtract= h2_true_tmp
@@ -141,16 +142,15 @@ def calc(_channel,_year):
         h2_ratio_subtract.SetTitle('fakerate_subtract')
         h2_ratio_subtract.Divide(h2_fake_tmp.GetPtr())
         h2_ratio_subtract.Write()
-
-    ROOT.gStyle.SetPaintTextFormat("4.2f")
-    c1=ROOT.TCanvas("c1", "c1", 1200, 900)
-    h2_ratio.Draw("texte colz")
-    c1.SaveAs("fakerate.pdf")
-    c2=ROOT.TCanvas("c2", "c2", 1200, 900)
-    h2_ratio_subtract.Draw("texte colz")
-    c2.SaveAs("fakerate_subtract.pdf")
-    fout.Write()
-    fout.Close()
+        fout.Write()
+        fout.Close()
+        ROOT.gStyle.SetPaintTextFormat("4.2f")
+        c1=ROOT.TCanvas("c1", "c1", 1200, 900)
+        h2_ratio.Draw("texte colz")
+        c1.SaveAs("fakerate.pdf")
+        c2=ROOT.TCanvas("c2", "c2", 1200, 900)
+        h2_ratio_subtract.Draw("texte colz")
+        c2.SaveAs("fakerate_subtract.pdf")
     '''
     if args.subtract:
         real_fake_sub = df.Filter('nLepton == 1').Filter(real_fake) \
