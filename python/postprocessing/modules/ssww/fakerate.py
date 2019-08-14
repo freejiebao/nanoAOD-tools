@@ -47,20 +47,24 @@ def get_plot(name, trigger, PID, files, isdata):
             tmpfile.Close()
 
         df = ROOT.ROOT.RDataFrame("Events", files[i])
+        print('>>>>>>>>>>>>>>>>>>>> the opened file: ',files[i])
         # For simplicity, select only events with exactly two muons and require opposite charge
-        fake_plot[i] = df.Filter('nlepton == 1').Filter(fake_selections) \
+        tmpplot=df.Filter('nlepton == 1').Filter(fake_selections) \
             .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
             .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];')\
             .Define('weight',weight) \
             .Histo2D(("fake_"+name+"_"+str(i), "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
-        fake_plot[i].Sumw2()
+        tmpplot.Sumw2()
+        fake_plot.append(tmpplot)
 
-        tight_plot[i] = df.Filter('nlepton == 1').Filter(true_selections) \
+        tmpplot = df.Filter('nlepton == 1').Filter(true_selections) \
             .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
             .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];') \
             .Define('weight',weight) \
             .Histo2D(("tight_"+name+"_"+str(i), "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
-        tight_plot[i].Sumw2()
+        tmpplot.Sumw2()
+        tight_plot.append(tmpplot)
+
     fake_template=fake_plot[0]
     tight_template=tight_plot[0]
     for i in range(0,len(tight_plot)-1):
