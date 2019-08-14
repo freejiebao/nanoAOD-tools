@@ -95,8 +95,15 @@ def set_samples(_year):
 
     return sample, data_chain, mc_chain
 
+def insertStr(instr,pos_str,add_str):
+    # change str to list
+    pos=instr.index(pos_str)
+    str_list = list(instr)
+    str_list.insert(pos,add_str)
+    outstr = "".join(str_list)
+    return outstr
 
-def add_files(_year,input, samples, chain, exclude, include):
+def add_files(_year,input, samples, chain, exclude, include, postfix):
     files = []
     if not len(exclude)==0 and not len(include)==0:
         try:
@@ -120,15 +127,18 @@ def add_files(_year,input, samples, chain, exclude, include):
                     print('>>>>>>>>>>>>>>>>>>>> %s not in chain') % i
             if not isample in exclude:
                 for i in range(0,len(samples[isample])):
-                    files.append(input+_year+'/'+samples[isample][i])
+                    realname=insertStr(input+_year+'/'+samples[isample][i],'.root',postfix)
+                    files.append(realname)
         elif include_flag:
             for i in include:
                 if not i in chain:
                     print('>>>>>>>>>>>>>>>>>>>> %s not in chain') % i
             if isample in include:
                 for i in range(0,len(samples[isample])):
-                    files.append(input+_year+'/'+samples[isample][i])
+                    realname=insertStr(input+_year+'/'+samples[isample][i],'.root',postfix)
+                    files.append(realname)
         else:
             for i in range(0,len(samples[isample])):
-                files.append(input+_year+'/'+samples[isample][i])
+                realname=insertStr(input+_year+'/'+samples[isample][i],'.root',postfix)
+                files.append(realname)
     return files

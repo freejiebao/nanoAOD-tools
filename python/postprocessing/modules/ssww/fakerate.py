@@ -38,7 +38,14 @@ def get_plot(name, trigger, PID, files, isdata):
     else:
         fake_selections = real_fake
         true_selections = real_tight
-        weight='xsweight*gen_weight/abs(gen_weight)'
+        if not len(files)==1:
+            print "==================== Error: more than one mc file!"
+            assert False
+        else:
+            tmpfile=ROOT.TFile(files[0])
+            xsweight=tmpfile.Get("xsweight").GetBinContent(1)
+            weight=str(xsweight)+'*gen_weight/abs(gen_weight)'
+            tmpfile.Close()
 
     df = ROOT.ROOT.RDataFrame("Events", files)
     # For simplicity, select only events with exactly two muons and require opposite charge
@@ -74,7 +81,7 @@ def calc(_channel,_year):
         else:
             exdata=['SingleMuon','SingleElectron','MuonEG','DoubleEG']
 
-        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[])
+        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[],'_thoeretic')
         # files = ['DoubleMuon_Run2017C.root']
         sig = ROOT.std.vector("string")(len(files))
         for i in range(0,len(files)):
@@ -86,7 +93,7 @@ def calc(_channel,_year):
             exdata=['SingleMuon','DoubleMuon','MuonEG']
         else:
             exdata=['SingleMuon','SingleElectron','MuonEG','DoubleMuon']
-        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[])
+        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[],'_thoeretic')
         sig = ROOT.std.vector("string")(len(files))
         for i in range(0,len(files)):
             sig[i]=files[i]
@@ -99,7 +106,8 @@ def calc(_channel,_year):
     h2_ratio.SetName('fakerate')
     h2_ratio.SetTitle('fakerate')
     h2_ratio.Divide(h2_fake_data.GetPtr())
-
+    h2_ratio.Write()
+    fout.Write()
     ROOT.gStyle.SetPaintTextFormat("4.2f")
     c1=ROOT.TCanvas("c1", "c1", 1200, 900)
     h2_ratio.Draw("texte colz")
@@ -112,7 +120,7 @@ def calc(_channel,_year):
         for imc in mc_chain:
             mc_chain_single = []
             mc_chain_single.append(imc)
-            files = SAMPLE.add_files(_year,args.input, samples, mc_chain_single,args.exlcude,args.inlcude)
+            files = SAMPLE.add_files(_year,args.input, samples, mc_chain_single,args.exlcude,args.inlcude,'_thoeretic')
             bkg = ROOT.std.vector("string")(len(files))
             for i in range(0,len(files)):
                 bkg[i]=files[i]
