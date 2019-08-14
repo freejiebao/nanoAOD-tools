@@ -117,12 +117,7 @@ def calc(_channel,_year):
     h2_ratio.SetTitle('fakerate')
     h2_ratio.Divide(h2_fake_data.GetPtr())
     h2_ratio.Write()
-    ROOT.gStyle.SetPaintTextFormat("4.2f")
-    c1=ROOT.TCanvas("c1", "c1", 1200, 900)
-    h2_ratio.Draw("texte colz")
-    c1.SaveAs("fakerate.pdf")
 
-    fout.cd()
     if args.subtract:
         h2_fake_tmp, h2_true_tmp = h2_fake_data, h2_true_data
         h2_fake_tmp.SetName('fake_data_subtrct')
@@ -147,12 +142,16 @@ def calc(_channel,_year):
         h2_ratio_subtract.Divide(h2_fake_tmp.GetPtr())
         h2_ratio_subtract.Write()
 
-        c2=ROOT.TCanvas("c2", "c2", 1200, 900)
-        h2_ratio_subtract.Draw("texte colz")
-        c2.SaveAs("fakerate_subtract.pdf")
+    ROOT.gStyle.SetPaintTextFormat("4.2f")
+    c1=ROOT.TCanvas("c1", "c1", 1200, 900)
+    h2_ratio.Draw("texte colz")
+    c1.SaveAs("fakerate.pdf")
+    c2=ROOT.TCanvas("c2", "c2", 1200, 900)
+    h2_ratio_subtract.Draw("texte colz")
+    c2.SaveAs("fakerate_subtract.pdf")
     fout.Write()
     fout.Close()
-'''
+    '''
     if args.subtract:
         real_fake_sub = df.Filter('nLepton == 1').Filter(real_fake) \
             .Define('mt','sqrt(2*lepton_pt[0]*event.met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
@@ -171,7 +170,7 @@ def calc(_channel,_year):
         tight_template.Divide(fake_template.GetPtr())
     else:
         tight_template.Divide(fake_template.GetPtr())
-'''
+    '''
 
 
 if __name__ == '__main__':
