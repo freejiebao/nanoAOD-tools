@@ -109,12 +109,14 @@ def calc(_channel,_year):
     else:
         return
     h2_fake_data, h2_true_data = get_plot('data',trigger, PID, sig,True)
-    h2_ratio= h2_true_data
+    h2_ratio= h2_true_data.Clone()
     h2_ratio.SetName('fakerate')
     h2_ratio.SetTitle('fakerate')
     h2_ratio.Divide(h2_fake_data.GetPtr())
 
-    h2_fake_tmp, h2_true_tmp,h2_ratio_subtract = h2_fake_data, h2_true_data,h2_ratio
+    h2_fake_tmp=h2_fake_data.Clone()
+    h2_true_tmp=h2_true_data.Clone()
+    h2_ratio_subtract=h2_ratio.Clone()
     h2_fake_tmp.SetName('fake_data_subtrct')
     h2_true_tmp.SetName('true_data_subtrct')
     h2_ratio_subtract.SetName('fakerate_subtract')
