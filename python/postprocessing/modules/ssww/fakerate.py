@@ -120,7 +120,7 @@ def calc(_channel,_year):
         for imc in mc_chain:
             mc_chain_single = []
             mc_chain_single.append(imc)
-            files = SAMPLE.add_files(_year,args.input, samples, mc_chain_single,args.exlcude,args.inlcude,'_thoeretic')
+            files = SAMPLE.add_files(_year,args.input, samples, mc_chain_single,args.exclude,args.include,'_thoeretic')
             bkg = ROOT.std.vector("string")(len(files))
             for i in range(0,len(files)):
                 bkg[i]=files[i]
