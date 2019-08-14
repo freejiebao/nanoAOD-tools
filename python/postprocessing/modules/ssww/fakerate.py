@@ -47,7 +47,7 @@ def get_plot(name, trigger, PID, files, isdata):
             tmpfile.Close()
 
         df = ROOT.ROOT.RDataFrame("Events", files[i])
-        print('>>>>>>>>>>>>>>>>>>>> the opened file: ',files[i])
+        print ('>>>>>>>>>>>>>>>>>>>> the opened file: ',files[i])
         # For simplicity, select only events with exactly two muons and require opposite charge
         tmpplot=df.Filter('nlepton == 1').Filter(fake_selections) \
             .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
@@ -68,9 +68,9 @@ def get_plot(name, trigger, PID, files, isdata):
     fake_template=fake_plot[0]
     tight_template=tight_plot[0]
     for i in range(0,len(tight_plot)-1):
-        fake_template.Add(fake_plot[i+1])
+        fake_template.Add(fake_plot[i+1].GetPtr())
         fake_template.SetName("fake_"+name)
-        tight_template.Add(tight_plot[i+1])
+        tight_template.Add(tight_plot[i+1].GetPtr())
         tight_template.SetName("tight_"+name)
 
     return fake_template, tight_template
