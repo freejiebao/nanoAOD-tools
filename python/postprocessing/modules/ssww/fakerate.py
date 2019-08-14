@@ -81,7 +81,6 @@ def calc(_channel,_year):
 
     # include = []
     # exclude = []
-    fout = ROOT.TFile(_year+'_'+'fakerate_'+_channel+'.root','recreate')
     samples, data_chain, mc_chain = SAMPLE.set_samples(_year)
     if _channel == 'muon':
         trigger = 'HLT_Mu17_TrkIsoVVL'
@@ -110,18 +109,19 @@ def calc(_channel,_year):
     else:
         return
     h2_fake_data, h2_true_data = get_plot('data',trigger, PID, sig,True)
-    h2_fake_data.Write()
-    h2_true_data.Write()
     h2_ratio= h2_true_data
     h2_ratio.SetName('fakerate')
     h2_ratio.SetTitle('fakerate')
     h2_ratio.Divide(h2_fake_data.GetPtr())
-    h2_ratio.Write()
+
+    h2_fake_tmp, h2_true_tmp,h2_ratio_subtract = h2_fake_data, h2_true_data,h2_ratio
+    h2_fake_tmp.SetName('fake_data_subtrct')
+    h2_true_tmp.SetName('true_data_subtrct')
+    h2_ratio_subtract.SetName('fakerate_subtract')
+    h2_fake_mc_plot=[]
+    h2_true_mc_plot=[]
 
     if args.subtract:
-        h2_fake_tmp, h2_true_tmp = h2_fake_data, h2_true_data
-        h2_fake_tmp.SetName('fake_data_subtrct')
-        h2_true_tmp.SetName('true_data_subtrct')
         for imc in mc_chain:
             mc_chain_single = []
             mc_chain_single.append(imc)
@@ -131,26 +131,35 @@ def calc(_channel,_year):
                 for i in range(0,len(files)):
                     bkg[i] = files[i]
                 h2_fake_mc, h2_true_mc = get_plot(imc,trigger, PID, bkg, False)
-                h2_fake_mc.Write()
-                h2_true_mc.Write()
+                h2_fake_mc_plot.append(h2_fake_mc)
+                h2_true_mc_plot.append(h2_true_mc)
                 h2_fake_tmp.Add(h2_fake_mc.GetPtr(),-1)
                 h2_true_tmp.Add(h2_true_mc.GetPtr(),-1)
-        h2_fake_tmp.Write()
-        h2_true_tmp.Write()
         h2_ratio_subtract= h2_true_tmp
-        h2_ratio_subtract.SetName('fakerate_subtract')
         h2_ratio_subtract.SetTitle('fakerate_subtract')
         h2_ratio_subtract.Divide(h2_fake_tmp.GetPtr())
+
+    fout = ROOT.TFile(_year+'_'+'fakerate_'+_channel+'.root','recreate')
+    h2_fake_data.Write()
+    h2_true_data.Write()
+    h2_ratio.Write()
+    if args.subtract:
+        for i in range(0,len(h2_fake_mc_plot)):
+            h2_fake_mc_plot[i].Write()
+            h2_true_mc_plot[i].Write()
+        h2_fake_tmp.Write()
+        h2_true_tmp.Write()
         h2_ratio_subtract.Write()
-        fout.Write()
-        fout.Close()
-        ROOT.gStyle.SetPaintTextFormat("4.2f")
-        c1=ROOT.TCanvas("c1", "c1", 1200, 900)
-        h2_ratio.Draw("texte colz")
-        c1.SaveAs("fakerate.pdf")
-        c2=ROOT.TCanvas("c2", "c2", 1200, 900)
-        h2_ratio_subtract.Draw("texte colz")
-        c2.SaveAs("fakerate_subtract.pdf")
+
+    fout.Write()
+    fout.Close()
+    ROOT.gStyle.SetPaintTextFormat("4.2f")
+    c1=ROOT.TCanvas("c1", "c1", 1200, 900)
+    h2_ratio.Draw("texte colz")
+    c1.SaveAs("fakerate.pdf")
+    c2=ROOT.TCanvas("c2", "c2", 1200, 900)
+    h2_ratio_subtract.Draw("texte colz")
+    c2.SaveAs("fakerate_subtract.pdf")
     '''
     if args.subtract:
         real_fake_sub = df.Filter('nLepton == 1').Filter(real_fake) \
