@@ -52,20 +52,23 @@ def get_plot(name, trigger, PID, files, isdata):
             .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
             .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];')\
             .Define('weight',weight) \
-            .Histo2D(("fake_"+name, "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
+            .Histo2D(("fake_"+name+"_"+str(i), "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
         fake_plot[i].Sumw2()
 
         tight_plot[i] = df.Filter('nlepton == 1').Filter(true_selections) \
             .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
             .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];') \
             .Define('weight',weight) \
-            .Histo2D(("tight_"+name, "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
+            .Histo2D(("tight_"+name+"_"+str(i), "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
         tight_plot[i].Sumw2()
     fake_template=fake_plot[0]
     tight_template=tight_plot[0]
     for i in range(0,len(tight_plot)-1):
         fake_template.Add(fake_plot[i+1])
+        fake_template.SetName("fake_"+name)
         tight_template.Add(tight_plot[i+1])
+        tight_template.SetName("tight_"+name)
+
     return fake_template, tight_template
 
 def calc(_channel,_year):
