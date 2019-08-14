@@ -122,6 +122,7 @@ def calc(_channel,_year):
     h2_ratio.Draw("texte colz")
     c1.SaveAs("fakerate.pdf")
 
+    fout.cd()
     if args.subtract:
         h2_fake_tmp, h2_true_tmp = h2_fake_data, h2_true_data
         h2_fake_tmp.SetName('fake_data_subtrct')
