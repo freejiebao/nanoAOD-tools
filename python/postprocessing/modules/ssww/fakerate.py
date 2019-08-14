@@ -22,7 +22,7 @@ args = parser.parse_args()
 
 
 ROOT.ROOT.EnableImplicitMT(8)
-
+ROOT.gROOT.SetBatch(ROOT.kTRUE)
 def get_plot(name, trigger, PID, files, isdata):
 
     eta_bin = array('f',[0., 0.5, 1., 1.479, 2., 2.5])
