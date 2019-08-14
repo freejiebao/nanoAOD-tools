@@ -81,7 +81,7 @@ def calc(_channel,_year):
         else:
             exdata=['SingleMuon','SingleElectron','MuonEG','DoubleEG']
 
-        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[],'_thoeretic')
+        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[],'')
         # files = ['DoubleMuon_Run2017C.root']
         sig = ROOT.std.vector("string")(len(files))
         for i in range(0,len(files)):
@@ -93,7 +93,7 @@ def calc(_channel,_year):
             exdata=['SingleMuon','DoubleMuon','MuonEG']
         else:
             exdata=['SingleMuon','SingleElectron','MuonEG','DoubleMuon']
-        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[],'_thoeretic')
+        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[],'')
         sig = ROOT.std.vector("string")(len(files))
         for i in range(0,len(files)):
             sig[i]=files[i]
