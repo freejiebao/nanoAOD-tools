@@ -24,45 +24,48 @@ args = parser.parse_args()
 ROOT.ROOT.EnableImplicitMT(8)
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
 def get_plot(name, trigger, PID, files, isdata):
-
     eta_bin = array('f',[0., 0.5, 1., 1.479, 2., 2.5])
     pt_bin = array('f',[20, 25, 30, 35])
-    fake_cut = trigger + '&& lepton_fakeable[0] && lepton_pdg_id[0] ==' + PID + '&& met < 30'
-    tight_cut = trigger + '&& lepton_tight[0] && lepton_pdg_id[0] ==' + PID + '&& met < 30'
-    real_fake = trigger + '&& lepton_real[0] && lepton_fakeable[0] && lepton_pdg_id[0] ==' + PID + '&& met < 30'
-    real_tight = trigger + '&& lepton_real[0] && lepton_tight[0] && lepton_pdg_id[0] ==' + PID + '&& met < 30'
-    if isdata:
-        fake_selections = fake_cut
-        true_selections = tight_cut
-        weight='1.'
-    else:
-        fake_selections = real_fake
-        true_selections = real_tight
-        if not len(files)==1:
-            print "==================== Error: more than one mc file!"
-            assert False
+    fake_cut = trigger + '&& lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
+    tight_cut = trigger + '&& lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
+    real_fake = trigger + '&& lepton_real[0] && lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
+    real_tight = trigger + '&& lepton_real[0] && lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
+
+    tight_plot = []
+    fake_plot = []
+    for i in range(0,len(files)):
+        if isdata:
+            fake_selections = fake_cut
+            true_selections = tight_cut
+            weight='1.'
         else:
-            tmpfile=ROOT.TFile(files[0])
+            fake_selections = real_fake
+            true_selections = real_tight
+            tmpfile=ROOT.TFile(files[i])
             xsweight=tmpfile.Get("xsweight").GetBinContent(1)
             weight=str(xsweight)+'*gen_weight/abs(gen_weight)'
             tmpfile.Close()
 
-    df = ROOT.ROOT.RDataFrame("Events", files)
-    # For simplicity, select only events with exactly two muons and require opposite charge
-    fake_template = df.Filter('nlepton == 1').Filter(fake_selections) \
-        .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
-        .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];')\
-        .Define('weight',weight) \
-        .Histo2D(("fake_"+name, "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
-    fake_template.Sumw2()
+        df = ROOT.ROOT.RDataFrame("Events", files[i])
+        # For simplicity, select only events with exactly two muons and require opposite charge
+        fake_plot[i] = df.Filter('nlepton == 1').Filter(fake_selections) \
+            .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
+            .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];')\
+            .Define('weight',weight) \
+            .Histo2D(("fake_"+name, "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
+        fake_plot[i].Sumw2()
 
-    tight_template = df.Filter('nlepton == 1').Filter(true_selections) \
-        .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
-        .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];') \
-        .Define('weight',weight) \
-        .Histo2D(("tight_"+name, "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
-    tight_template.Sumw2()
-
+        tight_plot[i] = df.Filter('nlepton == 1').Filter(true_selections) \
+            .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
+            .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];') \
+            .Define('weight',weight) \
+            .Histo2D(("tight_"+name, "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
+        tight_plot[i].Sumw2()
+    fake_template=fake_plot[0]
+    tight_template=tight_plot[0]
+    for i in range(0,len(tight_plot)-1):
+        fake_template.Add(fake_plot[i+1])
+        tight_template.Add(tight_plot[i+1])
     return fake_template, tight_template
 
 def calc(_channel,_year):
@@ -107,7 +110,6 @@ def calc(_channel,_year):
     h2_ratio.SetTitle('fakerate')
     h2_ratio.Divide(h2_fake_data.GetPtr())
     h2_ratio.Write()
-    fout.Write()
     ROOT.gStyle.SetPaintTextFormat("4.2f")
     c1=ROOT.TCanvas("c1", "c1", 1200, 900)
     h2_ratio.Draw("texte colz")
@@ -140,7 +142,8 @@ def calc(_channel,_year):
         c2=ROOT.TCanvas("c2", "c2", 1200, 900)
         h2_ratio_subtract.Draw("texte colz")
         c2.SaveAs("fakerate_subtract.pdf")
-
+    fout.Write()
+    fout.Close()
 '''
     if args.subtract:
         real_fake_sub = df.Filter('nLepton == 1').Filter(real_fake) \
