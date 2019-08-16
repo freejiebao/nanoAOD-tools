@@ -26,7 +26,7 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 def get_plot(name, trigger, PID, files, isdata):
     eta_bin = array('f',[0., 0.5, 1., 1.479, 2., 2.5])
     pt_bin = array('f',[20, 25, 30, 35])
-    fake_cut = trigger + '&& lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
+    fake_cut = trigger + '&& (lepton_fakeable[0] || lepton_tight[0]) && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
     tight_cut = trigger + '&& lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
     real_fake = trigger + '&& lepton_real[0] && lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
     real_tight = trigger + '&& lepton_real[0] && lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
@@ -49,7 +49,7 @@ def get_plot(name, trigger, PID, files, isdata):
         df = ROOT.ROOT.RDataFrame("Events", files[i])
         print '>>>>>>>>>>>>>>>>>>>> the opened file: ',files[i]
         # For simplicity, select only events with exactly two muons and require opposite charge
-        tmpplot=df.Filter('nlepton == 1').Filter(fake_selections) \
+        tmpplot=df.Filter('nlepton == 1 && njet>0').Filter(fake_selections) \
             .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
             .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];')\
             .Define('weight',weight) \
@@ -57,7 +57,7 @@ def get_plot(name, trigger, PID, files, isdata):
         tmpplot.Sumw2()
         fake_plot.append(tmpplot)
 
-        tmpplot = df.Filter('nlepton == 1').Filter(true_selections) \
+        tmpplot = df.Filter('nlepton == 1 && njet>0').Filter(true_selections) \
             .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
             .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];') \
             .Define('weight',weight) \
@@ -65,13 +65,13 @@ def get_plot(name, trigger, PID, files, isdata):
         tmpplot.Sumw2()
         tight_plot.append(tmpplot)
 
-    fake_template=fake_plot[0]
-    tight_template=tight_plot[0]
+    fake_template=fake_plot[0].Clone()
+    tight_template=tight_plot[0].Clone()
+    fake_template.SetName("fake_"+name)
+    tight_template.SetName("tight_"+name)
     for i in range(0,len(tight_plot)-1):
         fake_template.Add(fake_plot[i+1].GetPtr())
-        fake_template.SetName("fake_"+name)
         tight_template.Add(tight_plot[i+1].GetPtr())
-        tight_template.SetName("tight_"+name)
 
     return fake_template, tight_template
 
@@ -137,9 +137,9 @@ def calc(_channel,_year):
                 h2_true_mc_plot.append(h2_true_mc)
                 h2_fake_tmp.Add(h2_fake_mc.GetPtr(),-1)
                 h2_true_tmp.Add(h2_true_mc.GetPtr(),-1)
-        h2_ratio_subtract= h2_true_tmp
+        h2_ratio_subtract= h2_true_tmp.Clone()
         h2_ratio_subtract.SetTitle('fakerate_subtract')
-        h2_ratio_subtract.Divide(h2_fake_tmp.GetPtr())
+        h2_ratio_subtract.Divide(h2_fake_tmp)
 
     fout = ROOT.TFile(_year+'_'+'fakerate_'+_channel+'.root','recreate')
     h2_fake_data.Write()

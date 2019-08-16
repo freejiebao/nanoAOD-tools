@@ -22,7 +22,7 @@ def save_plot(df):
     for i in range(len(regions)):
         for j in range(len(regions[i])):
             df_tmp=df_ss.Filter(regions[i][j])
-            histo=df_tmp.Histo1D(("ss_etabin"+str(i)+"_etabin"+str(j)+"_mll", "mll", 30, 76.1876, 106.1876), "mll","weight")
+            histo=df_tmp.Histo1D(("ss_etabin"+str(i)+"_etabin"+str(j)+"_mll", "mll", 30, 76.1876, 106.1876), "mll")
             histo.Write()
 
     # opposite-sign
@@ -38,15 +38,25 @@ def save_plot(df):
 def fit():
     print('>>>>>>>>>>>>>>>>>>>> perform fit')
     fin=ROOT.TFile('chargeflip_plots.root')
-    nEvent=10000
-    nHalf=0.5*nEvent
-    w = ROOT.RooWorkspace("w")
-    w.factory("BreitWigner:sig_bw(x[76.1876, 106.1876], bwmean[91.1876,89,93],bwgamma[7.5,0.,30.])")
-    w.factory("CBShape:sig_cb(x, cbmean[91.1876,89,93], cbsigma[7.5,0.,30.],cbalpha[1,1,10],n[1,1,5])")
-    w.factory("FCONV:bxc(x,sig_bw,sig_cb)")
-    w.factory("Exponential:bkg(x,exalpha[-1.,-10,-0.1])")
-    # w.factory("SUM:model(sigfrac[0.5,0,1.]*bxc, bkgfrac[0.5,0,1.]*bkg)")
-    w.factory("SUM:model(nsig[%s,0,%s]*bxc, nbkg[%s,0,%s]*bkg)") %(str(nEvent),str(nHalf),str(nEvent),str(nHalf))
+    histos=[]
+    for tkey in fin.GetListOfKeys():
+        key=tkey.GetName()
+        #print(key)
+        histos.append(key)
+    for ihis in histos:
+        print 'fit to: ',ihis
+        htmp=fin.Get(ihis)
+        nEvent=htmp.Integral()
+        nHalf=0.5*nEvent
+        w = ROOT.RooWorkspace("w")
+        w.factory("BreitWigner:sig_bw(x[76.1876, 106.1876], bwmean[91.1876,89,93],bwgamma[7.5,0.,30.])")
+        w.factory("CBShape:sig_cb(x, cbmean[91.1876,89,93], cbsigma[7.5,0.,30.],cbalpha[1,1,10],n[1,1,5])")
+        w.factory("FCONV:bxc(x,sig_bw,sig_cb)")
+        w.factory("Exponential:bkg(x,exalpha[-1.,-10,-0.1])")
+        # w.factory("SUM:model(sigfrac[0.5,0,1.]*bxc, bkgfrac[0.5,0,1.]*bkg)")
+        w.factory("SUM:model(nsig[%s,0,%s]*bxc, nbkg[%s,0,%s]*bkg)") %(str(nEvent),str(nHalf),str(nEvent),str(nHalf))
+        x=w.var('x')
+        dh=ROOT.RooDataHist('d'+ihis,'d'+ihis,x,ROOT.Import(htmp))
 
 
 if __name__ == '__main__':
