@@ -112,7 +112,8 @@ def calc(_channel,_year):
     h2_ratio= h2_true_data.Clone()
     h2_ratio.SetName('fakerate')
     h2_ratio.SetTitle('fakerate')
-    h2_ratio.Divide(h2_fake_data)
+    h2_ratio.Divide(h2_fake_data
+                    )
 
     h2_fake_tmp=h2_fake_data.Clone()
     h2_true_tmp=h2_true_data.Clone()
