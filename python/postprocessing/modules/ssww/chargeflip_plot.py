@@ -56,8 +56,8 @@ def fit():
         nEvent=htmp.Integral()
         nHalf=0.5*nEvent
         w = ROOT.RooWorkspace("w")
-        w.factory("BreitWigner:sig_bw(x[76.1876, 106.1876], bwmean[91.1876,89,93],bwgamma[7.5,0.,30.])")
-        w.factory("CBShape:sig_cb(x, cbmean[91.1876,89,93], cbsigma[7.5,0.,30.],cbalpha[1,1,10],n[1,1,5])")
+        w.factory("BreitWigner:sig_bw(x[76.1876, 106.1876], bwmean[91.1876,89,93],bwgamma[2.4952,2.4,2.6])")
+        w.factory("CBShape:sig_cb(x, cbmean[0.,-1.,1.], cbsigma[2.4952,2.4,2.6],cbalpha[1.2,1,10],n[0.81,0.5,5])")
         w.factory("FCONV:bxc(x,sig_bw,sig_cb)")
         w.factory("Exponential:bkg(x,exalpha[-1.,-10,-0.1])")
         # w.factory("SUM:model(sigfrac[0.5,0,1.]*bxc, bkgfrac[0.5,0,1.]*bkg)")
