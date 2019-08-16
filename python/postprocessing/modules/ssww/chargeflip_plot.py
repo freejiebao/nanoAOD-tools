@@ -9,13 +9,13 @@ def save_plot(df):
     print('>>>>>>>>>>>>>>>>>>>> save plots')
     #df = ROOT.ROOT.RDataFrame("Events", files)
     fout=ROOT.TFile('chargeflip_plots.root','recreate')
-    df1=df.Filter('nlepton == 2 && lepton_pt[0] > 20 && lepton_pt[2] > 20 && abs(mll-%s) < 15 && lepton_tight[0] && lepton_tight[1]') % zmass
+    df1=df.Filter('nlepton == 2 && lepton_pt[0] > 20 && lepton_pt[2] > 20 && abs(mll-'+zmass+') < 15 && lepton_tight[0] && lepton_tight[1]')
     # pt_bin=['0.','20.']
     eta_bin = ['0.','0.5','1.0','1.5','2.0','2.5']
     regions=np.zeros((5,5),dtype=np.object)
     for i in range(len(regions)):
         for j in range(len(regions[i])):
-            regions[i][j]='abs(lepton_eta[0])>=%s && abs(lepton_eta[0])<%s && abs(lepton_eta[1])>=%s && abs(lepton_eta[1])<%s' %(eta_bin[i],eta_bin[i+1],eta_bin[j],eta_bin[j+1])
+            regions[i][j]='abs(lepton_eta[0])>='+eta_bin[i]+' && abs(lepton_eta[0])<'+eta_bin[i+1]+' && abs(lepton_eta[1])>='+eta_bin[j]+' && abs(lepton_eta[1])<'+eta_bin[j+1]
 
     # same-sign
     df_ss=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1] == 11*11')
@@ -50,6 +50,6 @@ def fit():
 
 
 if __name__ == '__main__':
-    df = ROOT.ROOT.RDataFrame("Events", 'WpWpJJ_EWK.root')
+    df = ROOT.ROOT.RDataFrame("Events", '/eos/user/l/llinwei/jie/ssww_ntuple/2016/WpWpJJ_EWK.root')
     df_unc = save_plot(df)
     #df_unc.Snapshot("Events", "newWpWpJJ_EWK.root")
