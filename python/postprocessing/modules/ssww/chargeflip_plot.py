@@ -1,8 +1,15 @@
+import argparse
 import ROOT
 import SAMPLE
 import numpy as np
 
 ROOT.ROOT.EnableImplicitMT(8)
+ROOT.gROOT.SetBatch(ROOT.kTRUE)
+
+parser = argparse.ArgumentParser(description='manual to this script')
+parser.add_argument('-p','--plot', help='make mll distribution, default is true',action='store_false', default= True)
+parser.add_argument('-f','--fit', help='fit to mll distribution, default is true',action='store_false', default= True)
+args = parser.parse_args()
 
 zmass = '91.1876'
 def save_plot(df):
@@ -82,6 +89,9 @@ def fit():
         w.writeToFile("output/"+ihis+"_config.root",True)
 
 if __name__ == '__main__':
-    df = ROOT.ROOT.RDataFrame("Events", '/eos/user/l/llinwei/jie/ssww_ntuple/2016/WpWpJJ_EWK.root')
-    df_unc = save_plot(df)
+    if args.plot:
+        df = ROOT.ROOT.RDataFrame("Events", '/eos/user/l/llinwei/jie/ssww_ntuple/2016/WpWpJJ_EWK.root')
+        save_plot(df)
+    if args.fit:
+        fit()
     #df_unc.Snapshot("Events", "newWpWpJJ_EWK.root")
