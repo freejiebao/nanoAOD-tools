@@ -44,7 +44,7 @@ if __name__ == '__main__':
                 with open(xs_file_path+'xs_' + args.year + '_nano_v4.py', 'r') as collect:
                     exec (collect)
                 _XSDB = XSDB
-                print _XSDB
+                #print _XSDB
                 try:
                     weight=_XSDB[sample_sub]['xs']*_XSDB[sample_sub]['kFactor']*lumi*1000/(f.Get("nEventsGenWeighted").GetBinContent(1))
                     print '>>>>>>>>>>>>>>>>>>>> xs weight for %s: %s' % (samples[imc][i],weight)
