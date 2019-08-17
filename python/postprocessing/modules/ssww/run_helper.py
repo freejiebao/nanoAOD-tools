@@ -37,7 +37,7 @@ if __name__ == '__main__':
                 with open(xs_file_path+'xs_' + args.year + '_nano_v4.py', 'r') as collect:
                     exec (collect)
                 _XSDB = XSDB
-                if hasattr(f,'xsweight'):
+                if hasattr(_XSDB[sample_sub],'xsweight'):
                     pass
                 else:
                     try:
