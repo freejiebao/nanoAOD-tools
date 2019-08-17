@@ -47,9 +47,9 @@ if __name__ == '__main__':
                         print("==================== Error: cannot find %s in XSDB") % samples[imc][i]
                         assert False
                     _XSDB[sample_sub]['xsweight']=weight
-                    old = 'XSDB[\'' + sample_sub + '\'] = '
+                    old = 'XSDB[\"' + sample_sub + '\"]'
                     remove_text(old, args.year)
-                    new = 'XSDB[\'' + sample_sub + '\'] = ' + str(_XSDB[sample_sub]) + '\n'
+                    new = 'XSDB[\"' + sample_sub + '\"] = ' + str(_XSDB[sample_sub]) + '\n'
                     with open('crab_collection' + args.year + '.py', 'a+') as collect:
                         collect.write(new)
 
