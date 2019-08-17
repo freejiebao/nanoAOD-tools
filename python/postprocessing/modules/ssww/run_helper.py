@@ -12,6 +12,18 @@ args = parser.parse_args()
 
 ROOT.ROOT.EnableImplicitMT(8)
 
+def remove_text(a, year):
+    xs_file_path='../../../../crab/'
+    with open(xs_file_path+'xs_' + year + '_nano_v4.py', 'r') as f:
+        lines = []  # empty list
+        for line in f.readlines():
+            lines.append(line)
+    with open(xs_file_path+'xs_' + year + '_nano_v4.py', 'w') as f:
+        for line in lines:
+            if not (a in line):
+                f.write('%s' % line)
+
+
 if __name__ == '__main__':
     samples, data_chain, mc_chain = SAMPLE.set_samples(args.year)
     for imc in mc_chain:
@@ -34,9 +46,16 @@ if __name__ == '__main__':
                     except:
                         print("==================== Error: cannot find %s in XSDB") % samples[imc][i]
                         assert False
-                    h_xsweight=ROOT.TH1D('xsweight','xsweight',1,0,1)
-                    h_xsweight.SetBinContent(1,weight)
-                    h_xsweight.Write()
+                    _XSDB[sample_sub]['xsweight']=weight
+                    old = 'XSDB[\'' + sample_sub + '\'] = '
+                    remove_text(old, args.year)
+                    new = 'XSDB[\'' + sample_sub + '\'] = ' + str(_XSDB[sample_sub]) + '\n'
+                    with open('crab_collection' + args.year + '.py', 'a+') as collect:
+                        collect.write(new)
+
+                    #h_xsweight=ROOT.TH1D('xsweight','xsweight',1,0,1)
+                    #h_xsweight.SetBinContent(1,weight)
+                    #h_xsweight.Write()
                 f.Close()
 
             # theoretic uncertainties using nanoAOD framework

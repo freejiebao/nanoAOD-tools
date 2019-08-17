@@ -4,6 +4,8 @@
     <list default="true" id="608f19c0-e35a-4ca5-b9bb-e7fc39aef6d9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/chargeflip_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/chargeflip_plot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/run_helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/run_helper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/sswwModule_copy.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/sswwModule_copy.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,7 +31,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/python/postprocessing/scripts" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/crab" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -44,9 +46,9 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/crab" />
       <recent name="$PROJECT_DIR$/python/postprocessing/scripts" />
       <recent name="$PROJECT_DIR$/python/postprocessing/modules/ssww" />
-      <recent name="$PROJECT_DIR$/crab" />
       <recent name="$PROJECT_DIR$/interface" />
       <recent name="$PROJECT_DIR$/src" />
     </key>
@@ -110,14 +112,7 @@
       <workItem from="1565148317759" duration="34602000" />
       <workItem from="1565421922531" duration="29532000" />
       <workItem from="1565663398391" duration="25944000" />
-      <workItem from="1565874553202" duration="9436000" />
-    </task>
-    <task id="LOCAL-00053" summary="update">
-      <created>1565405075175</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1565405075176</updated>
+      <workItem from="1565874553202" duration="14007000" />
     </task>
     <task id="LOCAL-00054" summary="update">
       <created>1565423547762</created>
@@ -455,7 +450,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565967678336</updated>
     </task>
-    <option name="localTasksCounter" value="102" />
+    <task id="LOCAL-00102" summary="update">
+      <created>1565972237369</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1565972237369</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

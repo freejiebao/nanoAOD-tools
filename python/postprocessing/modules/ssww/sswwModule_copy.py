@@ -318,9 +318,9 @@ class sswwProducer(Module):
         detajj = jets[loose_jets[0]].eta - jets[loose_jets[1]].eta
 
         mjj = (jets[loose_jets[0]].p4() + jets[loose_jets[1]].p4()).M()
-        if self.preSel:
-            if mjj < 500:
-                return False
+        #if self.preSel:
+        #    if mjj < 500:
+        #        return False
 
         # store leptons information
         # loose leptons

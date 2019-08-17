@@ -51,22 +51,23 @@ def fit():
         #print(key)
         histos.append(key)
     for ihis in histos:
-        print 'fit to: ',ihis
+        print('fit to: ',ihis)
         htmp=fin.Get(ihis)
         nEvent=htmp.Integral()
-        nHalf=0.5*nEvent
+        nHalf=0.8*nEvent
         w = ROOT.RooWorkspace("w")
         w.factory("BreitWigner:sig_bw(x[76.1876, 106.1876], bwmean[91.1876,89,93],bwgamma[2.4952,2.4,2.6])")
-        w.factory("CBShape:sig_cb(x, cbmean[0.,-1.,1.], cbsigma[2.4952,2.4,2.6],cbalpha[1.2,1,10],n[0.81,0.5,5])")
+        w.factory("CBShape:sig_cb(x, cbmean[0.,1.,10.], cbsigma[2.4952,2.4,2.6],cbalpha[20,0.,10],n[10,0.5,20])")
         w.factory("FCONV:bxc(x,sig_bw,sig_cb)")
         w.factory("Exponential:bkg(x,exalpha[-1.,-10,-0.1])")
         # w.factory("SUM:model(sigfrac[0.5,0,1.]*bxc, bkgfrac[0.5,0,1.]*bkg)")
-        w.factory("SUM:model(nsig["+str(nHalf)+",0,"+str(nEvent)+"]*bxc, nbkg["+str(nHalf)+",0,"+str(nEvent)+"]*bkg)")
+        w.factory("SUM:model(nsig["+str(nHalf)+",0,"+str(nEvent)+"]*bxc, nbkg["+str(nEvent-nHalf)+",0,"+str(nEvent)+"]*bkg)")
         x=w.var('x')
         pdf=w.pdf('model')
         dh=ROOT.RooDataHist('d'+ihis,'d'+ihis,ROOT.RooArgList(x),htmp)
         getattr(w,'import')(dh)
         r = pdf.fitTo(dh, ROOT.RooFit.Save(True), ROOT.RooFit.Minimizer("Minuit2","Migrad"))
+        #r = pdf.chi2FitTo(dh, ROOT.RooFit.Save(True))
         r.Print()
         c = ROOT.TCanvas()
         plot = x.frame(ROOT.RooFit.Title("Fit to: "+ihis))
