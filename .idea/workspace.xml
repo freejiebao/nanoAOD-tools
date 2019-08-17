@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="608f19c0-e35a-4ca5-b9bb-e7fc39aef6d9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crab/xs_2018_nano_v4.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/xs_2018_nano_v4.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/run_helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/run_helper.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -110,14 +111,7 @@
       <workItem from="1565148317759" duration="34602000" />
       <workItem from="1565421922531" duration="29532000" />
       <workItem from="1565663398391" duration="25944000" />
-      <workItem from="1565874553202" duration="16720000" />
-    </task>
-    <task id="LOCAL-00057" summary="update">
-      <created>1565431265095</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1565431265095</updated>
+      <workItem from="1565874553202" duration="17325000" />
     </task>
     <task id="LOCAL-00058" summary="update">
       <created>1565438965991</created>
@@ -455,7 +449,14 @@
       <option name="project" value="LOCAL" />
       <updated>1566021099628</updated>
     </task>
-    <option name="localTasksCounter" value="106" />
+    <task id="LOCAL-00106" summary="update">
+      <created>1566022757853</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1566022757853</updated>
+    </task>
+    <option name="localTasksCounter" value="107" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

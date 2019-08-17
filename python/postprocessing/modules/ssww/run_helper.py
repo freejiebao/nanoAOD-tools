@@ -31,7 +31,7 @@ if __name__ == '__main__':
             # xs weight must go the first, or the input name will change
             if args.xsweight:
                 if not os.path.exists('xs_' + args.year + '_nano_v4_v1.py'):
-                    collect = open('xs_' + args.year + '_nano_v4_v1.py', "a+")
+                    collect = open('xs_' + args.year + '_nano_v4_v1.py', "w")
                     collect.write('XSDB = {} \n')
                     collect.close()
                 else:
