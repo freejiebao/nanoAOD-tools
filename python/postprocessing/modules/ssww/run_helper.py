@@ -30,6 +30,13 @@ if __name__ == '__main__':
         for i in range(len(samples[imc])):
             # xs weight must go the first, or the input name will change
             if args.xsweight:
+                if not os.path.exists('xs_' + args.year + '_nano_v4_v1.py'):
+                    collect = open('xs_' + args.year + '_nano_v4_v1.py', "a+")
+                    collect.write('XSDB = {} \n')
+                    collect.close()
+                else:
+                    pass
+
                 f=ROOT.TFile(args.input+args.year+'/'+samples[imc][i],'update')
                 xs_file_path='../../../../crab/'
                 sample_sub=samples[imc][i].strip('.root')
@@ -37,25 +44,20 @@ if __name__ == '__main__':
                 with open(xs_file_path+'xs_' + args.year + '_nano_v4.py', 'r') as collect:
                     exec (collect)
                 _XSDB = XSDB
-                if hasattr(_XSDB[sample_sub],'xsweight'):
-                    pass
-                else:
-                    try:
-                        weight=_XSDB[sample_sub]['xs']*_XSDB[sample_sub]['kFactor']*lumi*1000/(f.Get("nEventsGenWeighted").GetBinContent(1))
-                        print '>>>>>>>>>>>>>>>>>>>> xs weight for %s: %s' % (samples[imc][i],weight)
-                    except:
-                        print("==================== Error: cannot find %s in XSDB") % samples[imc][i]
-                        assert False
-                    _XSDB[sample_sub]['xsweight']=weight
-                    old = 'XSDB[\"' + sample_sub + '\"]'
-                    remove_text(old, args.year)
-                    new = 'XSDB[\"' + sample_sub + '\"] = ' + str(_XSDB[sample_sub]) + '\n'
-                    with open('crab_collection' + args.year + '.py', 'a+') as collect:
-                        collect.write(new)
-
-                    #h_xsweight=ROOT.TH1D('xsweight','xsweight',1,0,1)
-                    #h_xsweight.SetBinContent(1,weight)
-                    #h_xsweight.Write()
+                print _XSDB
+                try:
+                    weight=_XSDB[sample_sub]['xs']*_XSDB[sample_sub]['kFactor']*lumi*1000/(f.Get("nEventsGenWeighted").GetBinContent(1))
+                    print '>>>>>>>>>>>>>>>>>>>> xs weight for %s: %s' % (samples[imc][i],weight)
+                except:
+                    print("==================== Error: cannot find %s in XSDB") % samples[imc][i]
+                    assert False
+                _XSDB[sample_sub]['xsweight']=weight
+                new = 'XSDB[\"' + sample_sub + '\"] = ' + str(_XSDB[sample_sub]) + '\n'
+                with open('xs_' + args.year + '_nano_v4_v1.py', 'a+') as collect:
+                    collect.write(new)
+                #h_xsweight=ROOT.TH1D('xsweight','xsweight',1,0,1)
+                #h_xsweight.SetBinContent(1,weight)
+                #h_xsweight.Write()
                 f.Close()
 
             # theoretic uncertainties using nanoAOD framework
