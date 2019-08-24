@@ -6,7 +6,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import *
 from PhysicsTools.NanoAODTools.postprocessing.framework.crabhelper import inputFiles,runsAndLumis
 
 from  PhysicsTools.NanoAODTools.postprocessing.modules.ssww.sswwModule_copy import *
-from  PhysicsTools.NanoAODTools.postprocessing.modules.ssww.helper_copy import *
+from  PhysicsTools.NanoAODTools.postprocessing.modules.ssww.helper_ssww import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.lepSFProducer_ssww import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.countHistogramsModule import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer import *
