@@ -319,10 +319,12 @@ class sswwProducer(Module):
         lepton_tkIsoId = []
         lepton_softmu = []
         lepton_zep = []
-
-        detajj = jets[loose_jets[0]].eta - jets[loose_jets[1]].eta
-
-        mjj = (jets[loose_jets[0]].p4() + jets[loose_jets[1]].p4()).M()
+        if len(loose_jets) < 2:
+            detajj=-9999.
+            mjj=-9999.
+        else:
+            detajj = jets[loose_jets[0]].eta - jets[loose_jets[1]].eta
+            mjj = (jets[loose_jets[0]].p4() + jets[loose_jets[1]].p4()).M()
         #if self.preSel:
         #    if mjj < 500:
         #        return False
@@ -353,7 +355,7 @@ class sswwProducer(Module):
             lepton_mass.append(leptons[loose_leptons[i]][0].mass)
             try:
                 lepton_zep.append(abs((leptons[loose_leptons[i]][0].eta - (jets[loose_jets[0]].eta + jets[loose_jets[1]].eta) / 2.) / detajj))
-            except ZeroDivisionError:
+            except:
                 lepton_zep.append(-9999.)
             else:
                 pass
@@ -491,4 +493,4 @@ sswwModule2016 = lambda: sswwProducer(minObjects=1, maxObjects=4, preSel=True, y
 sswwModule2017 = lambda: sswwProducer(minObjects=1, maxObjects=4, preSel=True, year='2017')
 sswwModule2018 = lambda: sswwProducer(minObjects=1, maxObjects=4, preSel=True, year='2018')
 
-# python scripts/nano_postproc.py . 2016_DoubleEG_nanoAOD.root -I PhysicsTools.NanoAODTools.postprocessing.examples.sswwModule_copy sswwModule2016 --bi crab/ssww_keep_and_drop_2016.txt --bo crab/ssww_output_branch_selection_2016.txt
+#python scripts/nano_postproc.py . /afs/cern.ch/work/j/jixiao/nano/2016/CMSSW_10_2_13/src/PhysicsTools/NanoAODTools/2016_DY_nanoAODv5.root -I PhysicsTools.NanoAODTools.postprocessing.modules.ssww.sswwModule_copy sswwModule2016 --bi python/postprocessing/scripts/ssww_keep_and_drop_2016.txt --bo python/postprocessing/scripts/ssww_output_branch_selection_2016.txt
