@@ -80,7 +80,7 @@ class sswwProducer(Module):
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         pass
 
-    def muonID(self, leptons, idx, n_fakeable_leptons, n_tight_leptons):
+    def muonID(self, lep, n_fakeable_leptons, n_tight_leptons):
 
         is_fakeable_id = False
         is_tight_id = False
@@ -90,47 +90,49 @@ class sswwProducer(Module):
 
         if self.year == '2016':
             # fakeable muon
-            if leptons[idx][0].tightId and leptons[idx][0].pfRelIso04_all < 0.4 and leptons[idx][0].tkIsoId > 0:
+            #if leptons[idx][0].tightId and leptons[idx][0].pfRelIso04_all < 0.4 and leptons[idx][0].tkIsoId > 0:
+            if lep.tightId and lep.pfRelIso04_all < 0.4:
                 is_fakeable_id = True
                 n_fakeable_leptons += 1
 
             # tight muon
-            if leptons[idx][0].tightId and leptons[idx][0].pfRelIso04_all < 0.15 and leptons[idx][0].dxy < 0.2 and leptons[idx][0].dz < 0.5:
+            if lep.tightId and lep.pfRelIso04_all < 0.15 and lep.dxy < 0.2 and lep.dz < 0.5:
                 is_tight_id = True
                 n_tight_leptons += 1
 
         elif self.year == '2017':
             # fakeable muon
-            if leptons[idx][0].tightId and leptons[idx][0].pfRelIso04_all < 0.4 and leptons[idx][0].tkIsoId > 0:
+            #if leptons[idx][0].tightId and leptons[idx][0].pfRelIso04_all < 0.4 and leptons[idx][0].tkIsoId > 0:
+            if lep.tightId and lep.pfRelIso04_all < 0.4:
                 is_fakeable_id = True
                 n_fakeable_leptons += 1
 
             # tight muon
-            if leptons[idx][0].mvaId > 2 and leptons[idx][0].miniIsoId > 2:
+            if lep.mvaId >= 3 and lep.miniIsoId >= 3:
                 # if leptons[idx][0].tightId and leptons[idx][0].miniIsoId > 2:
                 is_tight_id = True
                 n_tight_leptons += 1
 
         elif self.year == '2018':
             # fakeable muon
-            if leptons[idx][0].tightId and leptons[idx][0].pfRelIso04_all < 0.4 and leptons[idx][0].tkIsoId > 0:
+            #if leptons[idx][0].tightId and leptons[idx][0].pfRelIso04_all < 0.4 and leptons[idx][0].tkIsoId > 0:
+            if lep.tightId and lep.pfRelIso04_all < 0.4:
                 is_fakeable_id = True
                 n_fakeable_leptons += 1
 
             # tight muon
-            if leptons[idx][0].tightId and leptons[idx][0].miniIsoId > 2 and leptons[idx][0].dxy < 0.2 and leptons[idx][
-                0].dz < 0.5:
+            if lep.tightId and lep.miniIsoId >= 3 and lep.dxy < 0.2 and lep.dz < 0.5:
                 is_tight_id = True
                 n_tight_leptons += 1
 
         # if this muon is just loose, then drop this event
-        if not (is_fakeable_id or is_tight_id):
-            store = False
-        else:
+        if is_fakeable_id or is_tight_id:
             store = True
+        else:
+            store = False
         return store, is_fakeable_id, is_tight_id, n_fakeable_leptons, n_tight_leptons
 
-    def electronID(self, leptons, i, n_fakeable_leptons, n_tight_leptons):
+    def electronID(self, lep, n_fakeable_leptons, n_tight_leptons):
 
         is_fakeable_id = False
         is_tight_id = False
@@ -139,12 +141,12 @@ class sswwProducer(Module):
 
             # fakeable electron
             # print leptons[i][0].pdgId, leptons[i][0].cutBased_HLTPreSel, leptons[i][0].mvaFall17V2Iso_WP80, leptons[i][0].tightCharge,leptons[i][0].eta
-            if leptons[i][0].cutBased_HLTPreSel == 1:
+            if lep.cutBased_HLTPreSel >= 1: # quite important '>=': cutBased_HLTPreSel: 0, fail; 1 loose; 2 tight
                 is_fakeable_id = True
                 n_fakeable_leptons += 1
 
             # tight electron
-            if leptons[i][0].mvaFall17V2Iso_WP80 and leptons[i][0].tightCharge == 2:
+            if lep.mvaFall17V2Iso_WP80 and lep.tightCharge == 2:
                 # if leptons[i][0].cutBased > 3 and leptons[i][0].tightCharge == 2:
                 is_tight_id = True
                 n_tight_leptons += 1
@@ -152,33 +154,35 @@ class sswwProducer(Module):
         elif self.year == '2017':
 
             # fakeable electron
-            if leptons[i][0].cutBased >= 1 and (abs(leptons[i][0].eta) <= 1.479 or (abs(leptons[i][0].eta) > 1.479 and leptons[i][0].sieie < 0.03 and leptons[i][0].eInvMinusPInv < 0.014)):
+            if lep.cutBased >= 2 and (abs(lep.eta) <= 1.479 or (abs(lep.eta) > 1.479 and lep.sieie < 0.03 and lep.eInvMinusPInv < 0.014)):
+            #if lep.cutBased >= 1:
                 is_fakeable_id = True
                 n_fakeable_leptons += 1
 
             # tight electron
-            if leptons[i][0].cutBased > 3 and leptons[i][0].tightCharge == 2:
+            if lep.cutBased >= 4 and lep.tightCharge == 2:
                 is_tight_id = True
                 n_tight_leptons += 1
 
         elif self.year == '2018':
 
             # fakeable electron
-            if leptons[i][0].cutBased >= 1 and (abs(leptons[i][0].eta) <= 1.479 or (abs(leptons[i][0].eta) > 1.479 and leptons[i][0].sieie < 0.03 and leptons[i][0].eInvMinusPInv < 0.014)):
+            if lep.cutBased >= 2 and (abs(lep.eta) <= 1.479 or (abs(lep.eta) > 1.479 and lep.sieie < 0.03 and lep.eInvMinusPInv < 0.014)):
+            #if lep.cutBased >= 1:
                 is_fakeable_id = True
                 n_fakeable_leptons += 1
 
             # tight electron
-            if leptons[i][0].mvaFall17V2Iso_WP80 and leptons[i][0].tightCharge == 2:
+            if lep.mvaFall17V2Iso_WP80 and lep.tightCharge == 2:
                 # if leptons[i][0].cutBased > 3 and leptons[i][0].tightCharge == 2:
                 is_tight_id = True
                 n_tight_leptons += 1
 
         # if this electron is just loose, then drop this event
-        if not (is_fakeable_id or is_tight_id):
-            store = False
-        else:
+        if is_fakeable_id or is_tight_id:
             store = True
+        else:
+            store = False
 
         return store, is_fakeable_id, is_tight_id, n_fakeable_leptons, n_tight_leptons
 
@@ -221,7 +225,7 @@ class sswwProducer(Module):
                     continue
                 if abs(leptons[i][0].eta) > 2.4:
                     continue
-                store, is_fakeable_id, is_tight_id, n_fakeable_leptons, n_tight_leptons = self.muonID(leptons, i, n_fakeable_leptons, n_tight_leptons)
+                store, is_fakeable_id, is_tight_id, n_fakeable_leptons, n_tight_leptons = self.muonID(leptons[i][0], n_fakeable_leptons, n_tight_leptons)
                 if store:
                     is_fakeable.append(is_fakeable_id)
                     is_tight.append(is_tight_id)
@@ -243,7 +247,7 @@ class sswwProducer(Module):
                         is_loose_id = True
                     else:
                         is_loose_id = False
-                    store, is_fakeable_id, is_tight_id, n_fakeable_leptons, n_tight_leptons = self.electronID(leptons, i, n_fakeable_leptons, n_tight_leptons)
+                    store, is_fakeable_id, is_tight_id, n_fakeable_leptons, n_tight_leptons = self.electronID(leptons[i][0], n_fakeable_leptons, n_tight_leptons)
                     if store:
                         is_fakeable.append(is_fakeable_id)
                         is_tight.append(is_tight_id)
@@ -253,7 +257,7 @@ class sswwProducer(Module):
                     # if is_loose_id is true, there will be additional loose leptons, so this event will be dropped
                     elif is_loose_id:
                         return False
-                    # if is_loose_id is false, just skip this event
+                    # if is_loose_id is false, just skip this lepton
                     else:
                         continue
 
@@ -277,8 +281,9 @@ class sswwProducer(Module):
                 tauVeto = False
 
         # jets
-        if len(jets) < 2:
-            return False
+        # if jet multiplicity is needed, then remove below cut
+        #if len(jets) < 2:
+        #    return False
         for i in range(0, len(jets)):
             if jets[i].pt < 30:
                 continue
@@ -293,9 +298,9 @@ class sswwProducer(Module):
 
             # actually jet related lepton maybe not loose
             loose_jets.append(i)
-
-        if len(loose_jets) < 2:
-            return False
+        # if jet multiplicity is needed, then remove below cut
+        #if len(loose_jets) < 2:
+        #    return False
 
         # decide whether lepton real
         isprompt_mask = (1 << 0)  # isPrompt

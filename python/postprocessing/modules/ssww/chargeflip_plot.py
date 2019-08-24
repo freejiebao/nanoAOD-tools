@@ -32,8 +32,8 @@ def save_plot(df):
             histo=df_tmp.Histo1D(("ss_etabin"+str(i)+"_etabin"+str(j)+"_mll", "mll", 30, 76.1876, 106.1876), "mll")
             histo.Write()
 
-    # opposite-sign
-    df_os=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1] == -11*11')
+    # opposite-sign, actually the total number of dielectron
+    df_os=df1.Filter('abs(lepton_pdg_id[0]*lepton_pdg_id[1]) == 11*11')
     for i in range(len(regions)):
         for j in range(len(regions[i])):
             df_tmp=df_os.Filter(regions[i][j])
@@ -44,8 +44,10 @@ def save_plot(df):
 
 def fit():
     print('>>>>>>>>>>>>>>>>>>>> perform fit')
-    fin=ROOT.TFile('chargeflip_plots.root')
+    fin=ROOT.TFile('chargeflip_DATA_2016.root')
     histos=[]
+    count={}
+    count_err={}
     for tkey in fin.GetListOfKeys():
         key=tkey.GetName()
         #print(key)
@@ -57,8 +59,10 @@ def fit():
         nHalf=0.8*nEvent
         w = ROOT.RooWorkspace("w")
         w.factory("BreitWigner:sig_bw(x[76.1876, 106.1876], bwmean[91.1876,89,93],bwgamma[2.4952,2.4,2.6])")
-        w.factory("CBShape:sig_cb(x, cbmean[0.,1.,10.], cbsigma[2.4952,2.4,2.6],cbalpha[20,0.,10],n[10,0.5,20])")
-        w.factory("FCONV:bxc(x,sig_bw,sig_cb)")
+        w.factory("Gaussian:sig_gau(gaumean[0,-2,2],gausigma[2.5,2.0,3.0])")
+        #w.factory("CBShape:sig_cb(x, cbmean[0.,1.,10.], cbsigma[2.4952,2.4,2.6],cbalpha[20,0.,10],n[10,0.5,20])")
+        w.factory("FCONV:bxc(x,sig_bw,sig_gau)")
+        #w.factory("FCONV:bxc(x,sig_bw,sig_cb)")
         w.factory("Exponential:bkg(x,exalpha[-1.,-10,-0.1])")
         # w.factory("SUM:model(sigfrac[0.5,0,1.]*bxc, bkgfrac[0.5,0,1.]*bkg)")
         w.factory("SUM:model(nsig["+str(nHalf)+",0,"+str(nEvent)+"]*bxc, nbkg["+str(nEvent-nHalf)+",0,"+str(nEvent)+"]*bkg)")
@@ -66,9 +70,10 @@ def fit():
         pdf=w.pdf('model')
         dh=ROOT.RooDataHist('d'+ihis,'d'+ihis,ROOT.RooArgList(x),htmp)
         getattr(w,'import')(dh)
-        r = pdf.fitTo(dh, ROOT.RooFit.Save(True), ROOT.RooFit.Minimizer("Minuit2","Migrad"))
-        #r = pdf.chi2FitTo(dh, ROOT.RooFit.Save(True))
-        r.Print()
+        r = pdf.fitTo(dh, ROOT.RooFit.Save(True), ROOT.RooFit.SumW2Error(True),ROOT.RooFit.Minimizer("Minuit2","Migrad"))
+        #r = pdf.fitTo(dh, ROOT.RooFit.Save(True))
+        #print('r.Print()       --------------------------------------------------------',w.var("nsig").getVal())
+        #r.Print()
         c = ROOT.TCanvas()
         plot = x.frame(ROOT.RooFit.Title("Fit to: "+ihis))
         dh.plotOn(plot)
@@ -83,16 +88,37 @@ def fit():
         mc.SetParametersOfInterest(ROOT.RooArgSet(w.var("nsig")))
         mc.SetSnapshot(ROOT.RooArgSet(w.var("nsig")))
         mc.SetObservables(ROOT.RooArgSet(w.var("x")))
-        w.defineSet("nuisParams","nbkg,bwmean,bwgamma,cbmean,cbsigma,cbalpha,exalpha")
+        #w.defineSet("nuisParams","nbkg,bwmean,bwgamma,cbmean,cbsigma,cbalpha,exalpha")
+        w.defineSet("nuisParams","nbkg,bwmean,bwgamma,gaumean,gausigma")
         nuis = getattr(w,'set')("nuisParams")
         mc.SetNuisanceParameters(nuis)
         getattr(w,'import')(mc)
-        w.writeToFile("output/"+ihis+"_config.root",True)
+        w.writeToFile(ihis+"_config.root",True)
+        count[ihis]=w.var("nsig").getVal()
+        count_err[ihis]=w.var("nsig").getError()
+    #print(count)
+    #print(count_err)
+    fout=ROOT.TFile('count_chargeflip.root','recreate')
+    h_ss=ROOT.TH2D('h_ss','h_ss',5,0.,2.5,5,0.,2.5)
+    h_os=ROOT.TH2D('h_os','h_os',5,0.,2.5,5,0.,2.5)
+    for ihis in count:
+        if 'ss' in ihis:
+            h_ss.SetBinContent(int(ihis[9])+1,int(ihis[17])+1,count[ihis])
+            h_ss.SetBinError(int(ihis[9])+1,int(ihis[17])+1,count_err[ihis])
+        else:
+            h_os.SetBinContent(int(ihis[9])+1,int(ihis[17])+1,count[ihis])
+            h_os.SetBinError(int(ihis[9])+1,int(ihis[17])+1,count_err[ihis])
+    h_ss.Write()
+    h_os.Write()
+    fout.Close()
+
+    #print(count)
 
 if __name__ == '__main__':
     if args.plot:
         df = ROOT.ROOT.RDataFrame("Events", '/eos/user/l/llinwei/jie/ssww_ntuple/2016/WpWpJJ_EWK.root')
         save_plot(df)
     if args.fit:
+        print('hahahha')
         fit()
     #df_unc.Snapshot("Events", "newWpWpJJ_EWK.root")

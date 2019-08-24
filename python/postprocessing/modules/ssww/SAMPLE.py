@@ -7,6 +7,7 @@ def get_lumi(_year):
         return 41.53
     else:
         return 59.74
+    #total:137.19
 
 def set_samples(_year):
     sample = {}

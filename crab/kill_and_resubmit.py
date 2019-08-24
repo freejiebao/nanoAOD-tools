@@ -33,13 +33,13 @@ def kill_year(_year):
     file_name = ''
     if _year=='2017':
         b = os.getcwd() + '/cfg2017/'
-        file_name='dataset_2017_nano_v4_new.py'
+        file_name='dataset_2017_nano_v5_new.py'
     elif _year=='2018':
         b = os.getcwd() + '/cfg2018/'
-        file_name='dataset_2018_nano_v4_new.py'
+        file_name='dataset_2018_nano_v5_new.py'
     elif _year=='2016':
         b = os.getcwd() + '/cfg2016/'
-        file_name='dataset_2016_nano_v4_new.py'
+        file_name='dataset_2016_nano_v5_new.py'
 
     handle=open(file_name,"r")
     exec(handle)
@@ -59,7 +59,7 @@ def kill_all(_all):
 
     for i in range(0,len(_year)):
         b = os.getcwd() + '/cfg%s/' %_year[i]
-        file_name='dataset_%s_nano_v4_new.py' %_year[i]
+        file_name='dataset_%s_nano_v5_new.py' %_year[i]
 
         handle=open(file_name,"r")
         exec(handle)

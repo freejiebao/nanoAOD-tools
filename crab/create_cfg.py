@@ -2,7 +2,7 @@ import argparse
 import os
 
 parser = argparse.ArgumentParser(description='manual to this script')
-parser.add_argument('-v','--version', help='which version should be', default='4')
+parser.add_argument('-v','--version', help='which version should be', default='5')
 group = parser.add_mutually_exclusive_group()  # type: _MutuallyExclusiveGroup
 group.add_argument('-y','--year', help='run on which year', choices=('2016','2017','2018'))
 group.add_argument('-a','--all', help='chose all jobs',action='store_true', default= False)
@@ -16,17 +16,17 @@ def new_py(year):
 
     if year == '2017':
         b = os.getcwd() + '/cfg2017/'
-        file_name = 'dataset_2017_nano_v4_new.py'
+        file_name = 'dataset_2017_nano_v5_new.py'
         outdir = '/store/user/%s/nano2017' + version
         golden_json = "\'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt\'"
     elif year == '2018':
         b = os.getcwd() + '/cfg2018/'
-        file_name = 'dataset_2018_nano_v4_new.py'
+        file_name = 'dataset_2018_nano_v5_new.py'
         outdir = '/store/user/%s/nano2018' + version
         golden_json = "\'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions18/13TeV/ReReco/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt\'"
     elif year == '2016':
         b = os.getcwd() + '/cfg2016/'
-        file_name = 'dataset_2016_nano_v4_new.py'
+        file_name = 'dataset_2016_nano_v5_new.py'
         outdir = '/store/user/%s/nano2016' + version
         golden_json = "\'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt\'"
     else:
@@ -50,7 +50,7 @@ def new_py(year):
         bsh = 'crab_script_%s.sh' % year
         script = 'crab_script_%s.py' % year
         split = 'FileBased'
-        unitsPerJob = '20'
+        unitsPerJob = '15'
         lumiMask = "config.Data.totalUnits = -1"
         for iiSample in _Samples[iSample]:
             # print(iiSample)
@@ -58,7 +58,7 @@ def new_py(year):
                 bsh = 'crab_script_data_%s.sh' % year
                 script = 'crab_script_data_%s.py' % year
                 split = 'LumiBased'
-                unitsPerJob = '100'
+                unitsPerJob = '87'
                 lumiMask = "config.Data.lumiMask = %s" % golden_json
             tmp_str = _Samples[iSample][iiSample]  # dataset
             # str_list.append(iSample)    # sample name
