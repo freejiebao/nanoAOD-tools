@@ -282,8 +282,8 @@ class sswwProducer(Module):
 
         # jets
         # if jet multiplicity is needed, then remove below cut
-        #if len(jets) < 2:
-        #    return False
+        if len(jets) < 2:
+            return False
         for i in range(0, len(jets)):
             if jets[i].pt < 30:
                 continue
@@ -299,8 +299,8 @@ class sswwProducer(Module):
             # actually jet related lepton maybe not loose
             loose_jets.append(i)
         # if jet multiplicity is needed, then remove below cut
-        #if len(loose_jets) < 2:
-        #    return False
+        if len(loose_jets) < 2:
+            return False
 
         # decide whether lepton real
         isprompt_mask = (1 << 0)  # isPrompt
