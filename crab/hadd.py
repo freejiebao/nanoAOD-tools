@@ -6,7 +6,7 @@ from argparse import _MutuallyExclusiveGroup
 
 parser = argparse.ArgumentParser(description='manual to this script')
 parser.add_argument('-t','--transfer', help='transfer to some site by scp, defalut is False', action='store_true', default=False)
-parser.add_argument('-s','--sever', help='transfer to the sever', default='xiaoj@hepfarm02.phy.pku.edu.cn')
+parser.add_argument('-s','--server', help='transfer to the server', default='xiaoj@hepfarm02.phy.pku.edu.cn')
 parser.add_argument('-o','--output', help='output path', default='/eos/user/l/llinwei/jie/ssww_ntuple/')
 group = parser.add_mutually_exclusive_group()  # type: _MutuallyExclusiveGroup
 # group.add_argument('-s', '--sample', help='give explicit sample names', nargs='*')
@@ -14,9 +14,9 @@ group.add_argument('-y', '--year', help='chose all jobs in this year', choices=(
 group.add_argument('-a', '--all', help='chose all jobs', action='store_true', default=False)
 args = parser.parse_args()
 
-server = args.sever
-
-
+server = args.server
+#print(server)
+#print(args.output)
 def get_FileSize(filePath):
     # filePath = unicode(filePath,'utf8')
     fsize = os.path.getsize(filePath)
@@ -82,3 +82,4 @@ if __name__ == '__main__':
     else:
         submit(args.year)
 
+# python hadd.py -t -o /home/pku/xiaoj/ssww_ntuple/ -y 2016
