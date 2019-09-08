@@ -20,7 +20,7 @@ def status(year):
     notin=[]
     for iSuccess in _Success:
         if iSuccess+'.root' in files:
-            fin=ROOT.TFile(iSuccess+'.root')
+            fin=ROOT.TFile(args.checkdir+year+'/'+iSuccess+'.root')
             print '===================== is ', iSuccess, 'IsZombie: ', fin.IsZombie()
             fin.Close()
         else:
