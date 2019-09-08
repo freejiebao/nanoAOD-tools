@@ -5,13 +5,13 @@ import SAMPLE
 
 parser = argparse.ArgumentParser(description='manual to this script')
 parser.add_argument('-y','--year', help='which year, default is 2016', default= '2016', choices=('2016','2017','2018'))
-parser.add_argument('-i','--input', help='input path', default= '/eos/user/l/llinwei/jie/ssww_ntuple/')
-parser.add_argument('-t','--theory', help='get the theoretic un certainty',action='store_false', default= True)
-parser.add_argument('-x','--xsweight', help='get xs scale factor',action='store_false', default= True)
+parser.add_argument('-i','--input', help='input path', default= '/home/cmsdas/testuser01/jie/ssww_ntuple/')
+#parser.add_argument('-i','--input', help='input path', default= '/eos/user/l/llinwei/jie/ssww_ntuple/')
+parser.add_argument('-t','--theory', help='get the theoretic un certainty, default is false',action='store_true', default= False)
+parser.add_argument('-x','--xsweight', help='get xs scale factor, default is false',action='store_true', default= False)
 args = parser.parse_args()
 
-ROOT.ROOT.EnableImplicitMT(8)
-
+ROOT.ROOT.EnableImplicitMT(30)
 def remove_text(a, year):
     xs_file_path='../../../../crab/'
     with open(xs_file_path+'xs_' + year + '_nano_v4.py', 'r') as f:
