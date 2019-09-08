@@ -20,16 +20,14 @@ def status(year):
     notin=[]
     for iSuccess in _Success:
         if iSuccess+'.root' in files:
-            pass
+            fin=ROOT.TFile(iSuccess+'.root')
+            print '===================== is ', iSuccess, 'IsZombie: ', fin.IsZombie()
+            fin.Close()
         else:
             notin.append(iSuccess)
     if len(notin)>0:
         print '<<<<<<<<<<<<<<<<<<<< list of not in files:'
     else:
-        for i in range(0,len(notin)):
-            fin=ROOT.TFile(notin[i]+'.root')
-            print '===================== is ', notin[i], 'IsZombie: ', fin.IsZombie()
-            fin.Close()
         print '>>>>>>>>>>>>>>>>>>>> COMPLETED: all files done!'
     for i in range(0,len(notin)):
         print notin[i]
