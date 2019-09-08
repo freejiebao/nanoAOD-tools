@@ -23,6 +23,7 @@ args = parser.parse_args()
 
 ROOT.ROOT.EnableImplicitMT(8)
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
+
 def get_plot(name, trigger, PID, files, isdata):
     eta_bin = array('f',[0., 0.5, 1., 1.479, 2., 2.5])
     pt_bin = array('f',[20, 25, 30, 35])
@@ -33,6 +34,12 @@ def get_plot(name, trigger, PID, files, isdata):
 
     tight_plot = []
     fake_plot = []
+    if not isdata:
+        with open('xs_' + args.year + '_nano_v4_v1.py','r') as collect:
+            exec (collect)
+            _XSDB = XSDB
+
+
     for i in range(0,len(files)):
         if isdata:
             fake_selections = fake_cut
@@ -41,10 +48,11 @@ def get_plot(name, trigger, PID, files, isdata):
         else:
             fake_selections = real_fake
             true_selections = real_tight
-            tmpfile=ROOT.TFile(files[i])
-            xsweight=tmpfile.Get("xsweight").GetBinContent(1)
+            xsweight=str(_XSDB[files[i][:len(files[i])-5]]['xsweight'])
             weight=str(xsweight)+'*gen_weight/abs(gen_weight)'
-            tmpfile.Close()
+            #tmpfile=ROOT.TFile(files[i])
+            #xsweight=tmpfile.Get("xsweight").GetBinContent(1)
+            #tmpfile.Close()
 
         df = ROOT.ROOT.RDataFrame("Events", files[i])
         print '>>>>>>>>>>>>>>>>>>>> the opened file: ',files[i]
@@ -112,9 +120,7 @@ def calc(_channel,_year):
     h2_ratio= h2_true_data.Clone()
     h2_ratio.SetName('fakerate')
     h2_ratio.SetTitle('fakerate')
-    h2_ratio.Divide(h2_fake_data
-                    )
-
+    h2_ratio.Divide(h2_fake_data)
     h2_fake_tmp=h2_fake_data.Clone()
     h2_true_tmp=h2_true_data.Clone()
     h2_ratio_subtract=h2_ratio.Clone()
@@ -128,7 +134,7 @@ def calc(_channel,_year):
         for imc in mc_chain:
             mc_chain_single = []
             mc_chain_single.append(imc)
-            files = SAMPLE.add_files(_year,args.input, samples, mc_chain_single,args.exclude,args.include,'_thoeretic')
+            files = SAMPLE.add_files(_year,args.input, samples, mc_chain_single,args.exclude,args.include,'')
             bkg = ROOT.std.vector("string")(len(files))
             if not len(files)==0:
                 for i in range(0,len(files)):
