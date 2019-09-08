@@ -93,8 +93,8 @@ def set_samples(_year):
         sample['VVV']=['ZZZ.root','WZZ.root','WWZ.root','WWW.root']
         data_chain = ['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG']
         #mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','DY0','DY1','DY2','DY3','ZG','ZZ','WW','ggWW','top','ggZZ','DPS0','DPS1','WWJJ_EWK0','WWJJ_EWK1','WGJJ','WZ0','WZ1','WZ2','VVV']
-        sample['redo']=['DY2JetsToLL_M-50_LHEZpT_250-400.root','DY2JetsToLL_M-50_LHEZpT_400-inf.root']
-        mc_chain = ['redo','DY1','DY2','DY3','ZG','ZZ','WW','ggWW','top','ggZZ','DPS0','DPS1','WWJJ_EWK0','WWJJ_EWK1','WGJJ','WZ0','WZ1','WZ2','VVV']
+        #sample['redo']=['DY2JetsToLL_M-50_LHEZpT_250-400.root','DY2JetsToLL_M-50_LHEZpT_400-inf.root']
+        #mc_chain = ['redo','DY1','DY2','DY3','ZG','ZZ','WW','ggWW','top','ggZZ','DPS0','DPS1','WWJJ_EWK0','WWJJ_EWK1','WGJJ','WZ0','WZ1','WZ2','VVV']
     return sample, data_chain, mc_chain
 
 def insertStr(instr,pos_str,add_str):

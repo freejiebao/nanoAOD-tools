@@ -2,6 +2,7 @@ import os
 import re
 import shutil
 import argparse
+import ROOT
 
 parser = argparse.ArgumentParser(description='manual to this script')
 parser.add_argument('-y','--year', help='run over which year', dest='chosenyear', default = '2022', choices=('2016','2017','2018','2022'))
@@ -25,6 +26,10 @@ def status(year):
     if len(notin)>0:
         print '<<<<<<<<<<<<<<<<<<<< list of not in files:'
     else:
+        for i in range(0,len(notin)):
+            fin=ROOT.TFile(notin[i]+'.root')
+            print '===================== is ', notin[i], 'IsZombie: ', fin.IsZombie()
+            fin.Close()
         print '>>>>>>>>>>>>>>>>>>>> COMPLETED: all files done!'
     for i in range(0,len(notin)):
         print notin[i]
