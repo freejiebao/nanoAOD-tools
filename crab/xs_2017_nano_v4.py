@@ -70,4 +70,5 @@ XSDB["WZTo3LNu_1Jets_MLL-4to50"]      = {'xs': 0.4868, 'accuracy': 'LO', 'kFacto
 XSDB["WZTo3LNu_2Jets_MLL-4to50"]      = {'xs': 0.1639, 'accuracy': 'LO', 'kFactor': 1.0} #fix
 XSDB["WZTo3LNu_3Jets_MLL-4to50"]      = {'xs': 0.0712, 'accuracy': 'LO', 'kFactor': 1.0} #fix
 XSDB["WLLJJ_WToLNu_EWK"]      = {'xs': 0.01628, 'accuracy': 'LO', 'kFactor': 1.0}
+XSDB["WJetsToLNu"]      = {'xs': 60430.0, 'accuracy': 'un', 'kFactor': 1.0}
 

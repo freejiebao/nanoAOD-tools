@@ -125,10 +125,10 @@ def calc(_channel,_year):
     h2_ratio.Divide(h2_fake_data)
     h2_fake_tmp=h2_fake_data.Clone()
     h2_true_tmp=h2_true_data.Clone()
-    h2_ratio_subtract=h2_ratio.Clone()
     h2_fake_tmp.SetName('fake_data_subtrct')
+    h2_fake_tmp.SetTitle('fake_data_subtrct')
     h2_true_tmp.SetName('true_data_subtrct')
-    h2_ratio_subtract.SetName('fakerate_subtract')
+    h2_true_tmp.SetTitle('true_data_subtrct')
     h2_fake_mc_plot=[]
     h2_true_mc_plot=[]
 
@@ -147,6 +147,7 @@ def calc(_channel,_year):
                 h2_fake_tmp.Add(h2_fake_mc,-1)
                 h2_true_tmp.Add(h2_true_mc,-1)
         h2_ratio_subtract= h2_true_tmp.Clone()
+        h2_ratio_subtract.SetName('fakerate_subtract')
         h2_ratio_subtract.SetTitle('fakerate_subtract')
         h2_ratio_subtract.Divide(h2_fake_tmp)
 
