@@ -97,3 +97,6 @@ Samples["WW_DoubleScattering"]      = {'nanoAODSIM': '/WW_DoubleScattering_13TeV
 Samples["WWTo2L2Nu_DoubleScattering"]      = {'nanoAODSIM': '/WWTo2L2Nu_DoubleScattering_13TeV-pythia8/RunIIAutumn18NanoAODv5-Nano1June2019_102X_upgrade2018_realistic_v19-v2/NANOAODSIM'}
 Samples["WWJJToLNuLNu_EWK_noTop"]      = {'nanoAODSIM': '/WWJJToLNuLNu_EWK_noTop_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv5-Nano1June2019_102X_upgrade2018_realistic_v19_ext1-v1/NANOAODSIM'}
 Samples["WWJJToLNuLNu_EWK"]      = {'nanoAODSIM': '/WWJJToLNuLNu_EWK_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv5-Nano1June2019_102X_upgrade2018_realistic_v19_ext1-v1/NANOAODSIM'}
+Samples["WJetsToLNu_0J"]      = {'nanoAODSIM': '/WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18NanoAODv5-Nano1June2019_102X_upgrade2018_realistic_v19-v1/NANOAODSIM'}
+Samples["WJetsToLNu_1J"]      = {'nanoAODSIM': '/WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18NanoAODv5-Nano1June2019_102X_upgrade2018_realistic_v19-v1/NANOAODSIM'}
+Samples["WJetsToLNu_2J"]      = {'nanoAODSIM': '/WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18NanoAODv5-Nano1June2019_102X_upgrade2018_realistic_v19-v1/NANOAODSIM'}

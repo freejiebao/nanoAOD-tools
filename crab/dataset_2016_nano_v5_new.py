@@ -131,3 +131,5 @@ Samples["WZTo3LNu_2Jets_MLL-4to50"]      = {'nanoAODSIM': '/WZTo3LNu_2Jets_MLL-4
 Samples["WZTo3LNu_3Jets_MLL-4to50"]      = {'nanoAODSIM': '/WZTo3LNu_3Jets_MLL-4To50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16NanoAODv5-PUMoriond17_Nano1June2019_102X_mcRun2_asymptotic_v7-v1/NANOAODSIM'}
 Samples["WLLJJ_WToLNu_EWK"]      = {'nanoAODSIM': '/WLLJJ_WToLNu_EWK_TuneCUETP8M1_13TeV_madgraph-madspin-pythia8/RunIISummer16NanoAODv5-PUMoriond17_Nano1June2019_102X_mcRun2_asymptotic_v7-v1/NANOAODSIM'}
 Samples["WLLJJ_WToLNu_EWK_4_60"]      = {'nanoAODSIM': '/WLLJJ_WToLNu_MLL-4To60_EWK_TuneCUETP8M1_13TeV_madgraph-madspin-pythia8/RunIISummer16NanoAODv5-PUMoriond17_Nano1June2019_102X_mcRun2_asymptotic_v7-v1/NANOAODSIM'}
+Samples["WJetsToLNu"]      = {'nanoAODSIM': '/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16NanoAODv5-PUMoriond17_Nano1June2019_102X_mcRun2_asymptotic_v7-v1/NANOAODSIM'}
+Samples["WJetsToLNu_ext1"]      = {'nanoAODSIM': '/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16NanoAODv5-PUMoriond17_Nano1June2019_102X_mcRun2_asymptotic_v7_ext2-v1/NANOAODSIM'}
