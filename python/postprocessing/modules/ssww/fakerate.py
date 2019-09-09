@@ -27,7 +27,7 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 def get_plot(name, trigger, PID, files, isdata):
     eta_bin = array('f',[0., 0.5, 1., 1.479, 2., 2.5])
     pt_bin = array('f',[20, 25, 30, 35])
-    fake_cut = trigger + '&& (lepton_fakeable[0] || lepton_tight[0]) && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
+    fake_cut = trigger + '&& lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
     tight_cut = trigger + '&& lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
     real_fake = trigger + '&& lepton_real[0] && lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
     real_tight = trigger + '&& lepton_real[0] && lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
