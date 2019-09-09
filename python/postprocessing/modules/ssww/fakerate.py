@@ -5,7 +5,7 @@ from array import array
 
 parser = argparse.ArgumentParser(description='manual to this script')
 parser.add_argument('-s','--subtract', help='subtract real lepton, default is true',action='store_false', default= True)
-parser.add_argument('-i','--input', help='input path', default= '/eos/user/l/llinwei/jie/ssww_ntuple/')
+parser.add_argument('-i','--input', help='input path', default= '/home/cmsdas/testuser01/jie/ssww_ntuple/')
 parser.add_argument('-y','--year', help='which year, default is 2016', default= '2016', choices=('2016','2017','2018'))
 group = parser.add_mutually_exclusive_group()  # type: _MutuallyExclusiveGroup
 group.add_argument('-c','--channel', help='muon/electron fake rate', choices=('muon','electron'),default='muon')
