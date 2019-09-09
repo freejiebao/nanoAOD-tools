@@ -21,7 +21,7 @@ group_mc.add_argument('-ex','--exclude', help='exclude samples',nargs='*',defaul
 args = parser.parse_args()
 
 
-ROOT.ROOT.EnableImplicitMT(8)
+ROOT.ROOT.EnableImplicitMT(70)
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
 
 def get_plot(name, trigger, PID, files, isdata):
@@ -48,7 +48,9 @@ def get_plot(name, trigger, PID, files, isdata):
         else:
             fake_selections = real_fake
             true_selections = real_tight
-            xsweight=str(_XSDB[files[i][:len(files[i])-5]]['xsweight'])
+            tmp_name=files[i].split('/')
+            sample_name=tmp_name[len(tmp_name)-1]
+            xsweight=str(_XSDB[sample_name[:len(sample_name)-5]]['xsweight'])
             weight=str(xsweight)+'*gen_weight/abs(gen_weight)'
             #tmpfile=ROOT.TFile(files[i])
             #xsweight=tmpfile.Get("xsweight").GetBinContent(1)
