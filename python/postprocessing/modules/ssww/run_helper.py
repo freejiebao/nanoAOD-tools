@@ -62,7 +62,7 @@ if __name__ == '__main__':
                 f.Close()
             if args.fixreal:
                 df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+samples[imc][i])
-                df01=df.Filter("nGenJet>0").Define("lepton_real_new","bool lepton_real_new[nlepton];for(int i=0; i<nlepton; i++){for(int j=0; j<nGenJet; j++){if(GenPart_pt[j]>5 && abs(GenPart_pdgId[j])==abs(lepton_pdg_id[i]) && (GenPart_statusFlags==0 || GenPart_statusFlags==6) && (sqrt(pow(lepton_eta[i] - GenPart_pt_eta[j], 2) + pow(abs(abs(lepton_phi[i] - GenPart_phi[j])-TMath::Pi())-TMath::Pi(), 2)) < 0.3)){lepton_real_new[i]=true;} else{lepton_real_new[i]=false;};}}; return lepton_real_new;")
+                df01=df.Filter("nGenJet>0").Define("lepton_real_new","bool lepton_real_new[nlepton];for(int i=0; i<nlepton; i++){for(int j=0; j<nGenJet; j++){if(GenPart_pt[j]>5 && abs(GenPart_pdgId[j])==abs(lepton_pdg_id[i]) && (GenPart_statusFlags==0 || GenPart_statusFlags==6) && (sqrt(pow(lepton_eta[i] - GenPart_eta[j], 2) + pow(abs(abs(lepton_phi[i] - GenPart_phi[j])-TMath::Pi())-TMath::Pi(), 2)) < 0.3)){lepton_real_new[i]=true;} else{lepton_real_new[i]=false;};}}; return lepton_real_new;")
                 df01.Snapshot("Events",args.input+args.year+'/fix_'+samples[imc][i])
             # theoretic uncertainties using nanoAOD framework
             if args.theory:
