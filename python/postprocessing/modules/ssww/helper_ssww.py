@@ -64,7 +64,7 @@ class sswwProducer(Module):
 
         return QCD_unc,SCALE_unc
 
-    def fake_muon_event_weight(eta,pt,histo):
+    def fake_muon_event_weight(self, eta,pt,histo):
 
         myeta  = min(abs(eta),2.4999)
         mypt   = min(pt,44.999)
@@ -78,7 +78,7 @@ class sswwProducer(Module):
 
         return prob/(1-prob),up/(1-up),down/(1-down)
 
-    def fake_electron_event_weight(eta,pt,histo):
+    def fake_electron_event_weight(self, eta,pt,histo):
 
         myeta  = min(abs(eta),2.4999)
         mypt   = min(pt,44.999)
@@ -127,7 +127,6 @@ class sswwProducer(Module):
             self.out.fillBranch("lepton_fake_weight_up", lepton_fake_weight_up)
             self.out.fillBranch("lepton_fake_weight_down", lepton_fake_weight_down)
         return True
-
 
 helper_thoeretic = lambda: sswwProducer(thoeretic=True)
 helper_fakelepton = lambda: sswwProducer(fakelepton=True)

@@ -303,8 +303,8 @@ class sswwProducer(Module):
         #    return False
 
         # decide whether lepton real
-        isprompt_mask = (1 << 0)  # isPrompt
-        isdirectprompttaudecayproduct_mask = (1 << 5)  # isDirectPromptTauDecayProduct
+        #isprompt_mask = (0 << 0)  # isPrompt
+        #isdirectprompttaudecayproduct_mask = (1 << 5)  # isDirectPromptTauDecayProduct
 
         lepton_idx = []
         lepton_pdg_id = []
@@ -362,7 +362,7 @@ class sswwProducer(Module):
 
             try:
                 for j in range(0, len(genparts)):
-                    if genparts[j].pt > 5 and abs(genparts[j].pdgId) == PID and ((genparts[j].statusFlags & isprompt_mask == isprompt_mask) or (genparts[j].statusFlags & isdirectprompttaudecayproduct_mask == isdirectprompttaudecayproduct_mask)) and deltaR(leptons[loose_leptons[i]][0].eta, leptons[loose_leptons[i]][0].phi, genparts[j].eta, genparts[j].phi) < 0.3:
+                    if genparts[j].pt > 5 and abs(genparts[j].pdgId) == PID and ((genparts[j].statusFlags == 0) or (genparts[j].statusFlags == 6)) and deltaR(leptons[loose_leptons[i]][0].eta, leptons[loose_leptons[i]][0].phi, genparts[j].eta, genparts[j].phi) < 0.3:
                         lepton_real.append(True)
                     else:
                         lepton_real.append(False)
