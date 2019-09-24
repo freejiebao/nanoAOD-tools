@@ -51,6 +51,7 @@ class exampleProducer(Module):
         self.out.branch("jet_idx", "I", lenVar="njet")
         self.out.branch("jet_id", "I", lenVar="njet")
         self.out.branch("jet_pt", "F", lenVar="njet")
+        self.out.branch("jet_rawFactor", "F", lenVar="njet")
         self.out.branch("jet_eta", "F", lenVar="njet")
         self.out.branch("jet_phi", "F", lenVar="njet")
         self.out.branch("jet_mass", "F", lenVar="njet")
@@ -832,6 +833,7 @@ class exampleProducer(Module):
         jet_idx = []
         jet_id = []
         jet_pt = []
+        jet_rawFactor = []
         jet_eta = []
         jet_phi = []
         jet_mass = []
@@ -843,6 +845,7 @@ class exampleProducer(Module):
             jet_idx.append(tight_jets[i])
             jet_id.append(jets[tight_jets[i]].jetId)
             jet_pt.append(jets[tight_jets[i]].pt)
+            jet_rawFactor.append(jets[tight_jets[i]].rawFactor)
             jet_eta.append(jets[tight_jets[i]].eta)
             jet_phi.append(jets[tight_jets[i]].phi)
             jet_mass.append(jets[tight_jets[i]].mass)
@@ -862,6 +865,7 @@ class exampleProducer(Module):
         self.out.fillBranch("jet_idx", jet_idx)
         self.out.fillBranch("jet_id", jet_id)
         self.out.fillBranch("jet_pt", jet_pt)
+        self.out.fillBranch("jet_rawFactor", jet_rawFactor)
         self.out.fillBranch("jet_eta", jet_eta)
         self.out.fillBranch("jet_phi", jet_phi)
         self.out.fillBranch("jet_mass", jet_mass)
