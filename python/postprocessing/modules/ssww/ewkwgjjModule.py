@@ -641,7 +641,7 @@ class exampleProducer(Module):
             #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(ele_p4 + pho_p4).M())
 
-            print "selected electron event: " + str(event.event) + " " + str(event.luminosityBlock) + " " + str(event.run)
+            #print "selected electron event: " + str(event.event) + " " + str(event.luminosityBlock) + " " + str(event.run)
 
         elif len(loose_but_not_tight_electrons) == 1:
 
