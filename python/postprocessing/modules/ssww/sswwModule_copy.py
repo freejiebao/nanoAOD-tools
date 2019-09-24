@@ -37,7 +37,7 @@ class sswwProducer(Module):
         self.out.branch("ntruepu", "F")
         self.out.branch("npvs", "I")
         self.out.branch("gen_weight", "F")
-        self.out.branch("tauVeto", "B")
+        self.out.branch("tauTag", "B")
         self.out.branch("n_tight_leptons", "I")
         self.out.branch("n_fakeable_leptons", "I")
         self.out.branch("lepton_idx", "I", lenVar="nlepton")
@@ -269,16 +269,17 @@ class sswwProducer(Module):
                 return False
 
         # tau veto
-        tauVeto = True
+        #tauVeto = True
         tauTag = False
 
         for i in range(0, len(taus)):
-            if taus[i].pt > 18 and abs(taus[i].eta) < 2.3 and taus[i].idDecayMode and taus[i].idDecayModeNewDMs and taus[i].rawIso < 5:
+            # if taus[i].pt > 18 and abs(taus[i].eta) < 2.3 and taus[i].idDecayMode and taus[i].idDecayModeNewDMs and taus[i].rawIso < 5:
+            if taus[i].pt > 18 and abs(taus[i].eta) < 2.3 and taus[i].idMVAoldDM2017v2>=2 and taus[i].idDecayModeNewDMs:
                 for j in range(0, len(loose_leptons)):
                     if deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, taus[i].eta, taus[i].phi) > 0.4:
                         tauTag = True
-            if tauTag:
-                tauVeto = False
+        #if tauTag:
+        #    tauVeto = False
 
         # jets
         # if jet multiplicity is needed, then remove below cut
@@ -422,7 +423,7 @@ class sswwProducer(Module):
         else:
             self.out.fillBranch("gen_weight", 0)
 
-        self.out.fillBranch("tauVeto", tauVeto)
+        self.out.fillBranch("tauTag", tauTag)
         self.out.fillBranch("n_tight_leptons", n_tight_leptons)
         self.out.fillBranch("n_fakeable_leptons", n_fakeable_leptons)
         self.out.fillBranch("lepton_idx", lepton_idx)
@@ -458,7 +459,7 @@ class sswwProducer(Module):
         tmp2 = -9999.
         if len(loose_leptons) > 3:
             for i in range(1, len(loose_leptons)):
-                tmp = (leptons[loose_leptons[0]][0].p4() + leptons[loose_leptons[i]][0].p4()).M() - 91.2
+                tmp = (leptons[loose_leptons[0]][0].p4() + leptons[loose_leptons[i]][0].p4()).M() - 91.1876
                 if abs(tmp) < abs(tmp2):
                     mll_z0 = (leptons[loose_leptons[0]][0].p4() + leptons[loose_leptons[i]][0].p4()).M()
                     tmp2 = tmp
