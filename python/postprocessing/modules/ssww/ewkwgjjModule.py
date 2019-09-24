@@ -25,12 +25,13 @@ class exampleProducer(Module):
         self.out.branch("event",  "l");
         self.out.branch("npu",  "I");
         self.out.branch("ntruepu",  "F");
-        self.out.branch("lepton_pdg_id",  "I");
-        self.out.branch("lepton_pt",  "F");
-        self.out.branch("lepton_phi",  "F");
-        self.out.branch("lepton_eta",  "F");
-        self.out.branch("lepton_mass",  "F");
-        self.out.branch("is_lepton_tight",  "B");
+        self.out.branch("lepton_pdg_id",  "I",lenVar="nlepton");
+        self.out.branch("lepton_pt",  "F",lenVar="nlepton");
+        self.out.branch("lepton_phi",  "F",lenVar="nlepton");
+        self.out.branch("lepton_eta",  "F",lenVar="nlepton");
+        self.out.branch("lepton_mass",  "F",lenVar="nlepton");
+        self.out.branch("lepton_tight",  "B",lenVar="nlepton");
+        self.out.branch("lepton_real",  "B",lenVar="nlepton");
         self.out.branch("photon_pt",  "F");
         self.out.branch("photon_phi",  "F");
         self.out.branch("photon_eta",  "F");
@@ -55,7 +56,6 @@ class exampleProducer(Module):
         self.out.branch("jet_hadronFlavour", "I", lenVar="njet")
         self.out.branch("jet_partonFlavour", "I", lenVar="njet")
         self.out.branch("gen_weight",  "F");
-        self.out.branch("is_lepton_real",  "B");
         self.out.branch("photon_gen_matching",  "I");
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         pass
@@ -354,7 +354,7 @@ class exampleProducer(Module):
         isprompttaudecayproduct_mask = (1 << 4) #isPromptTauDecayProduct
 
 
-        is_lepton_real=0
+        lepton_real=0
 
 
         if len(tight_muons) == 1:
@@ -363,7 +363,7 @@ class exampleProducer(Module):
 
                 for i in range(0,len(genparts)):
                     if genparts[i].pt > 5 and abs(genparts[i].pdgId) == 13 and ((genparts[i].statusFlags == 0) or (genparts[i].statusFlags == 3)) and deltaR(muons[tight_muons[0]].eta,muons[tight_muons[0]].phi,genparts[i].eta,genparts[i].phi) < 0.3:
-                        is_lepton_real=1
+                        lepton_real=1
             except:
                 pass
 
@@ -390,7 +390,7 @@ class exampleProducer(Module):
 
             self.out.fillBranch("mt",sqrt(2*muons[tight_muons[0]].pt*event.MET_pt*(1 - cos(event.MET_phi - muons[tight_muons[0]].phi))))
 
-            print "selected muon event: " + str(event.event) + " " + str(event.luminosityBlock) + " " + str(event.run)
+            #print "selected muon event: " + str(event.event) + " " + str(event.luminosityBlock) + " " + str(event.run)
             
             mask1 = (1 << 1) | (1 << 3) | (1 << 5) | (1 << 7) | (1 << 9) | (1 << 11) | (1 << 13)
             mask2 = (1 << 1) | (1 << 3) | (1 << 5) | (1 << 7) | (1 << 9) | (1 << 11) 
@@ -409,7 +409,7 @@ class exampleProducer(Module):
             else:
                 assert(0)
 
-            self.out.fillBranch("is_lepton_real",is_lepton_real)
+            self.out.fillBranch("lepton_real",lepton_real)
             self.out.fillBranch("lepton_pdg_id",13)
             self.out.fillBranch("lepton_pt",muons[tight_muons[0]].pt)
             self.out.fillBranch("lepton_eta",muons[tight_muons[0]].eta)
@@ -422,7 +422,7 @@ class exampleProducer(Module):
             self.out.fillBranch("photon_mass",photons[tight_photons[0]].mass)
             #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(muons[tight_muons[0]].p4() + photons[tight_photons[0]].p4()).M())
-            self.out.fillBranch("is_lepton_tight",1)
+            self.out.fillBranch("lepton_tight",1)
 
         elif len(loose_but_not_tight_muons) == 1:
 
@@ -430,7 +430,7 @@ class exampleProducer(Module):
 
                 for i in range(0,len(genparts)):
                     if genparts[i].pt > 5 and abs(genparts[i].pdgId) == 13 and ((genparts[i].statusFlags & isprompt_mask == isprompt_mask) or (genparts[i].statusFlags & isprompttaudecayproduct_mask == isprompttaudecayproduct_mask)) and deltaR(muons[loose_but_not_tight_muons[0]].eta,muons[loose_but_not_tight_muons[0]].phi,genparts[i].eta,genparts[i].phi) < 0.3:
-                        is_lepton_real=1
+                        lepton_real=1
             except:
                 pass
 
@@ -468,7 +468,7 @@ class exampleProducer(Module):
             else:
                 assert(0)
 
-            self.out.fillBranch("is_lepton_real",is_lepton_real)
+            self.out.fillBranch("lepton_real",lepton_real)
             self.out.fillBranch("lepton_pdg_id",13)
             self.out.fillBranch("lepton_pt",muons[loose_but_not_tight_muons[0]].pt)
             self.out.fillBranch("lepton_eta",muons[loose_but_not_tight_muons[0]].eta)
@@ -482,7 +482,7 @@ class exampleProducer(Module):
             self.out.fillBranch("photon_mass",photons[tight_photons[0]].mass)
             #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(muons[loose_but_not_tight_muons[0]].p4() + photons[tight_photons[0]].p4()).M())
-            self.out.fillBranch("is_lepton_tight",0)
+            self.out.fillBranch("lepton_tight",0)
 
         elif len(tight_electrons) == 1:
 
@@ -490,7 +490,7 @@ class exampleProducer(Module):
 
                 for i in range(0,len(genparts)):
                     if genparts[i].pt > 5 and abs(genparts[i].pdgId) == 11 and ((genparts[i].statusFlags & isprompt_mask == isprompt_mask) or (genparts[i].statusFlags & isprompttaudecayproduct_mask == isprompttaudecayproduct_mask)) and deltaR(electrons[tight_electrons[0]].eta,electrons[tight_electrons[0]].phi,genparts[i].eta,genparts[i].phi) < 0.3:
-                        is_lepton_real=1
+                        lepton_real=1
             except:
                 pass
 
@@ -546,7 +546,7 @@ class exampleProducer(Module):
 
 
 
-            self.out.fillBranch("is_lepton_real",is_lepton_real)
+            self.out.fillBranch("lepton_real",lepton_real)
             self.out.fillBranch("lepton_pdg_id",11)
             self.out.fillBranch("lepton_pt",electrons[tight_electrons[0]].pt)
             self.out.fillBranch("lepton_eta",electrons[tight_electrons[0]].eta)
@@ -560,7 +560,7 @@ class exampleProducer(Module):
             self.out.fillBranch("photon_mass",photons[tight_photons[0]].mass)
             #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(ele_p4 + pho_p4).M())
-            self.out.fillBranch("is_lepton_tight",1)
+            self.out.fillBranch("lepton_tight",1)
 
             print "selected electron event: " + str(event.event) + " " + str(event.luminosityBlock) + " " + str(event.run)
 
@@ -570,7 +570,7 @@ class exampleProducer(Module):
 
                 for i in range(0,len(genparts)):
                     if genparts[i].pt > 5 and abs(genparts[i].pdgId) == 11 and ((genparts[i].statusFlags & isprompt_mask == isprompt_mask) or (genparts[i].statusFlags & isprompttaudecayproduct_mask == isprompttaudecayproduct_mask)) and deltaR(electrons[loose_but_not_tight_electrons[0]].eta,electrons[loose_but_not_tight_electrons[0]].phi,genparts[i].eta,genparts[i].phi) < 0.3:
-                        is_lepton_real=1
+                        lepton_real=1
 
             except:
 
@@ -624,7 +624,7 @@ class exampleProducer(Module):
 
 
 
-            self.out.fillBranch("is_lepton_real",is_lepton_real)
+            self.out.fillBranch("lepton_real",lepton_real)
             self.out.fillBranch("lepton_pdg_id",11)
             self.out.fillBranch("lepton_pt",electrons[loose_but_not_tight_electrons[0]].pt)
             self.out.fillBranch("lepton_eta",electrons[loose_but_not_tight_electrons[0]].eta)
@@ -637,7 +637,7 @@ class exampleProducer(Module):
             self.out.fillBranch("photon_mass",photons[tight_photons[0]].mass)
             #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(ele_p4 + pho_p4).M())
-            self.out.fillBranch("is_lepton_tight",0)
+            self.out.fillBranch("lepton_tight",0)
 
         else:
             return False
