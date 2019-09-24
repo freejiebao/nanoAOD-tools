@@ -406,11 +406,14 @@ class exampleProducer(Module):
             _photon_gen_matching=[]
             bitmap = photons[tight_photons[0]].vidNestedWPBitmap & mask1
             if (bitmap == mask1):
-                self.out.fillBranch("photon_selection",_photon_selection.append(int(2)))
+                _photon_selection.append(int(2))
+                self.out.fillBranch("photon_selection",_photon_selection)
             elif (bitmap == mask5):
-                self.out.fillBranch("photon_selection",_photon_selection.append(int(1)))
+                _photon_selection.append(int(1))
+                self.out.fillBranch("photon_selection",_photon_selection)
             elif (bitmap == mask2) or (bitmap == mask3) or (bitmap == mask4):
-                self.out.fillBranch("photon_selection",_photon_selection.append(int(0)))
+                _photon_selection.append(int(0))
+                self.out.fillBranch("photon_selection",_photon_selection)
             else:
                 assert(0)
 
@@ -479,11 +482,14 @@ class exampleProducer(Module):
             _photon_selection=[]
             _photon_gen_matching=[]
             if (bitmap == mask1):
-                self.out.fillBranch("photon_selection",_photon_selection.append(int(2)))
+                _photon_selection.append(int(2))
+                self.out.fillBranch("photon_selection",_photon_selection)
             elif (bitmap == mask5):
-                self.out.fillBranch("photon_selection",_photon_selection.append(int(1)))
+                _photon_selection.append(int(1))
+                self.out.fillBranch("photon_selection",_photon_selection)
             elif (bitmap == mask2) or (bitmap == mask3) or (bitmap == mask4):
-                self.out.fillBranch("photon_selection",_photon_selection.append(int(0)))
+                _photon_selection.append(int(0))
+                self.out.fillBranch("photon_selection",_photon_selection)
             else:
                 assert(0)
 
@@ -567,16 +573,16 @@ class exampleProducer(Module):
             _photon_selection=[]
             _photon_gen_matching=[]
             if (bitmap == mask1):
-                self.out.fillBranch("photon_selection",_photon_selection.append(int(2)))
+                _photon_selection.append(int(2))
+                self.out.fillBranch("photon_selection",_photon_selection)
             elif (bitmap == mask5):
-                self.out.fillBranch("photon_selection",_photon_selection.append(int(1)))
+                _photon_selection.append(int(1))
+                self.out.fillBranch("photon_selection",_photon_selection)
             elif (bitmap == mask2) or (bitmap == mask3) or (bitmap == mask4):
-                self.out.fillBranch("photon_selection",_photon_selection.append(int(0)))
+                _photon_selection.append(int(0))
+                self.out.fillBranch("photon_selection",_photon_selection)
             else:
                 assert(0)
-
-
-
 
             _lepton_real=[]
             _lepton_pdg_id=[]
@@ -659,14 +665,16 @@ class exampleProducer(Module):
             _photon_selection=[]
             _photon_gen_matching=[]
             if (bitmap == mask1):
-                self.out.fillBranch("photon_selection",_photon_selection.append(int(2)))
+                _photon_selection.append(int(2))
+                self.out.fillBranch("photon_selection",_photon_selection)
             elif (bitmap == mask5):
-                self.out.fillBranch("photon_selection",_photon_selection.append(int(1)))
+                _photon_selection.append(int(1))
+                self.out.fillBranch("photon_selection",_photon_selection)
             elif (bitmap == mask2) or (bitmap == mask3) or (bitmap == mask4):
-                self.out.fillBranch("photon_selection",_photon_selection.append(int(0)))
+                _photon_selection.append(int(0))
+                self.out.fillBranch("photon_selection",_photon_selection)
             else:
                 assert(0)
-
 
             _lepton_real=[]
             _lepton_pdg_id=[]
