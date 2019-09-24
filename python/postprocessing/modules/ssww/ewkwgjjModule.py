@@ -403,7 +403,6 @@ class exampleProducer(Module):
             _photon_eta=[]
             _photon_mass=[]
             _photon_selection=[]
-            _photon_gen_matching=[]
             bitmap = photons[tight_photons[0]].vidNestedWPBitmap & mask1
             if (bitmap == mask1):
                 _photon_selection.append(int(2))
@@ -492,7 +491,6 @@ class exampleProducer(Module):
             _photon_eta=[]
             _photon_mass=[]
             _photon_selection=[]
-            _photon_gen_matching=[]
             if (bitmap == mask1):
                 _photon_selection.append(int(2))
                 self.out.fillBranch("photon_selection",_photon_selection)
@@ -595,7 +593,6 @@ class exampleProducer(Module):
             _photon_eta=[]
             _photon_mass=[]
             _photon_selection=[]
-            _photon_gen_matching=[]
             if (bitmap == mask1):
                 _photon_selection.append(int(2))
                 self.out.fillBranch("photon_selection",_photon_selection)
@@ -700,7 +697,6 @@ class exampleProducer(Module):
             _photon_eta=[]
             _photon_mass=[]
             _photon_selection=[]
-            _photon_gen_matching=[]
             if (bitmap == mask1):
                 _photon_selection.append(int(2))
                 self.out.fillBranch("photon_selection",_photon_selection)
@@ -762,6 +758,7 @@ class exampleProducer(Module):
         #else:
         #    return True
 
+        _photon_gen_matching=[]
         photon_gen_matching=0
 
         try:
@@ -787,8 +784,8 @@ class exampleProducer(Module):
 
         except:
             pass
-
-        self.out.fillBranch("photon_gen_matching",photon_gen_matching)
+        _photon_gen_matching.append(photon_gen_matching)
+        self.out.fillBranch("photon_gen_matching",_photon_gen_matching)
 
         try:
 
