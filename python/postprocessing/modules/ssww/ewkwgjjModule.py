@@ -32,12 +32,13 @@ class exampleProducer(Module):
         self.out.branch("lepton_mass",  "F",lenVar="nlepton");
         self.out.branch("lepton_tight",  "B",lenVar="nlepton");
         self.out.branch("lepton_real",  "B",lenVar="nlepton");
-        self.out.branch("photon_pt",  "F");
-        self.out.branch("photon_phi",  "F");
-        self.out.branch("photon_eta",  "F");
-        self.out.branch("photon_mass",  "F");
+        self.out.branch("photon_pt",  "F",lenVar="nphoton");
+        self.out.branch("photon_phi",  "F",lenVar="nphoton");
+        self.out.branch("photon_eta",  "F",lenVar="nphoton");
+        self.out.branch("photon_mass",  "F",lenVar="nphoton");
+        self.out.branch("photon_selection",  "I",lenVar="nphoton");
+        self.out.branch("photon_gen_matching",  "I",lenVar="nphoton");
         self.out.branch("mlg",  "F");
-        self.out.branch("photon_selection",  "I");
         self.out.branch("btagging_selection",  "I");
         self.out.branch("met",  "F");
         self.out.branch("met_phi",  "F");
@@ -56,7 +57,6 @@ class exampleProducer(Module):
         self.out.branch("jet_hadronFlavour", "I", lenVar="njet")
         self.out.branch("jet_partonFlavour", "I", lenVar="njet")
         self.out.branch("gen_weight",  "F");
-        self.out.branch("photon_gen_matching",  "I");
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         pass
     def analyze(self, event):
@@ -399,7 +399,6 @@ class exampleProducer(Module):
             mask5 = (1 << 1) | (1 << 3) | (1 << 5) | (1 << 9) | (1 << 11) | (1 << 13) #invert the medium photon ID with the sigma_ietaieta cut removed
 
             bitmap = photons[tight_photons[0]].vidNestedWPBitmap & mask1
-
             if (bitmap == mask1):
                 self.out.fillBranch("photon_selection",2)
             elif (bitmap == mask5):
@@ -409,20 +408,28 @@ class exampleProducer(Module):
             else:
                 assert(0)
 
-            self.out.fillBranch("lepton_real",lepton_real)
-            self.out.fillBranch("lepton_pdg_id",13)
-            self.out.fillBranch("lepton_pt",muons[tight_muons[0]].pt)
-            self.out.fillBranch("lepton_eta",muons[tight_muons[0]].eta)
-            self.out.fillBranch("lepton_phi",muons[tight_muons[0]].phi)
-            self.out.fillBranch("lepton_mass",muons[tight_muons[0]].mass)
+            _lepton_real=[]
+            _lepton_pdg_id=[]
+            _lepton_pt=[]
+            _lepton_eta=[]
+            _lepton_phi=[]
+            _lepton_mass=[]
+            _lepton_tight=[]
+            self.out.fillBranch("lepton_real",_lepton_real.append(lepton_real))
+            self.out.fillBranch("lepton_pdg_id",_lepton_pdg_id.append(13))
+            self.out.fillBranch("lepton_pt",_lepton_pt.append(muons[tight_muons[0]].pt))
+            self.out.fillBranch("lepton_eta",_lepton_eta.append(muons[tight_muons[0]].eta))
+            self.out.fillBranch("lepton_phi",_lepton_phi.append(muons[tight_muons[0]].phi))
+            self.out.fillBranch("lepton_mass",_lepton_mass.append(muons[tight_muons[0]].mass))
+            self.out.fillBranch("lepton_tight",_lepton_tight.append(1))
             self.out.fillBranch("met",event.MET_pt)
+            self.out.fillBranch("met_phi",event.MET_phi)
             self.out.fillBranch("photon_pt",photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
             self.out.fillBranch("photon_eta",photons[tight_photons[0]].eta)
             self.out.fillBranch("photon_phi",photons[tight_photons[0]].phi)
             self.out.fillBranch("photon_mass",photons[tight_photons[0]].mass)
             #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(muons[tight_muons[0]].p4() + photons[tight_photons[0]].p4()).M())
-            self.out.fillBranch("lepton_tight",1)
 
         elif len(loose_but_not_tight_muons) == 1:
 
@@ -468,12 +475,20 @@ class exampleProducer(Module):
             else:
                 assert(0)
 
-            self.out.fillBranch("lepton_real",lepton_real)
-            self.out.fillBranch("lepton_pdg_id",13)
-            self.out.fillBranch("lepton_pt",muons[loose_but_not_tight_muons[0]].pt)
-            self.out.fillBranch("lepton_eta",muons[loose_but_not_tight_muons[0]].eta)
-            self.out.fillBranch("lepton_phi",muons[loose_but_not_tight_muons[0]].phi)
-            self.out.fillBranch("lepton_mass",muons[loose_but_not_tight_muons[0]].mass)
+            _lepton_real=[]
+            _lepton_pdg_id=[]
+            _lepton_pt=[]
+            _lepton_eta=[]
+            _lepton_phi=[]
+            _lepton_mass=[]
+            _lepton_tight=[]
+            self.out.fillBranch("lepton_real",_lepton_real.append(lepton_real))
+            self.out.fillBranch("lepton_pdg_id",_lepton_pdg_id.append(13))
+            self.out.fillBranch("lepton_pt",_lepton_pt.append(muons[tight_muons[0]].pt))
+            self.out.fillBranch("lepton_eta",_lepton_eta.append(muons[tight_muons[0]].eta))
+            self.out.fillBranch("lepton_phi",_lepton_phi.append(muons[tight_muons[0]].phi))
+            self.out.fillBranch("lepton_mass",_lepton_mass.append(muons[tight_muons[0]].mass))
+            self.out.fillBranch("lepton_tight",_lepton_tight.append(0))
             self.out.fillBranch("met",event.MET_pt)
             self.out.fillBranch("met_phi",event.MET_phi)
             self.out.fillBranch("photon_pt",photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
@@ -482,7 +497,6 @@ class exampleProducer(Module):
             self.out.fillBranch("photon_mass",photons[tight_photons[0]].mass)
             #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(muons[loose_but_not_tight_muons[0]].p4() + photons[tight_photons[0]].p4()).M())
-            self.out.fillBranch("lepton_tight",0)
 
         elif len(tight_electrons) == 1:
 
@@ -546,12 +560,20 @@ class exampleProducer(Module):
 
 
 
-            self.out.fillBranch("lepton_real",lepton_real)
-            self.out.fillBranch("lepton_pdg_id",11)
-            self.out.fillBranch("lepton_pt",electrons[tight_electrons[0]].pt)
-            self.out.fillBranch("lepton_eta",electrons[tight_electrons[0]].eta)
-            self.out.fillBranch("lepton_phi",electrons[tight_electrons[0]].phi)
-            self.out.fillBranch("lepton_mass",electrons[tight_electrons[0]].mass)
+            _lepton_real=[]
+            _lepton_pdg_id=[]
+            _lepton_pt=[]
+            _lepton_eta=[]
+            _lepton_phi=[]
+            _lepton_mass=[]
+            _lepton_tight=[]
+            self.out.fillBranch("lepton_real",_lepton_real.append(lepton_real))
+            self.out.fillBranch("lepton_pdg_id",_lepton_pdg_id.append(11))
+            self.out.fillBranch("lepton_pt",_lepton_pt.append(muons[tight_muons[0]].pt))
+            self.out.fillBranch("lepton_eta",_lepton_eta.append(muons[tight_muons[0]].eta))
+            self.out.fillBranch("lepton_phi",_lepton_phi.append(muons[tight_muons[0]].phi))
+            self.out.fillBranch("lepton_mass",_lepton_mass.append(muons[tight_muons[0]].mass))
+            self.out.fillBranch("lepton_tight",_lepton_tight.append(1))
             self.out.fillBranch("met",event.MET_pt)
             self.out.fillBranch("met_phi",event.MET_phi)
             self.out.fillBranch("photon_pt",photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
@@ -560,7 +582,6 @@ class exampleProducer(Module):
             self.out.fillBranch("photon_mass",photons[tight_photons[0]].mass)
             #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(ele_p4 + pho_p4).M())
-            self.out.fillBranch("lepton_tight",1)
 
             print "selected electron event: " + str(event.event) + " " + str(event.luminosityBlock) + " " + str(event.run)
 
@@ -623,13 +644,20 @@ class exampleProducer(Module):
                 assert(0)
 
 
-
-            self.out.fillBranch("lepton_real",lepton_real)
-            self.out.fillBranch("lepton_pdg_id",11)
-            self.out.fillBranch("lepton_pt",electrons[loose_but_not_tight_electrons[0]].pt)
-            self.out.fillBranch("lepton_eta",electrons[loose_but_not_tight_electrons[0]].eta)
-            self.out.fillBranch("lepton_phi",electrons[loose_but_not_tight_electrons[0]].phi)
-            self.out.fillBranch("lepton_mass",electrons[loose_but_not_tight_electrons[0]].mass)
+            _lepton_real=[]
+            _lepton_pdg_id=[]
+            _lepton_pt=[]
+            _lepton_eta=[]
+            _lepton_phi=[]
+            _lepton_mass=[]
+            _lepton_tight=[]
+            self.out.fillBranch("lepton_real",_lepton_real.append(lepton_real))
+            self.out.fillBranch("lepton_pdg_id",_lepton_pdg_id.append(11))
+            self.out.fillBranch("lepton_pt",_lepton_pt.append(muons[tight_muons[0]].pt))
+            self.out.fillBranch("lepton_eta",_lepton_eta.append(muons[tight_muons[0]].eta))
+            self.out.fillBranch("lepton_phi",_lepton_phi.append(muons[tight_muons[0]].phi))
+            self.out.fillBranch("lepton_mass",_lepton_mass.append(muons[tight_muons[0]].mass))
+            self.out.fillBranch("lepton_tight",_lepton_tight.append(0))
             self.out.fillBranch("met",event.MET_pt)
             self.out.fillBranch("photon_pt",photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
             self.out.fillBranch("photon_eta",photons[tight_photons[0]].eta)
@@ -637,7 +665,6 @@ class exampleProducer(Module):
             self.out.fillBranch("photon_mass",photons[tight_photons[0]].mass)
             #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(ele_p4 + pho_p4).M())
-            self.out.fillBranch("lepton_tight",0)
 
         else:
             return False
