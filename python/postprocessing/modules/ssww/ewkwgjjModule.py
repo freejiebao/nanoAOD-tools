@@ -643,6 +643,7 @@ class exampleProducer(Module):
             _photon_phi.append(photons[tight_photons[0]].phi)
             _photon_mass.append(photons[tight_photons[0]].mass)
 
+            self.out.fillBranch("lepton_idx",_lepton_idx)
             self.out.fillBranch("lepton_real",_lepton_real)
             self.out.fillBranch("lepton_pdg_id",_lepton_pdg_id)
             self.out.fillBranch("lepton_pt",_lepton_pt)
