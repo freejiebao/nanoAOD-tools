@@ -398,13 +398,19 @@ class exampleProducer(Module):
             mask4 = (1 << 1) | (1 << 3) | (1 << 5) | (1 << 7) | (1 << 11) | (1 << 13)
             mask5 = (1 << 1) | (1 << 3) | (1 << 5) | (1 << 9) | (1 << 11) | (1 << 13) #invert the medium photon ID with the sigma_ietaieta cut removed
 
+            _photon_pt=[]
+            _photon_phi=[]
+            _photon_eta=[]
+            _photon_mass=[]
+            _photon_selection=[]
+            _photon_gen_matching=[]
             bitmap = photons[tight_photons[0]].vidNestedWPBitmap & mask1
             if (bitmap == mask1):
-                self.out.fillBranch("photon_selection",2)
+                self.out.fillBranch("photon_selection",_photon_selection.append(2))
             elif (bitmap == mask5):
-                self.out.fillBranch("photon_selection",1)
+                self.out.fillBranch("photon_selection",_photon_selection.append(1))
             elif (bitmap == mask2) or (bitmap == mask3) or (bitmap == mask4):
-                self.out.fillBranch("photon_selection",0)
+                self.out.fillBranch("photon_selection",_photon_selection.append(0))
             else:
                 assert(0)
 
@@ -424,10 +430,10 @@ class exampleProducer(Module):
             self.out.fillBranch("lepton_tight",_lepton_tight.append(1))
             self.out.fillBranch("met",event.MET_pt)
             self.out.fillBranch("met_phi",event.MET_phi)
-            self.out.fillBranch("photon_pt",photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
-            self.out.fillBranch("photon_eta",photons[tight_photons[0]].eta)
-            self.out.fillBranch("photon_phi",photons[tight_photons[0]].phi)
-            self.out.fillBranch("photon_mass",photons[tight_photons[0]].mass)
+            self.out.fillBranch("photon_pt",_photon_pt.append(photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr))
+            self.out.fillBranch("photon_eta",_photon_eta.append(photons[tight_photons[0]].eta))
+            self.out.fillBranch("photon_phi",_photon_phi.append(photons[tight_photons[0]].phi))
+            self.out.fillBranch("photon_mass",_photon_mass.append(photons[tight_photons[0]].mass))
             #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(muons[tight_muons[0]].p4() + photons[tight_photons[0]].p4()).M())
 
@@ -466,12 +472,18 @@ class exampleProducer(Module):
 
             bitmap = photons[tight_photons[0]].vidNestedWPBitmap & mask1
 
+            _photon_pt=[]
+            _photon_phi=[]
+            _photon_eta=[]
+            _photon_mass=[]
+            _photon_selection=[]
+            _photon_gen_matching=[]
             if (bitmap == mask1):
-                self.out.fillBranch("photon_selection",2)
+                self.out.fillBranch("photon_selection",_photon_selection.append(2))
             elif (bitmap == mask5):
-                self.out.fillBranch("photon_selection",1)
+                self.out.fillBranch("photon_selection",_photon_selection.append(1))
             elif (bitmap == mask2) or (bitmap == mask3) or (bitmap == mask4):
-                self.out.fillBranch("photon_selection",0)
+                self.out.fillBranch("photon_selection",_photon_selection.append(0))
             else:
                 assert(0)
 
@@ -491,10 +503,10 @@ class exampleProducer(Module):
             self.out.fillBranch("lepton_tight",_lepton_tight.append(0))
             self.out.fillBranch("met",event.MET_pt)
             self.out.fillBranch("met_phi",event.MET_phi)
-            self.out.fillBranch("photon_pt",photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
-            self.out.fillBranch("photon_eta",photons[tight_photons[0]].eta)
-            self.out.fillBranch("photon_phi",photons[tight_photons[0]].phi)
-            self.out.fillBranch("photon_mass",photons[tight_photons[0]].mass)
+            self.out.fillBranch("photon_pt",_photon_pt.append(photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr))
+            self.out.fillBranch("photon_eta",_photon_eta.append(photons[tight_photons[0]].eta))
+            self.out.fillBranch("photon_phi",_photon_phi.append(photons[tight_photons[0]].phi))
+            self.out.fillBranch("photon_mass",_photon_mass.append(photons[tight_photons[0]].mass))
             #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(muons[loose_but_not_tight_muons[0]].p4() + photons[tight_photons[0]].p4()).M())
 
@@ -548,12 +560,18 @@ class exampleProducer(Module):
 
             bitmap = photons[tight_photons[0]].vidNestedWPBitmap & mask1
 
+            _photon_pt=[]
+            _photon_phi=[]
+            _photon_eta=[]
+            _photon_mass=[]
+            _photon_selection=[]
+            _photon_gen_matching=[]
             if (bitmap == mask1):
-                self.out.fillBranch("photon_selection",2)
+                self.out.fillBranch("photon_selection",_photon_selection.append(2))
             elif (bitmap == mask5):
-                self.out.fillBranch("photon_selection",1)
+                self.out.fillBranch("photon_selection",_photon_selection.append(1))
             elif (bitmap == mask2) or (bitmap == mask3) or (bitmap == mask4):
-                self.out.fillBranch("photon_selection",0)
+                self.out.fillBranch("photon_selection",_photon_selection.append(0))
             else:
                 assert(0)
 
@@ -576,10 +594,10 @@ class exampleProducer(Module):
             self.out.fillBranch("lepton_tight",_lepton_tight.append(1))
             self.out.fillBranch("met",event.MET_pt)
             self.out.fillBranch("met_phi",event.MET_phi)
-            self.out.fillBranch("photon_pt",photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
-            self.out.fillBranch("photon_eta",photons[tight_photons[0]].eta)
-            self.out.fillBranch("photon_phi",photons[tight_photons[0]].phi)
-            self.out.fillBranch("photon_mass",photons[tight_photons[0]].mass)
+            self.out.fillBranch("photon_pt",_photon_pt.append(photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr))
+            self.out.fillBranch("photon_eta",_photon_eta.append(photons[tight_photons[0]].eta))
+            self.out.fillBranch("photon_phi",_photon_phi.append(photons[tight_photons[0]].phi))
+            self.out.fillBranch("photon_mass",_photon_mass.append(photons[tight_photons[0]].mass))
             #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(ele_p4 + pho_p4).M())
 
@@ -634,12 +652,18 @@ class exampleProducer(Module):
 
             bitmap = photons[tight_photons[0]].vidNestedWPBitmap & mask1
 
+            _photon_pt=[]
+            _photon_phi=[]
+            _photon_eta=[]
+            _photon_mass=[]
+            _photon_selection=[]
+            _photon_gen_matching=[]
             if (bitmap == mask1):
-                self.out.fillBranch("photon_selection",2)
+                self.out.fillBranch("photon_selection",_photon_selection.append(2))
             elif (bitmap == mask5):
-                self.out.fillBranch("photon_selection",1)
+                self.out.fillBranch("photon_selection",_photon_selection.append(1))
             elif (bitmap == mask2) or (bitmap == mask3) or (bitmap == mask4):
-                self.out.fillBranch("photon_selection",0)
+                self.out.fillBranch("photon_selection",_photon_selection.append(0))
             else:
                 assert(0)
 
@@ -659,10 +683,10 @@ class exampleProducer(Module):
             self.out.fillBranch("lepton_mass",_lepton_mass.append(muons[tight_muons[0]].mass))
             self.out.fillBranch("lepton_tight",_lepton_tight.append(0))
             self.out.fillBranch("met",event.MET_pt)
-            self.out.fillBranch("photon_pt",photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
-            self.out.fillBranch("photon_eta",photons[tight_photons[0]].eta)
-            self.out.fillBranch("photon_phi",photons[tight_photons[0]].phi)
-            self.out.fillBranch("photon_mass",photons[tight_photons[0]].mass)
+            self.out.fillBranch("photon_pt",_photon_pt.append(photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr))
+            self.out.fillBranch("photon_eta",_photon_eta.append(photons[tight_photons[0]].eta))
+            self.out.fillBranch("photon_phi",_photon_phi.append(photons[tight_photons[0]].phi))
+            self.out.fillBranch("photon_mass",_photon_mass.append(photons[tight_photons[0]].mass))
             #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(ele_p4 + pho_p4).M())
 
@@ -772,3 +796,5 @@ class exampleProducer(Module):
         return True
 
 exampleModule = lambda : exampleProducer()
+
+#python scripts/nano_postproc.py . /afs/cern.ch/work/j/jixiao/nano/2016/CMSSW_10_2_13/src/PhysicsTools/NanoAODTools/2016_DY_nanoAODv5.root -I PhysicsTools.NanoAODTools.postprocessing.modules.ssww.ewkwgjjModule exampleModule --bi python/postprocessing/scripts/ssww_keep_and_drop_2016_jec.txt --bo python/postprocessing/scripts/ssww_output_branch_selection_2016.txt
