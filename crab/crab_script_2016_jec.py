@@ -18,7 +18,7 @@ from  PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetHelperRun2_ssww
 
 jmeCorrections = createJMECorrector(True, "2016", "B", "Total", True, "AK4PFchs", False)
 
-p=PostProcessor(".",inputFiles(),None,os.environ['CMSSW_BASE']+"/python/PhysicsTools/NanoAODTools/postprocessing/scripts/ssww_keep_and_drop_2016.txt",modules=[countHistogramsModule(),PrefCorr_2016(),exampleModule(),muonScaleRes2016(),puWeight_2016(),jmeCorrections(),btagSF2016(),lepSF_2016(),helper_thoeretic()],provenance=True,justcount=False,noOut=False,fwkJobReport=True,outputbranchsel = os.environ['CMSSW_BASE']+"/python/PhysicsTools/NanoAODTools/postprocessing/scripts/ssww_output_branch_selection_2016.txt")
+p=PostProcessor(".",inputFiles(),None,os.environ['CMSSW_BASE']+"/python/PhysicsTools/NanoAODTools/postprocessing/scripts/ssww_keep_and_drop_2016_jec.txt",modules=[countHistogramsModule(),PrefCorr_2016(),exampleModule(),muonScaleRes2016(),puWeight_2016(),jmeCorrections(),btagSF2016(),lepSF_2016(),helper_thoeretic()],provenance=True,justcount=False,noOut=False,fwkJobReport=True,outputbranchsel = os.environ['CMSSW_BASE']+"/python/PhysicsTools/NanoAODTools/postprocessing/scripts/ssww_output_branch_selection_2016.txt")
 p.run()
 
 print "DONE"
