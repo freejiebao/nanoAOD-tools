@@ -363,7 +363,7 @@ class sswwProducer(Module):
 
             try:
                 for j in range(0, len(genparts)):
-                    if genparts[j].pt > 5 and abs(genparts[j].pdgId) == PID and ((genparts[j].statusFlags == 0) or (genparts[j].statusFlags == 6)) and deltaR(leptons[loose_leptons[i]][0].eta, leptons[loose_leptons[i]][0].phi, genparts[j].eta, genparts[j].phi) < 0.3:
+                    if genparts[j].pt > 5 and abs(genparts[j].pdgId) == PID and ((genparts[j].statusFlags == 0) or (genparts[j].statusFlags == 3)) and deltaR(leptons[loose_leptons[i]][0].eta, leptons[loose_leptons[i]][0].phi, genparts[j].eta, genparts[j].phi) < 0.3:
                         lepton_real.append(True)
                     else:
                         lepton_real.append(False)
