@@ -25,6 +25,7 @@ class exampleProducer(Module):
         self.out.branch("event",  "l");
         self.out.branch("npu",  "I");
         self.out.branch("ntruepu",  "F");
+        self.out.branch("lepton_idx",  "I",lenVar="nlepton");
         self.out.branch("lepton_pdg_id",  "I",lenVar="nlepton");
         self.out.branch("lepton_pt",  "F",lenVar="nlepton");
         self.out.branch("lepton_phi",  "F",lenVar="nlepton");
@@ -32,6 +33,7 @@ class exampleProducer(Module):
         self.out.branch("lepton_mass",  "F",lenVar="nlepton");
         self.out.branch("lepton_tight",  "B",lenVar="nlepton");
         self.out.branch("lepton_real",  "B",lenVar="nlepton");
+        self.out.branch("photon_idx",  "I",lenVar="nphoton");
         self.out.branch("photon_pt",  "F",lenVar="nphoton");
         self.out.branch("photon_phi",  "F",lenVar="nphoton");
         self.out.branch("photon_eta",  "F",lenVar="nphoton");
@@ -398,6 +400,7 @@ class exampleProducer(Module):
             mask4 = (1 << 1) | (1 << 3) | (1 << 5) | (1 << 7) | (1 << 11) | (1 << 13)
             mask5 = (1 << 1) | (1 << 3) | (1 << 5) | (1 << 9) | (1 << 11) | (1 << 13) #invert the medium photon ID with the sigma_ietaieta cut removed
 
+            _photon_idx=[]
             _photon_pt=[]
             _photon_phi=[]
             _photon_eta=[]
@@ -416,6 +419,7 @@ class exampleProducer(Module):
             else:
                 assert(0)
 
+            _lepton_idx=[]
             _lepton_real=[]
             _lepton_pdg_id=[]
             _lepton_pt=[]
@@ -424,6 +428,7 @@ class exampleProducer(Module):
             _lepton_mass=[]
             _lepton_tight=[]
 
+            _lepton_idx.append(tight_muons[0])
             _lepton_real.append(lepton_real)
             _lepton_pdg_id.append(muons[tight_muons[0]].pdgId)
             _lepton_pt.append(muons[tight_muons[0]].pt)
@@ -431,10 +436,12 @@ class exampleProducer(Module):
             _lepton_phi.append(muons[tight_muons[0]].phi)
             _lepton_mass.append(muons[tight_muons[0]].mass)
             _lepton_tight.append(bool(1))
+            _photon_pt.append(tight_photons[0])
             _photon_pt.append(photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
             _photon_eta.append(photons[tight_photons[0]].eta)
             _photon_phi.append(photons[tight_photons[0]].phi)
             _photon_mass.append(photons[tight_photons[0]].mass)
+            self.out.fillBranch("lepton_idx",_lepton_idx)
             self.out.fillBranch("lepton_real",_lepton_real)
             self.out.fillBranch("lepton_pdg_id",_lepton_pdg_id)
             self.out.fillBranch("lepton_pt",_lepton_pt)
@@ -444,6 +451,7 @@ class exampleProducer(Module):
             self.out.fillBranch("lepton_tight",_lepton_tight)
             self.out.fillBranch("met",event.MET_pt)
             self.out.fillBranch("met_phi",event.MET_phi)
+            self.out.fillBranch("photon_idx",_photon_idx)
             self.out.fillBranch("photon_pt",_photon_pt)
             self.out.fillBranch("photon_eta",_photon_eta)
             self.out.fillBranch("photon_phi",_photon_phi)
@@ -486,6 +494,7 @@ class exampleProducer(Module):
 
             bitmap = photons[tight_photons[0]].vidNestedWPBitmap & mask1
 
+            _photon_idx=[]
             _photon_pt=[]
             _photon_phi=[]
             _photon_eta=[]
@@ -503,6 +512,7 @@ class exampleProducer(Module):
             else:
                 assert(0)
 
+            _lepton_idx=[]
             _lepton_real=[]
             _lepton_pdg_id=[]
             _lepton_pt=[]
@@ -511,6 +521,7 @@ class exampleProducer(Module):
             _lepton_mass=[]
             _lepton_tight=[]
 
+            _lepton_idx.append(loose_but_not_tight_muons[0])
             _lepton_real.append(lepton_real)
             _lepton_pdg_id.append(muons[loose_but_not_tight_muons[0]].pdgId)
             _lepton_pt.append(muons[loose_but_not_tight_muons[0]].pt)
@@ -518,10 +529,12 @@ class exampleProducer(Module):
             _lepton_phi.append(muons[loose_but_not_tight_muons[0]].phi)
             _lepton_mass.append(muons[loose_but_not_tight_muons[0]].mass)
             _lepton_tight.append(bool(0))
+            _photon_pt.append(tight_photons[0])
             _photon_pt.append(photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
             _photon_eta.append(photons[tight_photons[0]].eta)
             _photon_phi.append(photons[tight_photons[0]].phi)
             _photon_mass.append(photons[tight_photons[0]].mass)
+            self.out.fillBranch("lepton_idx",_lepton_idx)
             self.out.fillBranch("lepton_real",_lepton_real)
             self.out.fillBranch("lepton_pdg_id",_lepton_pdg_id)
             self.out.fillBranch("lepton_pt",_lepton_pt)
@@ -531,6 +544,7 @@ class exampleProducer(Module):
             self.out.fillBranch("lepton_tight",_lepton_tight)
             self.out.fillBranch("met",event.MET_pt)
             self.out.fillBranch("met_phi",event.MET_phi)
+            self.out.fillBranch("photon_idx",_photon_idx)
             self.out.fillBranch("photon_pt",_photon_pt)
             self.out.fillBranch("photon_eta",_photon_eta)
             self.out.fillBranch("photon_phi",_photon_phi)
@@ -588,6 +602,7 @@ class exampleProducer(Module):
 
             bitmap = photons[tight_photons[0]].vidNestedWPBitmap & mask1
 
+            _photon_idx=[]
             _photon_pt=[]
             _photon_phi=[]
             _photon_eta=[]
@@ -605,6 +620,7 @@ class exampleProducer(Module):
             else:
                 assert(0)
 
+            _lepton_idx=[]
             _lepton_real=[]
             _lepton_pdg_id=[]
             _lepton_pt=[]
@@ -613,6 +629,7 @@ class exampleProducer(Module):
             _lepton_mass=[]
             _lepton_tight=[]
 
+            _lepton_idx.append(tight_electrons[0])
             _lepton_real.append(lepton_real)
             _lepton_pdg_id.append(electrons[tight_electrons[0]].pdgId)
             _lepton_pt.append(electrons[tight_electrons[0]].pt)
@@ -620,6 +637,7 @@ class exampleProducer(Module):
             _lepton_phi.append(electrons[tight_electrons[0]].phi)
             _lepton_mass.append(electrons[tight_electrons[0]].mass)
             _lepton_tight.append(bool(1))
+            _photon_idx.append(tight_photons[0])
             _photon_pt.append(photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
             _photon_eta.append(photons[tight_photons[0]].eta)
             _photon_phi.append(photons[tight_photons[0]].phi)
@@ -634,6 +652,7 @@ class exampleProducer(Module):
             self.out.fillBranch("lepton_tight",_lepton_tight)
             self.out.fillBranch("met",event.MET_pt)
             self.out.fillBranch("met_phi",event.MET_phi)
+            self.out.fillBranch("photon_idx",_photon_idx)
             self.out.fillBranch("photon_pt",_photon_pt)
             self.out.fillBranch("photon_eta",_photon_eta)
             self.out.fillBranch("photon_phi",_photon_phi)
@@ -692,6 +711,7 @@ class exampleProducer(Module):
 
             bitmap = photons[tight_photons[0]].vidNestedWPBitmap & mask1
 
+            _photon_idx=[]
             _photon_pt=[]
             _photon_phi=[]
             _photon_eta=[]
@@ -709,6 +729,7 @@ class exampleProducer(Module):
             else:
                 assert(0)
 
+            _lepton_idx=[]
             _lepton_real=[]
             _lepton_pdg_id=[]
             _lepton_pt=[]
@@ -717,6 +738,7 @@ class exampleProducer(Module):
             _lepton_mass=[]
             _lepton_tight=[]
 
+            _lepton_idx.append(loose_but_not_tight_electrons[0])
             _lepton_real.append(lepton_real)
             _lepton_pdg_id.append(electrons[loose_but_not_tight_electrons[0]].pdgId)
             _lepton_pt.append(electrons[loose_but_not_tight_electrons[0]].pt)
@@ -724,11 +746,13 @@ class exampleProducer(Module):
             _lepton_phi.append(electrons[loose_but_not_tight_electrons[0]].phi)
             _lepton_mass.append(electrons[loose_but_not_tight_electrons[0]].mass)
             _lepton_tight.append(bool(0))
+            _photon_idx.append(tight_photons[0])
             _photon_pt.append(photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
             _photon_eta.append(photons[tight_photons[0]].eta)
             _photon_phi.append(photons[tight_photons[0]].phi)
             _photon_mass.append(photons[tight_photons[0]].mass)
 
+            self.out.fillBranch("lepton_idx",_lepton_idx)
             self.out.fillBranch("lepton_real",_lepton_real)
             self.out.fillBranch("lepton_pdg_id",_lepton_pdg_id)
             self.out.fillBranch("lepton_pt",_lepton_pt)
@@ -738,6 +762,7 @@ class exampleProducer(Module):
             self.out.fillBranch("lepton_tight",_lepton_tight)
             self.out.fillBranch("met",event.MET_pt)
             self.out.fillBranch("met_phi",event.MET_phi)
+            self.out.fillBranch("photon_idx",_photon_idx)
             self.out.fillBranch("photon_pt",_photon_pt)
             self.out.fillBranch("photon_eta",_photon_eta)
             self.out.fillBranch("photon_phi",_photon_phi)
