@@ -29,6 +29,7 @@ class exampleProducer(Module):
         self.out.branch("lepton_pt",  "F");
         self.out.branch("lepton_phi",  "F");
         self.out.branch("lepton_eta",  "F");
+        self.out.branch("is_lepton_tight",  "B");
         self.out.branch("photon_pt",  "F");
         self.out.branch("photon_phi",  "F");
         self.out.branch("photon_eta",  "F");
@@ -40,7 +41,16 @@ class exampleProducer(Module):
         self.out.branch("mjj","F")
         self.out.branch("npvs","I")
         self.out.branch("njets","I")
-        self.out.branch("is_lepton_tight",  "B");
+        self.out.branch("jet_idx", "I", lenVar="njet")
+        self.out.branch("jet_id", "I", lenVar="njet")
+        self.out.branch("jet_pt", "F", lenVar="njet")
+        self.out.branch("jet_eta", "F", lenVar="njet")
+        self.out.branch("jet_phi", "F", lenVar="njet")
+        self.out.branch("jet_mass", "F", lenVar="njet")
+        self.out.branch("jet_btagCSVV2", "F", lenVar="njet")
+        self.out.branch("jet_btagDeepB", "F", lenVar="njet")
+        self.out.branch("jet_hadronFlavour", "I", lenVar="njet")
+        self.out.branch("jet_partonFlavour", "I", lenVar="njet")
         self.out.branch("gen_weight",  "F");
         self.out.branch("is_lepton_real",  "B");
         self.out.branch("photon_gen_matching",  "I");
@@ -406,7 +416,7 @@ class exampleProducer(Module):
             self.out.fillBranch("photon_pt",photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
             self.out.fillBranch("photon_eta",photons[tight_photons[0]].eta)
             self.out.fillBranch("photon_phi",photons[tight_photons[0]].phi)
-            self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
+            #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(muons[tight_muons[0]].p4() + photons[tight_photons[0]].p4()).M())
             self.out.fillBranch("is_lepton_tight",1)
 
@@ -463,7 +473,7 @@ class exampleProducer(Module):
             self.out.fillBranch("photon_pt",photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
             self.out.fillBranch("photon_eta",photons[tight_photons[0]].eta)
             self.out.fillBranch("photon_phi",photons[tight_photons[0]].phi)
-            self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
+            #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(muons[loose_but_not_tight_muons[0]].p4() + photons[tight_photons[0]].p4()).M())
             self.out.fillBranch("is_lepton_tight",0)
 
@@ -538,7 +548,7 @@ class exampleProducer(Module):
             self.out.fillBranch("photon_pt",photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
             self.out.fillBranch("photon_eta",photons[tight_photons[0]].eta)
             self.out.fillBranch("photon_phi",photons[tight_photons[0]].phi)
-            self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
+            #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(ele_p4 + pho_p4).M())
             self.out.fillBranch("is_lepton_tight",1)
 
@@ -613,7 +623,7 @@ class exampleProducer(Module):
             self.out.fillBranch("photon_pt",photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
             self.out.fillBranch("photon_eta",photons[tight_photons[0]].eta)
             self.out.fillBranch("photon_phi",photons[tight_photons[0]].phi)
-            self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
+            #self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
             self.out.fillBranch("mlg",(ele_p4 + pho_p4).M())
             self.out.fillBranch("is_lepton_tight",0)
 
@@ -673,7 +683,48 @@ class exampleProducer(Module):
         except:
             pass
 
+        # store jets information
+        jet_idx = []
+        jet_id = []
+        jet_pt = []
+        jet_eta = []
+        jet_phi = []
+        jet_mass = []
+        jet_btagCSVV2 = []
+        jet_btagDeepB = []
+        jet_hadronFlavour = []
+        jet_partonFlavour = []
+        for i in range(0, len(tight_jets)):
+            jet_idx.append(tight_jets[i])
+            jet_id.append(jets[tight_jets[i]].jetId)
+            jet_pt.append(jets[tight_jets[i]].pt)
+            jet_eta.append(jets[tight_jets[i]].eta)
+            jet_phi.append(jets[tight_jets[i]].phi)
+            jet_mass.append(jets[tight_jets[i]].mass)
+            jet_btagCSVV2.append(jets[tight_jets[i]].btagCSVV2)
+            jet_btagDeepB.append(jets[tight_jets[i]].btagDeepB)
+            if hasattr(jets[tight_jets[i]], 'hadronFlavour'):
+                jet_hadronFlavour.append(jets[tight_jets[i]].hadronFlavour)
+            else:
+                jet_hadronFlavour.append(-9999)
+
+            if hasattr(jets[tight_jets[i]], 'partonFlavour'):
+                jet_partonFlavour.append(jets[tight_jets[i]].partonFlavour)
+            else:
+                jet_partonFlavour.append(-9999)
+
         self.out.fillBranch("njets",njets)
+        self.out.fillBranch("jet_idx", jet_idx)
+        self.out.fillBranch("jet_id", jet_id)
+        self.out.fillBranch("jet_pt", jet_pt)
+        self.out.fillBranch("jet_eta", jet_eta)
+        self.out.fillBranch("jet_phi", jet_phi)
+        self.out.fillBranch("jet_mass", jet_mass)
+        self.out.fillBranch("jet_btagCSVV2", jet_btagCSVV2)
+        self.out.fillBranch("jet_btagDeepB", jet_btagDeepB)
+        self.out.fillBranch("jet_hadronFlavour", jet_hadronFlavour)
+        self.out.fillBranch("jet_partonFlavour", jet_partonFlavour)
+        self.out.fillBranch("mjj",(jets[tight_jets[0]].p4() + jets[tight_jets[1]].p4()).M())
         self.out.fillBranch("npvs",event.PV_npvs)
         self.out.fillBranch("event",event.event)
         self.out.fillBranch("lumi",event.luminosityBlock)
