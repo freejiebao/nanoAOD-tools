@@ -417,6 +417,14 @@ class exampleProducer(Module):
             else:
                 assert(0)
 
+            _lepton_real=[]
+            _lepton_pdg_id=[]
+            _lepton_pt=[]
+            _lepton_eta=[]
+            _lepton_phi=[]
+            _lepton_mass=[]
+            _lepton_tight=[]
+
             _lepton_real.append(lepton_real)
             _lepton_pdg_id.append(muons[tight_muons[0]].pdgId)
             _lepton_pt.append(muons[tight_muons[0]].pt)
