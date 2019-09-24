@@ -46,7 +46,7 @@ class jetmetUncertaintiesProducer(Module):
         self.jetSmearer = jetSmearer(globalTag, jetType, self.jerInputFileName, self.jerUncertaintyInputFileName, self.jmrVals)
 
         if "AK4" in jetType :
-            self.jetBranchName = "Jet"
+            self.jetBranchName = "jet"
             self.genJetBranchName = "GenJet"
             self.genSubJetBranchName = None
             self.doGroomed = False
