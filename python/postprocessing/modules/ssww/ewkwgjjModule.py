@@ -512,11 +512,11 @@ class exampleProducer(Module):
             _lepton_tight=[]
 
             _lepton_real.append(lepton_real)
-            _lepton_pdg_id.append(muons[tight_muons[0]].pdgId)
-            _lepton_pt.append(muons[tight_muons[0]].pt)
-            _lepton_eta.append(muons[tight_muons[0]].eta)
-            _lepton_phi.append(muons[tight_muons[0]].phi)
-            _lepton_mass.append(muons[tight_muons[0]].mass)
+            _lepton_pdg_id.append(muons[loose_but_not_tight_muons[0]].pdgId)
+            _lepton_pt.append(muons[loose_but_not_tight_muons[0]].pt)
+            _lepton_eta.append(muons[loose_but_not_tight_muons[0]].eta)
+            _lepton_phi.append(muons[loose_but_not_tight_muons[0]].phi)
+            _lepton_mass.append(muons[loose_but_not_tight_muons[0]].mass)
             _lepton_tight.append(bool(0))
             _photon_pt.append(photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
             _photon_eta.append(photons[tight_photons[0]].eta)
@@ -718,11 +718,11 @@ class exampleProducer(Module):
             _lepton_tight=[]
 
             _lepton_real.append(lepton_real)
-            _lepton_pdg_id.append(electrons[tight_electrons[0]].pdgId)
-            _lepton_pt.append(electrons[tight_electrons[0]].pt)
-            _lepton_eta.append(electrons[tight_electrons[0]].eta)
-            _lepton_phi.append(electrons[tight_electrons[0]].phi)
-            _lepton_mass.append(electrons[tight_electrons[0]].mass)
+            _lepton_pdg_id.append(electrons[loose_but_not_tight_electrons[0]].pdgId)
+            _lepton_pt.append(electrons[loose_but_not_tight_electrons[0]].pt)
+            _lepton_eta.append(electrons[loose_but_not_tight_electrons[0]].eta)
+            _lepton_phi.append(electrons[loose_but_not_tight_electrons[0]].phi)
+            _lepton_mass.append(electrons[loose_but_not_tight_electrons[0]].mass)
             _lepton_tight.append(bool(0))
             _photon_pt.append(photons[tight_photons[0]].pt/photons[tight_photons[0]].eCorr)
             _photon_eta.append(photons[tight_photons[0]].eta)
