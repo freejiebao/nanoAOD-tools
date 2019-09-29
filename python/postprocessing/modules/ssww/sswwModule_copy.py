@@ -361,14 +361,15 @@ class sswwProducer(Module):
             else:
                 pass
 
+            lepton_real_flag=False
             try:
                 for j in range(0, len(genparts)):
                     if genparts[j].pt > 5 and abs(genparts[j].pdgId) == PID and ((genparts[j].statusFlags == 0) or (genparts[j].statusFlags == 3)) and deltaR(leptons[loose_leptons[i]][0].eta, leptons[loose_leptons[i]][0].phi, genparts[j].eta, genparts[j].phi) < 0.3:
-                        lepton_real.append(True)
-                    else:
-                        lepton_real.append(False)
+                        lepton_real_flag=True
+                        break
+                lepton_real.append(lepton_real_flag)
             except:
-                lepton_real.append(False)
+                lepton_real.append(lepton_real_flag)
             else:
                 pass
 
