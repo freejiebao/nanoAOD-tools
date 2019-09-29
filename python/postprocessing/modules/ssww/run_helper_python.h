@@ -29,7 +29,7 @@ RVec<int> lepton_real_code(int nlepton, rvec_i lepton_pdg_id, rvec_f lepton_pt, 
 {
    RVec<int> lepton_real_fix(nlepton);
    for(int i=0; i<nlepton; i++){
-    lepton_real_new[i]=0;
+    lepton_real_fix[i]=0;
     for(int j=0; j<nGenPart; j++){
         if(GenPart_pt[j]>5 && abs(GenPart_pdgId[j])==abs(lepton_pdg_id[i]) && (GenPart_statusFlags[j]==0 || GenPart_statusFlags[j]==3) && deltaR(lepton_eta[i],lepton_phi[i],GenPart_eta[j],GenPart_phi[j])< 0.3){
             lepton_real_fix[i]=1;
