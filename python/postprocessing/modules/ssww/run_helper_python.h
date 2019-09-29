@@ -15,7 +15,7 @@
 #include "TLatex.h"
 #include "Math/Vector4D.h"
 #include "TStyle.h"
-#include "DataFormats/Math/interface/deltaR.h"
+#include "deltaR.h"
 
 using namespace ROOT::VecOps;
 using RNode = ROOT::RDF::RNode;
