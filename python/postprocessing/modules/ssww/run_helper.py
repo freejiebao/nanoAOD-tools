@@ -69,7 +69,7 @@ if __name__ == '__main__':
                 f.Close()
             if args.fixreal:
                 df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+samples[imc][i])
-                df01=df.Filter("nGenPart>0").Define("lepton_real_new","lepton_real_code(nlepton,lepton_pdg_id,lepton_pt,lepton_eta,nGenPart,GenPart_pdgId,GenPart_pt,GenPart_statusFlags,GenPart_eta,GenPart_phi)")
+                df01=df.Filter("nGenPart>0").Define("lepton_real_new","lepton_real_code(nlepton,lepton_pdg_id,lepton_pt,lepton_eta,lepton_phi,nGenPart,GenPart_pdgId,GenPart_pt,GenPart_statusFlags,GenPart_eta,GenPart_phi)")
                 df01.Snapshot("Events",args.input+args.year+'/fix_'+samples[imc][i])
             # theoretic uncertainties using nanoAOD framework
             if args.theory:
