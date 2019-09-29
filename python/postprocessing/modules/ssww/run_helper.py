@@ -9,10 +9,16 @@ parser.add_argument('-i','--input', help='input path', default= '/home/cmsdas/te
 #parser.add_argument('-i','--input', help='input path', default= '/eos/user/l/llinwei/jie/ssww_ntuple/')
 parser.add_argument('-t','--theory', help='get the theoretic un certainty, default is false',action='store_true', default= False)
 parser.add_argument('-x','--xsweight', help='get xs scale factor, default is false',action='store_true', default= False)
-parser.add_argument('-f','--fixreal', help='fix the real lepton decision',action='store_true', default= False)
+parser.add_argument('-f','--fixreal', help='fix the real lepton decision, default is false',action='store_true', default= False)
 args = parser.parse_args()
 
 ROOT.ROOT.EnableImplicitMT(70)
+
+# Include necessary header
+run_helper_header_path = os.environ['CMSSW_BASE'] + "/python/PhysicsTools/NanoAODTools/postprocessing/modules/ssww/run_helper_python.h"
+
+ROOT.gInterpreter.Declare('#include "{}"'.format(run_helper_header_path))
+
 def remove_text(a, year):
     xs_file_path='../../../../crab/'
     with open(xs_file_path+'xs_' + year + '_nano_v4.py', 'r') as f:
@@ -62,7 +68,7 @@ if __name__ == '__main__':
                 f.Close()
             if args.fixreal:
                 df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+samples[imc][i])
-                df01=df.Filter("nGenJet>0").Define("lepton_real_new","bool lepton_real_new[nlepton];for(int i=0; i<nlepton; i++){for(int j=0; j<nGenJet; j++){if(GenPart_pt[j]>5 && abs(GenPart_pdgId[j])==abs(lepton_pdg_id[i]) && (GenPart_statusFlags==0 || GenPart_statusFlags==3) && (sqrt(pow(lepton_eta[i] - GenPart_eta[j], 2) + pow(abs(abs(lepton_phi[i] - GenPart_phi[j])-TMath::Pi())-TMath::Pi(), 2)) < 0.3)){lepton_real_new[i]=true;} else{lepton_real_new[i]=false;};}}; return lepton_real_new;")
+                df01=df.Filter("nGenPart>0").Define("lepton_real_new","lepton_real_code(nlepton,lepton_pdg_id,lepton_pt,lepton_eta,nGenPart,GenPart_pdgId,GenPart_pt,GenPart_statusFlags,GenPart_eta,GenPart_phi)")
                 df01.Snapshot("Events",args.input+args.year+'/fix_'+samples[imc][i])
             # theoretic uncertainties using nanoAOD framework
             if args.theory:
