@@ -3,7 +3,7 @@ import os, sys
 import subprocess
 
 from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties_ssww import *
-from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetRecalib import *
+from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetRecalib_ssww import *
 
 # JEC dict
 jecTagsMC = {'2016' : 'Summer16_07Aug2017_V11_MC', 
