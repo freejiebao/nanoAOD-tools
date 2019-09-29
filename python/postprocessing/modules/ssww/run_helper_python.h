@@ -25,14 +25,14 @@ using rvec_b = const RVec<bool> &;
 
 // match leptons to gen information
 // reference to: https://github.com/root-project/root/blob/master/tutorials/dataframe/df103_NanoAODHiggsAnalysis_python.h
-RVec<int> lepton_real_code(int nlepton, rvec_i lepton_pdg_id, rvec_f lepton_pt, rvec_f lepton_eta, rvec_f lepton_phi, int nGenPart, rvec_i GenPart_pdgId, rvec_f GenPart_pt, rvec_i GenPart_statusFlags, rvec_f GenPart_eta, rvec_f GenPart_phi)
+RVec<bool> lepton_real_code(int nlepton, rvec_i lepton_pdg_id, rvec_f lepton_pt, rvec_f lepton_eta, rvec_f lepton_phi, int nGenPart, rvec_i GenPart_pdgId, rvec_f GenPart_pt, rvec_i GenPart_statusFlags, rvec_f GenPart_eta, rvec_f GenPart_phi)
 {
-   RVec<int> lepton_real_fix(nlepton);
+   RVec<bool> lepton_real_fix(nlepton);
    for(int i=0; i<nlepton; i++){
-    lepton_real_fix[i]=0;
+    lepton_real_fix[i]=false;
     for(int j=0; j<nGenPart; j++){
         if(GenPart_pt[j]>5 && abs(GenPart_pdgId[j])==abs(lepton_pdg_id[i]) && (GenPart_statusFlags[j]==0 || GenPart_statusFlags[j]==3) && deltaR(lepton_eta[i],lepton_phi[i],GenPart_eta[j],GenPart_phi[j])< 0.3){
-            lepton_real_fix[i]=1;
+            lepton_real_fix[i]=true;
             break;
         }
     }
