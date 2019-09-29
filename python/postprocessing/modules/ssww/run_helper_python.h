@@ -22,7 +22,6 @@ using RNode = ROOT::RDF::RNode;
 using rvec_f = const RVec<float> &;
 using rvec_i = const RVec<int> &;
 using rvec_b = const RVec<bool> &;
-const auto z_mass = 91.2;
 
 // match leptons to gen information
 // reference to: https://github.com/root-project/root/blob/master/tutorials/dataframe/df103_NanoAODHiggsAnalysis_python.h
@@ -32,7 +31,7 @@ RVec<bool> lepton_real_code(int nlepton, rvec_i lepton_pdg_id, rvec_f lepton_pt,
    for(int i=0; i<nlepton; i++){
     lepton_real_new[i]=false;
     for(int j=0; j<nGenPart; j++){
-        if(GenPart_pt[j]>5 && abs(GenPart_pdgId[j])==abs(lepton_pdg_id[i]) && (GenPart_statusFlags==0 || GenPart_statusFlags==3) && deltaR(lepton_eta[i],lepton_phi[i],GenPart_eta[j],GenPart_phi[j])< 0.3)){
+        if(GenPart_pt[j]>5 && abs(GenPart_pdgId[j])==abs(lepton_pdg_id[i]) && (GenPart_statusFlags==0 || GenPart_statusFlags==3) && deltaR(lepton_eta[i],lepton_phi[i],GenPart_eta[j],GenPart_phi[j])< 0.3){
             lepton_real_new[i]=true;
             break;
         }
