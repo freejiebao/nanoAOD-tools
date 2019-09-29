@@ -14,7 +14,7 @@ from  PhysicsTools.NanoAODTools.postprocessing.modules.common.PrefireCorr_ssww i
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.muonScaleResProducer_ssww import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties_ssww import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.btv.btagSFProducer_ssww import *
-from  PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetHelperRun2 import *  ##new way of using jme uncertainty
+from  PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetHelperRun2_ssww import *  ##new way of using jme uncertainty
 
 jmeCorrections = createJMECorrector(True, "2016", "B", "Total", True, "AK4PFchs", False)
 
