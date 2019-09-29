@@ -15,7 +15,8 @@ args = parser.parse_args()
 ROOT.ROOT.EnableImplicitMT(70)
 
 # Include necessary header
-run_helper_header_path = os.environ['CMSSW_BASE'] + "/python/PhysicsTools/NanoAODTools/postprocessing/modules/ssww/run_helper_python.h"
+#run_helper_header_path = os.environ['CMSSW_BASE'] + "/python/PhysicsTools/NanoAODTools/postprocessing/modules/ssww/run_helper_python.h"
+run_helper_header_path = "run_helper_python.h"
 
 ROOT.gInterpreter.Declare('#include "{}"'.format(run_helper_header_path))
 
