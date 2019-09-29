@@ -197,6 +197,7 @@ class jetmetUncertaintiesProducer(Module):
         """process event, return True (go to next module) or False (fail, go to next event)"""
         jets = Collection(event, self.jetBranchName )
         genJets = Collection(event, self.genJetBranchName )
+        Jets = Collection(event, 'Jet')
 
         if self.doGroomed :
             subJets = Collection(event, self.subJetBranchName )
@@ -286,9 +287,9 @@ class jetmetUncertaintiesProducer(Module):
             jet_mass=jet.mass
 
             #redo JECs if desired
-            if hasattr(jet, "rawFactor"):
-                jet_rawpt = jet_pt * (1 - jet.rawFactor)
-                jet_rawmass = jet_mass * (1 - jet.rawFactor)
+            if hasattr(Jets[jet.idx], "rawFactor"):
+                jet_rawpt = jet_pt * (1 - Jets[jet.idx].rawFactor)
+                jet_rawmass = jet_mass * (1 - Jets[jet.idx].rawFactor)
             else:
                 jet_rawpt = -1.0 * jet_pt #If factor not present factor will be saved as -1
                 jet_rawmass = -1.0 * jet_mass #If factor not present factor will be saved as -1
