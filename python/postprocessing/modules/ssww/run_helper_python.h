@@ -20,7 +20,7 @@
 
 // match leptons to gen information
 // reference to: https://github.com/root-project/root/blob/master/tutorials/dataframe/df103_NanoAODHiggsAnalysis_python.h
-float calc_mjj(flot j1_pt, float j1_eta, float j1_phi, float j1_mass, flot j2_pt, float j2_eta, float j2_phi, float j2_mass)
+float calc_mjj(float j1_pt, float j1_eta, float j1_phi, float j1_mass, float j2_pt, float j2_eta, float j2_phi, float j2_mass)
 {
     ROOT::Math::PtEtaPhiMVector p1(j1_pt, j1_eta, j1_phi, j1_mass);
     ROOT::Math::PtEtaPhiMVector p2(j2_pt, j2_eta, j2_phi, j2_mass);
