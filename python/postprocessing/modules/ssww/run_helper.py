@@ -9,7 +9,7 @@ parser.add_argument('-i','--input', help='input path', default= '/home/cmsdas/te
 #parser.add_argument('-i','--input', help='input path', default= '/eos/user/l/llinwei/jie/ssww_ntuple/')
 parser.add_argument('-t','--theory', help='get the theoretic un certainty, default is false',action='store_true', default= False)
 parser.add_argument('-x','--xsweight', help='get xs scale factor, default is false',action='store_true', default= False)
-parser.add_argument('-f','--fixreal', help='fix the real lepton decision, default is false',action='store_true', default= False)
+parser.add_argument('-s','--skim', help='do 1st skim, default is false',action='store_true', default= False)
 args = parser.parse_args()
 
 ROOT.ROOT.EnableImplicitMT(70)
@@ -45,7 +45,7 @@ if __name__ == '__main__':
                 else:
                     pass
 
-                f=ROOT.TFile(args.input+args.year+'/'+samples[imc][i],'update')
+                f=ROOT.TFile(args.input+args.year+'/'+samples[imc][i])
                 xs_file_path='../../../../crab/'
                 sample_sub=samples[imc][i].strip('.root')
                 lumi=SAMPLE.get_lumi(args.year)
@@ -80,3 +80,22 @@ if __name__ == '__main__':
                 run_command+=' -I PhysicsTools.NanoAODTools.postprocessing.modules.ssww.helper_ssww helper_thoeretic -s _thoeretic'
                 os.system(run_command)
                 # python ../../../../scripts/nano_postproc.py . /afs/cern.ch/work/j/jixiao/nano/2016/CMSSW_10_2_13/src/PhysicsTools/NanoAODTools/2016_WZ_nanoAOD.root -I PhysicsTools.NanoAODTools.postprocessing.modules.ssww.helper_ssww helper_thoeretic -s _thoeretic
+            if args.skim:
+                print '>>>>>>>>>>>>>>>>>>>> skim %s' % samples[imc][i]
+                df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+samples[imc][i])
+                # lepton pt > 20, jet pt > 30
+                df1 = df.Filter("nlepton>1 && njet>1") \
+                    .Filter("lepton_pt[0]>20 || lepton_corrected_pt[0]>20 || lepton_correctedUp_pt[0]>20 || lepton_correctedDown_pt[0]>20","cut lep1_pt") \
+                    .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt") \
+                    .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
+                    .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt")
+                # new variable for mjj w.r.t jes jer
+                df2 = df1.Define("mjj_jerUp","calc_mjj(jet_pt_jerUp[0],jet_eta[0],jet_phi[0],jet_mass_jerUp[0],jet_pt_jerUp[1],jet_eta[1],jet_phi[1],jet_mass_jerUp[1])") \
+                            .Define("mjj_jerDown","calc_mjj(jet_pt_jerDown[0],jet_eta[0],jet_phi[0],jet_mass_jerDown[0],jet_pt_jerDown[1],jet_eta[1],jet_phi[1],jet_mass_jerDown[1])") \
+                            .Define("mjj_jesTotalUp","calc_mjj(jet_pt_jesTotalUp[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalUp[0],jet_pt_jesTotalUp[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalUp[1])") \
+                            .Define("mjj_jesTotalDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])")
+                if not os.path.exists("skim"):
+                    os.mkdir("skim")
+                df2.Snapshot("Events","skim/"+samples[imc][i])
+                allCutsReport = df.Report()
+                allCutsReport.Print()

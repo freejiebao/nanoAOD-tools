@@ -17,25 +17,12 @@
 #include "TStyle.h"
 #include "deltaR.h"
 
-using namespace ROOT::VecOps;
-using RNode = ROOT::RDF::RNode;
-using rvec_f = const RVec<float> &;
-using rvec_i = const RVec<int> &;
-using rvec_b = const RVec<bool> &;
 
 // match leptons to gen information
 // reference to: https://github.com/root-project/root/blob/master/tutorials/dataframe/df103_NanoAODHiggsAnalysis_python.h
-RVec<bool> lepton_real_code(int nlepton, rvec_i lepton_pdg_id, rvec_f lepton_pt, rvec_f lepton_eta, rvec_f lepton_phi, int nGenPart, rvec_i GenPart_pdgId, rvec_f GenPart_pt, rvec_i GenPart_statusFlags, rvec_f GenPart_eta, rvec_f GenPart_phi)
+float calc_mjj(flot j1_pt, float j1_eta, float j1_phi, float j1_mass, flot j2_pt, float j2_eta, float j2_phi, float j2_mass)
 {
-   RVec<bool> lepton_real_fix(nlepton);
-   for(int i=0; i<nlepton; i++){
-    lepton_real_fix[i]=false;
-    for(int j=0; j<nGenPart; j++){
-        if(GenPart_pt[j]>5 && abs(GenPart_pdgId[j])==abs(lepton_pdg_id[i]) && (GenPart_statusFlags[j]==0 || GenPart_statusFlags[j]==3) && deltaR(lepton_eta[i],lepton_phi[i],GenPart_eta[j],GenPart_phi[j])< 0.3){
-            lepton_real_fix[i]=true;
-            break;
-        }
-    }
-   }
-   return  lepton_real_fix;
+    ROOT::Math::PtEtaPhiMVector p1(j1_pt, j1_eta, j1_phi, j1_mass);
+    ROOT::Math::PtEtaPhiMVector p2(j2_pt, j2_eta, j2_phi, j2_mass);
+    return (p1 + p2).M();
 }
