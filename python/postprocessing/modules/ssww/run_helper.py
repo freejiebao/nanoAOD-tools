@@ -102,20 +102,20 @@ if __name__ == '__main__':
                 df2.Snapshot("Events","skim/"+samples[imc][i])
                 allCutsReport = df.Report()
                 allCutsReport.Print()
-        for idata in data_chain:
-            for i in range(0,len(samples[idata])):
-                if args.skim:
-                    print '>>>>>>>>>>>>>>>>>>>> skim %s' % samples[imc][i]
-                    df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+samples[imc][i])
-                    # lepton pt > 20, jet pt > 30
-                    df1 = df.Filter("nlepton>1 && njet>1") \
-                        .Filter("lepton_pt[0]>20 || lepton_corrected_pt[0]>20 || lepton_correctedUp_pt[0]>20 || lepton_correctedDown_pt[0]>20","cut lep1_pt") \
-                        .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt") \
-                        .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
-                        .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt")
-                    # new variable for mjj w.r.t jes jer
-                    if not os.path.exists("skim"):
-                        os.mkdir("skim")
-                    df1.Snapshot("Events","skim/"+samples[imc][i])
-                    allCutsReport = df.Report()
-                    allCutsReport.Print()
+    for idata in data_chain:
+        for i in range(0,len(samples[idata])):
+            if args.skim:
+                print '>>>>>>>>>>>>>>>>>>>> skim %s' % samples[imc][i]
+                df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+samples[imc][i])
+                # lepton pt > 20, jet pt > 30
+                df1 = df.Filter("nlepton>1 && njet>1") \
+                    .Filter("lepton_pt[0]>20 || lepton_corrected_pt[0]>20 || lepton_correctedUp_pt[0]>20 || lepton_correctedDown_pt[0]>20","cut lep1_pt") \
+                    .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt") \
+                    .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
+                    .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt")
+                # new variable for mjj w.r.t jes jer
+                if not os.path.exists("skim"):
+                    os.mkdir("skim")
+                df1.Snapshot("Events","skim/"+samples[imc][i])
+                allCutsReport = df.Report()
+                allCutsReport.Print()
