@@ -105,8 +105,8 @@ if __name__ == '__main__':
     for idata in data_chain:
         for i in range(0,len(samples[idata])):
             if args.skim:
-                print '>>>>>>>>>>>>>>>>>>>> skim %s' % samples[imc][i]
-                df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+samples[imc][i])
+                print '>>>>>>>>>>>>>>>>>>>> skim %s' % samples[idata][i]
+                df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+samples[idata][i])
                 # lepton pt > 20, jet pt > 30
                 df1 = df.Filter("nlepton>1 && njet>1") \
                     .Filter("lepton_pt[0]>20 || lepton_corrected_pt[0]>20 || lepton_correctedUp_pt[0]>20 || lepton_correctedDown_pt[0]>20","cut lep1_pt") \
@@ -116,6 +116,6 @@ if __name__ == '__main__':
                 # new variable for mjj w.r.t jes jer
                 if not os.path.exists("skim"):
                     os.mkdir("skim")
-                df1.Snapshot("Events","skim/"+samples[imc][i])
+                df1.Snapshot("Events","skim/"+samples[idata][i])
                 allCutsReport = df.Report()
                 allCutsReport.Print()
