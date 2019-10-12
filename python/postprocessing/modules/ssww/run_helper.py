@@ -12,7 +12,7 @@ parser.add_argument('-x','--xsweight', help='get xs scale factor, default is fal
 parser.add_argument('-s','--skim', help='do 1st skim, default is false',action='store_true', default= False)
 args = parser.parse_args()
 
-ROOT.ROOT.EnableImplicitMT(70)
+ROOT.ROOT.EnableImplicitMT(32)
 
 # Include necessary header
 #run_helper_header_path = os.environ['CMSSW_BASE'] + "/python/PhysicsTools/NanoAODTools/postprocessing/modules/ssww/run_helper_python.h"
