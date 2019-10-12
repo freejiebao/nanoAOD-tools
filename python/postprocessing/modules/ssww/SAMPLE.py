@@ -167,7 +167,7 @@ def trigger_maker(_year,branch_list,dataset):
         triDoubleEG=['HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ','HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL','HLT_DiEle27_WPTightCaloOnly_L1DoubleEG','HLT_DoubleEle33_CaloIdL_MW','HLT_DoubleEle25_CaloIdL_MW','HLT_DoubleEle27_CaloIdL_MW','HLT_DoublePhoton70']
 
     for i in range(0,len(triMuonEG)):
-        if i in branch_list:
+        if triMuonEG[i] in branch_list:
             if i == 0:
                 triggers['MuonEG']=triMuonEG[i]
             else:
@@ -175,7 +175,7 @@ def trigger_maker(_year,branch_list,dataset):
                 triggers['MuonEG']+=triMuonEG[i]
 
     for i in range(0,len(triSingleMuon)):
-        if i in branch_list:
+        if triSingleMuon[i] in branch_list:
             if i == 0:
                 triggers['SingleMuon']=triSingleMuon[i]
             else:
@@ -183,7 +183,7 @@ def trigger_maker(_year,branch_list,dataset):
                 triggers['SingleMuon']+=triSingleMuon[i]
 
     for i in range(0,len(triSingleElectron)):
-        if i in branch_list:
+        if triSingleElectron[i] in branch_list:
             if i == 0:
                 triggers['SingleElectron']=triSingleElectron[i]
             else:
@@ -191,7 +191,7 @@ def trigger_maker(_year,branch_list,dataset):
                 triggers['SingleElectron']+=triSingleElectron[i]
 
     for i in range(0,len(triDoubleMuon)):
-        if i in branch_list:
+        if triDoubleMuon[i] in branch_list:
             if i == 0:
                 triggers['DoubleMuon']=triDoubleMuon[i]
             else:
@@ -199,7 +199,7 @@ def trigger_maker(_year,branch_list,dataset):
                 triggers['DoubleMuon']+=triDoubleMuon[i]
 
     for i in range(0,len(triDoubleEG)):
-        if i in branch_list:
+        if triDoubleEG[i] in branch_list:
             if i == 0:
                 triggers['DoubleEG']=triDoubleEG[i]
             else:
