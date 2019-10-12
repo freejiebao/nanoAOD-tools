@@ -144,3 +144,87 @@ def add_files(_year,input, samples, chain, exclude, include, postfix):
                 realname=insertStr(input+_year+'/'+samples[isample][i],'.root',postfix)
                 files.append(realname)
     return files
+
+def trigger_maker(_year,branch_list,dataset):
+    triggers={}
+    if _year=='2016':
+        triMuonEG=['HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL','HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL','HLT_Mu17_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL','HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL','HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL','HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL']
+        triSingleMuon=['HLT_IsoMu22','HLT_IsoTkMu22','HLT_IsoMu24','HLT_IsoTkMu24']
+        triSingleElectron=['HLT_Ele25_eta2p1_WPTight_Gsf','HLT_Ele27_eta2p1_WPLoose_Gsf','HLT_Ele27_WPTight_Gsf','HLT_Ele35_WPLoose_Gsf']
+        triDoubleMuon=['HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ','HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ','HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ']
+        triDoubleEG=['HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ']
+    elif _year=='2017':
+        triMuonEG=['HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ','HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL','HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ','HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL','HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ','HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL','HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ','HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL']
+        triSingleMuon=['HLT_IsoMu24','HLT_IsoMu27','HLT_IsoMu30','HLT_Mu50']
+        triSingleElectron=['HLT_Ele115_CaloIdVT_GsfTrkIdT','HLT_Ele27_WPTight_Gsf','HLT_Ele32_WPTight_Gsf','HLT_Ele35_WPTight_Gsf','HLT_Ele32_WPTight_Gsf_L1DoubleEG','HLT_Photon200']
+        triDoubleMuon=['HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8','HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8','HLT_Mu19_TrkIsoVVL_Mu9_TrkIsoVVL_DZ_Mass3p8','HLT_Mu19_TrkIsoVVL_Mu9_TrkIsoVVL_DZ_Mass8']
+        triDoubleEG=['HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ','HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL','HLT_DiEle27_WPTightCaloOnly_L1DoubleEG','HLT_DoubleEle33_CaloIdL_MW','HLT_DoubleEle25_CaloIdL_MW','HLT_DoublePhoton70']
+    else:
+        triMuonEG=['HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ','HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL','HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ','HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL','HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ','HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL']
+        triSingleMuon=['HLT_IsoMu24','HLT_IsoMu27','HLT_IsoMu30','HLT_Mu50']
+        triSingleElectron=['HLT_Ele115_CaloIdVT_GsfTrkIdT','HLT_Ele27_WPTight_Gsf','HLT_Ele28_WPTight_Gsf','HLT_Ele32_WPTight_Gsf','HLT_Ele35_WPTight_Gsf','HLT_Ele38_WPTight_Gsf','HLT_Ele40_WPTight_Gsf','HLT_Ele32_WPTight_Gsf_L1DoubleEG','HLT_Photon200']
+        triDoubleMuon=['HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8','HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8','HLT_Mu19_TrkIsoVVL_Mu9_TrkIsoVVL_DZ_Mass3p8','HLT_Mu19_TrkIsoVVL_Mu9_TrkIsoVVL_DZ_Mass8']
+        triDoubleEG=['HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ','HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL','HLT_DiEle27_WPTightCaloOnly_L1DoubleEG','HLT_DoubleEle33_CaloIdL_MW','HLT_DoubleEle25_CaloIdL_MW','HLT_DoubleEle27_CaloIdL_MW','HLT_DoublePhoton70']
+
+    for i in range(0,len(triMuonEG)):
+        if i in branch_list:
+            if i == 0:
+                triggers['MuonEG']=triMuonEG[i]
+            else:
+                triggers['MuonEG']+=' && '
+                triggers['MuonEG']+=triMuonEG[i]
+
+    for i in range(0,len(triSingleMuon)):
+        if i in branch_list:
+            if i == 0:
+                triggers['SingleMuon']=triSingleMuon[i]
+            else:
+                triggers['SingleMuon']+=' && '
+                triggers['SingleMuon']+=triSingleMuon[i]
+
+    for i in range(0,len(triSingleElectron)):
+        if i in branch_list:
+            if i == 0:
+                triggers['SingleElectron']=triSingleElectron[i]
+            else:
+                triggers['SingleElectron']+=' && '
+                triggers['SingleElectron']+=triSingleElectron[i]
+
+    for i in range(0,len(triDoubleMuon)):
+        if i in branch_list:
+            if i == 0:
+                triggers['DoubleMuon']=triDoubleMuon[i]
+            else:
+                triggers['DoubleMuon']+=' && '
+                triggers['DoubleMuon']+=triDoubleMuon[i]
+
+    for i in range(0,len(triDoubleEG)):
+        if i in branch_list:
+            if i == 0:
+                triggers['DoubleEG']=triDoubleEG[i]
+            else:
+                triggers['DoubleEG']+=' && '
+                triggers['DoubleEG']+=triDoubleEG[i]
+
+    if _year=='2018':
+        if dataset=='MuonEG':
+            final_trig='('+triggers['MuonEG']+')'
+        elif dataset=='DoubleMuon':
+            final_trig='!('+triggers['MuonEG']+') && ('+triggers['DoubleMuon']+')'
+        elif dataset=='SingleMuon':
+            final_trig='!('+triggers['MuonEG']+') && !('+triggers['DoubleMuon']+') && ('+triggers['SingleMuon']+')'
+        elif dataset=='EGamma':
+            final_trig='!('+triggers['MuonEG']+') && !('+triggers['DoubleMuon']+') && !('+triggers['SingleMuon']+') && (('+triggers['SingleElectron']+') || ('+triggers['DoubleEG']+'))'
+    else:
+        if dataset=='MuonEG':
+            final_trig='('+triggers['MuonEG']+')'
+        elif dataset=='SingleMuon':
+            final_trig='!('+triggers['MuonEG']+') && ('+triggers['SingleMuon']+')'
+        elif dataset=='SingleElectron':
+            final_trig='!('+triggers['MuonEG']+') && !('+triggers['SingleMuon']+') && ('+triggers['SingleElectron']+')'
+        elif dataset=='DoubleMuon':
+            final_trig='!('+triggers['MuonEG']+') && !('+triggers['SingleMuon']+') && !('+triggers['SingleElectron']+') && ('+triggers['DoubleMuon']+')'
+        elif dataset=='DoubleEG':
+            final_trig='!('+triggers['MuonEG']+') && !('+triggers['SingleMuon']+') && !('+triggers['SingleElectron']+') && !('+triggers['DoubleMuon']+') && ('+triggers['DoubleEG']+')'
+
+    return final_trig

@@ -10,6 +10,8 @@ parser.add_argument('-i','--input', help='input path', default= '/home/cmsdas/te
 parser.add_argument('-t','--theory', help='get the theoretic un certainty, default is false',action='store_true', default= False)
 parser.add_argument('-x','--xsweight', help='get xs scale factor, default is false',action='store_true', default= False)
 parser.add_argument('-s','--skim', help='do 1st skim, default is false',action='store_true', default= False)
+#parser.add_argument('-tr','--trigger', help='trigger maker, default is false',action='store_true', default= False)
+parser.add_argument('-p','--prestep', help='declare prestep path postfix', default= 'skim')
 args = parser.parse_args()
 
 ROOT.ROOT.EnableImplicitMT(32)
@@ -102,20 +104,38 @@ if __name__ == '__main__':
                 df2.Snapshot("Events","skim/"+samples[imc][i])
                 allCutsReport = df.Report()
                 allCutsReport.Print()
+
+
     for idata in data_chain:
         for i in range(0,len(samples[idata])):
             if args.skim:
                 print '>>>>>>>>>>>>>>>>>>>> skim %s' % samples[idata][i]
                 df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+samples[idata][i])
+                branch_list=df.GetColumnNames()
+                # trigger cut
+                if 'MuonEG' in idata:
+                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"MuonEG")
+                elif 'SingleMuon' in idata:
+                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"SingleMuon")
+                elif 'SingleElectron' in idata:
+                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"SingleElectron")
+                elif 'DoubleMuon' in idata:
+                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"DoubleMuon")
+                elif 'DoubleEG' in idata:
+                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"DoubleEG")
+                elif 'EGamma' in idata:
+                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"EGamma")
+                df1=df.Filter(trigger_cut,"trigger cut")
                 # lepton pt > 20, jet pt > 30
-                df1 = df.Filter("nlepton>1 && njet>1") \
+                df2 = df1.Filter("nlepton>1 && njet>1") \
                     .Filter("lepton_pt[0]>20 || lepton_corrected_pt[0]>20 || lepton_correctedUp_pt[0]>20 || lepton_correctedDown_pt[0]>20","cut lep1_pt") \
                     .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt") \
-                    .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
-                    .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt")
+                    .Filter("jet_pt[0]>30","cut jet1_pt") \
+                    .Filter("jet_pt[1]>30","cut jet2_pt")
+
                 # new variable for mjj w.r.t jes jer
                 if not os.path.exists("skim"):
                     os.mkdir("skim")
-                df1.Snapshot("Events","skim/"+samples[idata][i])
+                df2.Snapshot("Events","skim/"+samples[idata][i])
                 allCutsReport = df.Report()
                 allCutsReport.Print()

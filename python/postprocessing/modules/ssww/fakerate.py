@@ -106,7 +106,7 @@ def calc(_channel,_year):
         for i in range(0,len(files)):
             sig[i]=files[i]
     elif _channel == 'electron':
-        trigger = 'HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30 && HLT_Ele17_CaloIdL_TrackIdL_IsoVL_PFJet30 && HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30'
+        trigger = 'HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30 || HLT_Ele17_CaloIdL_TrackIdL_IsoVL_PFJet30 || HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30'
         PID = '11'
         if _year=='2018':
             exdata=['SingleMuon','DoubleMuon','MuonEG']
