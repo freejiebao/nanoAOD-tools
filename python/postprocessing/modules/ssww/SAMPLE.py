@@ -171,7 +171,7 @@ def trigger_maker(_year,branch_list,dataset):
             if i == 0:
                 triggers['MuonEG']=triMuonEG[i]
             else:
-                triggers['MuonEG']+=' && '
+                triggers['MuonEG']+=' || '
                 triggers['MuonEG']+=triMuonEG[i]
 
     for i in range(0,len(triSingleMuon)):
@@ -179,7 +179,7 @@ def trigger_maker(_year,branch_list,dataset):
             if i == 0:
                 triggers['SingleMuon']=triSingleMuon[i]
             else:
-                triggers['SingleMuon']+=' && '
+                triggers['SingleMuon']+=' || '
                 triggers['SingleMuon']+=triSingleMuon[i]
 
     for i in range(0,len(triSingleElectron)):
@@ -187,7 +187,7 @@ def trigger_maker(_year,branch_list,dataset):
             if i == 0:
                 triggers['SingleElectron']=triSingleElectron[i]
             else:
-                triggers['SingleElectron']+=' && '
+                triggers['SingleElectron']+=' || '
                 triggers['SingleElectron']+=triSingleElectron[i]
 
     for i in range(0,len(triDoubleMuon)):
@@ -195,7 +195,7 @@ def trigger_maker(_year,branch_list,dataset):
             if i == 0:
                 triggers['DoubleMuon']=triDoubleMuon[i]
             else:
-                triggers['DoubleMuon']+=' && '
+                triggers['DoubleMuon']+=' || '
                 triggers['DoubleMuon']+=triDoubleMuon[i]
 
     for i in range(0,len(triDoubleEG)):
@@ -203,7 +203,7 @@ def trigger_maker(_year,branch_list,dataset):
             if i == 0:
                 triggers['DoubleEG']=triDoubleEG[i]
             else:
-                triggers['DoubleEG']+=' && '
+                triggers['DoubleEG']+=' || '
                 triggers['DoubleEG']+=triDoubleEG[i]
 
     if _year=='2018':
