@@ -50,7 +50,7 @@ def new_py(year):
         bsh = 'crab_script_%s.sh' % year
         script = 'crab_script_%s.py' % year
         split = 'FileBased'
-        unitsPerJob = '9'
+        unitsPerJob = '3'
         lumiMask = "config.Data.totalUnits = -1"
         for iiSample in _Samples[iSample]:
             # print(iiSample)

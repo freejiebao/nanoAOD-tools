@@ -24,193 +24,151 @@ args = parser.parse_args()
 ROOT.ROOT.EnableImplicitMT(70)
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
 
-def selections():
-    cuts={}
+run_helper_header_path = "run_helper_python.h"
+ROOT.gInterpreter.Declare('#include "{}"'.format(run_helper_header_path))
 
-    cuts['ssww']={['filter0']:['nlepton==2 && njet>1'],['lepton_cuts']:['lepton_pt[0]>25 && lepton_pt[1]>20 && mll>20'],['jet_cuts']:['jet_pt[0]>30 && jet_pt[1]>30 && mjj>500 && abs(detajj)>2.5'],['met_cuts']:['met>40']}
-    cuts['wz']=[]
-    cuts['top']=[]
-    cuts['zz']=[]
+def plot_variables(sample,region,df):
+    plots=[]
+    plots.append(df.Histo1D(('lep1_pt', "lep1_pt;l_{1}^{pt} (GeV);Event", 5, 20,300), "lepton_pt[0]","weight"))
+    plots.append(df.Histo1D(('lep2_pt', "lep2_pt;l_{2}^{pt} (GeV);Event", 5, 20,300), "lepton_pt[1]","weight"))
+    plots.append(df.Histo1D(('jet1_pt', "jet1_pt;j_{1}^{pt} (GeV);Event", 5, 20,300), "jet_pt[0]","weight"))
+    plots.append(df.Histo1D(('jet2_pt', "jet2_pt;j_{2}^{pt} (GeV);Event", 5, 20,300), "jet_pt[1]","weight"))
 
-    mc_cuts={'nominal':''}
-def get_plot(name, trigger, PID, files, isdata):
-    eta_bin = array('f',[0., 0.5, 1., 1.479, 2., 2.5])
-    pt_bin = array('f',[20, 25, 30, 35])
-    fake_cut = trigger + '&& lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
-    tight_cut = trigger + '&& lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
-    real_fake = trigger + '&& lepton_real[0] && lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
-    real_tight = trigger + '&& lepton_real[0] && lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
+    plots.append(df.Histo1D(('lep1_eta', "lep1_eta;l_{1}^{#eta} (GeV);Event", 10, -2.5,2.5), "lepton_eta[0]","weight"))
+    plots.append(df.Histo1D(('lep2_eta', "lep2_eta;l_{2}^{#eta} (GeV);Event", 10, -2.5,2.5), "lepton_eta[1]","weight"))
+    plots.append(df.Histo1D(('jet1_eta', "jet1_eta;j_{1}^{#eta} (GeV);Event", 10, -2.5,2.5), "jet_eta[0]","weight"))
+    plots.append(df.Histo1D(('jet2_eta', "jet2_eta;j_{2}^{#eta} (GeV);Event", 10, -2.5,2.5), "jet_eta[1]","weight"))
 
-    tight_plot = []
-    fake_plot = []
-    if not isdata:
-        with open('xs_' + args.year + '_nano_v4_v1.py','r') as collect:
-            exec (collect)
-            _XSDB = XSDB
+    plots.append(df.Histo1D(('mll', "mll;m_{ll} (GeV);Event", 5, 20,300), "mll","weight"))
+    plots.append(df.Histo1D(('mjj_low', "mjj_low;m_{jj} (GeV);Event", 5, 150,500), "mjj","weight"))
+    plots.append(df.Histo1D(('mjj', "mjj;m_{jj} (GeV);Event", 5, 500,2000), "mjj","weight"))
 
+    f=ROOT.TFile.Open('plots_'+args.year+'.root','update')
+    try:
+        f.cd(region)
+    except:
+        f.mkdir(region)
+        f.cd(region)
 
-    for i in range(0,len(files)):
-        if isdata:
-            fake_selections = fake_cut
-            true_selections = tight_cut
-            weight='1.'
-        else:
-            fake_selections = real_fake
-            true_selections = real_tight
-            tmp_name=files[i].split('/')
-            sample_name=tmp_name[len(tmp_name)-1]
-            xsweight=str(_XSDB[sample_name[:len(sample_name)-5]]['xsweight'])
-            weight=str(xsweight)+'*gen_weight/abs(gen_weight)'
-            #tmpfile=ROOT.TFile(files[i])
-            #xsweight=tmpfile.Get("xsweight").GetBinContent(1)
-            #tmpfile.Close()
+    for i in range(0,len(plots)):
+        plot_name=plots[i].GetName()
+        try:
+            ROOT.gDirectory.cd(plot_name)
+        except:
+            ROOT.gDirectory.mkdir(plot_name)
+            ROOT.gDirectory.cd(plot_name)
+        plots[i].SetName(sample)
+        #plots[i].SetTitle(sample)
+        plots[i].Write()
+        ROOT.gDirectory.cd('..')
+    return
 
-        df = ROOT.ROOT.RDataFrame("Events", files[i])
-        print '>>>>>>>>>>>>>>>>>>>> the opened file: ',files[i]
-        # For simplicity, select only events with exactly two muons and require opposite charge
-        tmpplot=df.Filter('nlepton == 1 && njet>0').Filter(fake_selections) \
-            .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
-            .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];')\
-            .Define('weight',weight) \
-            .Histo2D(("fake_"+name+"_"+str(i), "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
-        tmpplot.Sumw2()
-        fake_plot.append(tmpplot)
+def get_stack():
+    print '>>>>>>>>>>>>>>>>>>>>>>> get stack'
 
-        tmpplot = df.Filter('nlepton == 1 && njet>0').Filter(true_selections) \
-            .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
-            .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];') \
-            .Define('weight',weight) \
-            .Histo2D(("tight_"+name+"_"+str(i), "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
-        tmpplot.Sumw2()
-        tight_plot.append(tmpplot)
+def ssww_region(sample,df):
+    print '>>>>>>>>>>>>>>>>>>>>>>> ssww region'
+    df1=df.Filter('nlepton==2 && njet>1','basic selection') \
+        .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && mll>20','lepton selection') \
+        .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')\
+        .Filter('(lepton_pdg_id[0]*lepton_pdg_id[1]!=11*11 || abs(mll-91.2)>15)','zveto selection')\
+        .Filter('jet_pt[0]>30 && jet_pt[1]>30 && mjj>500 && abs(detajj)>2.5','jet selection') \
+        .Filter('met>40','met selection')\
+        .Filter('lepton_zep[0]<0.75 && lepton_zep[1]<0.75','zepp selection')\
+        .Filter('!tauTag','tau veto')\
+        .Define('bveto','bveto_helper(jet_pt,jet_eta,jet_btagCSVV2,0.8484)').Filter('bveto')
 
-    fake_template=fake_plot[0].Clone()
-    tight_template=tight_plot[0].Clone()
-    fake_template.SetName("fake_"+name)
-    tight_template.SetName("tight_"+name)
-    for i in range(0,len(tight_plot)-1):
-        fake_template.Add(fake_plot[i+1].GetPtr())
-        tight_template.Add(tight_plot[i+1].GetPtr())
+    allCutsReport = df.Report()
+    allCutsReport.Print()
+    plot_variables(sample,'ssww_region',df1)
+    return
 
-    return fake_template, tight_template
+def top_region(sample,df):
+    df1=df.Filter('nlepton==2 && njet>1','basic selection') \
+        .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && mll>20','lepton selection') \
+        .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign') \
+        .Filter('jet_pt[0]>30 && jet_pt[1]>30 && mjj>500 && abs(detajj)>2.5','jet selection') \
+        .Filter('met>40','met selection')
 
-def calc(_channel,_year):
+    allCutsReport = df.Report()
+    allCutsReport.Print()
+    plot_variables(sample,'top_region',df1)
+    return
+
+def lowmjj_region(sample,df):
+    df1=df.Filter('nlepton==2 && njet>1','basic selection') \
+        .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && mll>20','lepton selection') \
+        .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign') \
+        .Filter('jet_pt[0]>30 && jet_pt[1]>30 && mjj<500 && mjj>150 && abs(detajj)>2.5','jet selection') \
+        .Filter('met>40','met selection')
+
+    allCutsReport = df.Report()
+    allCutsReport.Print()
+    plot_variables(sample,'lowmjj_region',df1)
+    return
+
+def wz_region(sample,df):
+    df1=df.Filter('nlepton==3 && njet>1','basic selection') \
+        .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && lepton_pt[2]>10','lepton selection') \
+        .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign') \
+        .Filter('jet_pt[0]>30 && jet_pt[1]>30 && mjj>500 && abs(detajj)>2.5','jet selection') \
+        .Filter('met>40','met selection')
+
+    allCutsReport = df.Report()
+    allCutsReport.Print()
+    plot_variables(sample,'wz_region',df1)
+    return
+
+def zz_region(sample,df):
+    df1=df.Filter('nlepton==4 && njet>1','basic selection') \
+        .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && lepton_pt[2]>10','lepton selection') \
+        .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign') \
+        .Filter('jet_pt[0]>30 && jet_pt[1]>30 && mjj>500 && abs(detajj)>2.5','jet selection') \
+        .Filter('met>40','met selection')
+
+    allCutsReport = df.Report()
+    allCutsReport.Print()
+    plot_variables(sample,'wz_region',df1)
+    return
+
+def calc(_year):
     # Enable multi-threading
     # Create dataframe from NanoAOD files
 
     # include = []
     # exclude = []
     samples, data_chain, mc_chain = SAMPLE.set_samples(_year)
-    if _channel == 'muon':
-        trigger = 'HLT_Mu17_TrkIsoVVL'
-        PID = '13'
-        if _year=='2018':
-            exdata=['SingleMuon','EGamma','MuonEG']
-        else:
-            exdata=['SingleMuon','SingleElectron','MuonEG','DoubleEG']
 
-        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[],'')
-        # files = ['DoubleMuon_Run2017C.root']
-        sig = ROOT.std.vector("string")(len(files))
-        for i in range(0,len(files)):
-            sig[i]=files[i]
-    elif _channel == 'electron':
-        trigger = 'HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30 || HLT_Ele17_CaloIdL_TrackIdL_IsoVL_PFJet30 || HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30'
-        PID = '11'
-        if _year=='2018':
-            exdata=['SingleMuon','DoubleMuon','MuonEG']
-        else:
-            exdata=['SingleMuon','SingleElectron','MuonEG','DoubleMuon']
-        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[],'')
-        sig = ROOT.std.vector("string")(len(files))
-        for i in range(0,len(files)):
-            sig[i]=files[i]
-    else:
-        return
-    h2_fake_data, h2_true_data = get_plot('data',trigger, PID, sig,True)
-    h2_ratio= h2_true_data.Clone()
-    h2_ratio.SetName('fakerate')
-    h2_ratio.SetTitle('fakerate')
-    h2_ratio.Divide(h2_fake_data)
-    h2_fake_tmp=h2_fake_data.Clone()
-    h2_true_tmp=h2_true_data.Clone()
-    h2_fake_tmp.SetName('fake_data_subtrct')
-    h2_fake_tmp.SetTitle('fake_data_subtrct')
-    h2_true_tmp.SetName('true_data_subtrct')
-    h2_true_tmp.SetTitle('true_data_subtrct')
-    h2_fake_mc_plot=[]
-    h2_true_mc_plot=[]
+    for idata in data_chain:
+        data_chain_single = []
+        data_chain_single.append(idata)
+        files = SAMPLE.add_files(_year,args.input, samples, data_chain_single,[],[],'skim')
+        data_files = ROOT.std.vector("string")(len(files))
+        if not len(files)==0:
+            for i in range(0,len(files)):
+                data_files[i] = files[i]
+            ssww_region(idata, data_files)
+            #top_region(idata, data_files)
+            #lowmjj_region(idata, data_files)
+            #wz_region(idata, data_files)
+            #zz_region(idata, data_files)
 
-    if args.subtract:
-        for imc in mc_chain:
-            mc_chain_single = []
-            mc_chain_single.append(imc)
-            files = SAMPLE.add_files(_year,args.input, samples, mc_chain_single,args.exclude,args.include,'')
-            bkg = ROOT.std.vector("string")(len(files))
-            if not len(files)==0:
-                for i in range(0,len(files)):
-                    bkg[i] = files[i]
-                h2_fake_mc, h2_true_mc = get_plot(imc,trigger, PID, bkg, False)
-                h2_fake_mc_plot.append(h2_fake_mc)
-                h2_true_mc_plot.append(h2_true_mc)
-                h2_fake_tmp.Add(h2_fake_mc,-1)
-                h2_true_tmp.Add(h2_true_mc,-1)
-        h2_ratio_subtract= h2_true_tmp.Clone()
-        h2_ratio_subtract.SetName('fakerate_subtract')
-        h2_ratio_subtract.SetTitle('fakerate_subtract')
-        h2_ratio_subtract.Divide(h2_fake_tmp)
-
-    fout = ROOT.TFile(_year+'_'+'fakerate_'+_channel+'.root','recreate')
-    h2_fake_data.Write()
-    h2_true_data.Write()
-    h2_ratio.Write()
-    if args.subtract:
-        for i in range(0,len(h2_fake_mc_plot)):
-            h2_fake_mc_plot[i].Write()
-            h2_true_mc_plot[i].Write()
-        h2_fake_tmp.Write()
-        h2_true_tmp.Write()
-        h2_ratio_subtract.Write()
-
-    fout.Write()
-    fout.Close()
-    ROOT.gStyle.SetPaintTextFormat("4.2f")
-    c1=ROOT.TCanvas("c1", "c1", 1200, 900)
-    h2_ratio.Draw("texte colz")
-    c1.SaveAs("fakerate.pdf")
-    c2=ROOT.TCanvas("c2", "c2", 1200, 900)
-    h2_ratio_subtract.Draw("texte colz")
-    c2.SaveAs("fakerate_subtract.pdf")
-    '''
-    if args.subtract:
-        real_fake_sub = df.Filter('nLepton == 1').Filter(real_fake) \
-            .Define('mt','sqrt(2*lepton_pt[0]*event.met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
-            .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];') \
-            .Histo2D({"real_fake", "real_fake;|#eta|;p_{T}", 5, {0., 0.5, 1., 1.479, 2., 2.5}, 3, {20, 25, 30, 35}}, "abs_eta", "pt_tmp","-1.*scale")
-        real_fake_sub.Sumw2()
-
-        real_tight_sub =  df.Filter('nLepton == 1').Filter(real_tight) \
-            .Define('mt','sqrt(2*lepton_pt[0]*event.met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
-            .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];') \
-            .Histo2D({"real_tight", "real_tight;|#eta|;p_{T}", 5, {0., 0.5, 1., 1.479, 2., 2.5}, 3, {20, 25, 30, 35}}, "abs_eta", "pt_tmp","-1.*scale")
-        real_tight_sub.Sumw2()
-
-        tight_template.Add(real_tight_sub.GetPtr())
-        fake_template.Add(real_fake_sub.GetPtr())
-        tight_template.Divide(fake_template.GetPtr())
-    else:
-        tight_template.Divide(fake_template.GetPtr())
-    '''
-
+    for imc in mc_chain:
+        mc_chain_single = []
+        mc_chain_single.append(imc)
+        files = SAMPLE.add_files(_year,args.input, samples, mc_chain_single,[],[],'skim')
+        mc_files = ROOT.std.vector("string")(len(files))
+        if not len(files)==0:
+            for i in range(0,len(files)):
+                mc_files[i] = files[i]
+            ssww_region(imc, data_files)
+            #top_region(imc, data_files)
+            #lowmjj_region(imc, data_files)
+            #wz_region(imc, data_files)
+            #zz_region(imc, data_files)
 
 if __name__ == '__main__':
 
     #print ('>>>>>>>>>>>>>>>>>>>> exclude: ',args.exclude)
-    #print ('>>>>>>>>>>>>>>>>>>>> include: ',args.include)
-
-    if args.all:
-        calc('muon',args.year)
-        calc('electron',args.year)
-    else:
-        calc(args.channel,args.year)
-
+    print ('>>>>>>>>>>>>>>>>>>>> include: ',args.include)
+    calc(args.year)

@@ -1,4 +1,5 @@
 import sys
+import ROOT
 
 def get_lumi(_year):
     if _year=='2016':
@@ -91,11 +92,36 @@ def set_samples(_year):
         sample['WZ1']=['WZTo3LNu_0Jets_MLL-50.root','WZTo3LNu_1Jets_MLL-50.root','WZTo3LNu_2Jets_MLL-50.root','WZTo3LNu_3Jets_MLL-50.root','WZTo3LNu_0Jets_MLL-4to50.root','WZTo3LNu_1Jets_MLL-4to50.root','WZTo3LNu_2Jets_MLL-4to50.root','WZTo3LNu_3Jets_MLL-4to50.root','WZTo2L2Q.root']
         sample['WZ2']=['WLLJJ_WToLNu_EWK.root','WZTo2L2Q.root']
         sample['VVV']=['ZZZ.root','WZZ.root','WWZ.root','WWW.root']
-        data_chain = ['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG']
-        #mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','DY0','DY1','DY2','DY3','ZG','ZZ','WW','ggWW','top','ggZZ','DPS0','DPS1','WWJJ_EWK0','WWJJ_EWK1','WGJJ','WZ0','WZ1','WZ2','VVV']
+        data_chain = ['SingleMuon','MuonEG','DoubleMuon','EGamma']
+        mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','DY0','DY1','DY2','DY3','ZG','ZZ','WW','ggWW','top','ggZZ','DPS0','DPS1','WWJJ_EWK0','WWJJ_EWK1','WGJJ','WZ0','WZ1','WZ2','VVV']
         #sample['redo']=['DY2JetsToLL_M-50_LHEZpT_250-400.root','DY2JetsToLL_M-50_LHEZpT_400-inf.root']
         #mc_chain = ['redo','DY1','DY2','DY3','ZG','ZZ','WW','ggWW','top','ggZZ','DPS0','DPS1','WWJJ_EWK0','WWJJ_EWK1','WGJJ','WZ0','WZ1','WZ2','VVV']
     return sample, data_chain, mc_chain
+
+def plot_scheme(_year):
+    if _year=='2016':
+        data_chain = ['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG']
+        mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','WWJJ_EWK','WGJJ','DY','ZG','ZZ','WW','ggWW','WZ0','WZ1','WZ2','top','ggZZ','VVV']
+        plot_setting={}
+        plot_setting['WpWpJJ_EWK']={'sample':['WpWpJJ_EWK'],'color':ROOT.kCyan,'name':'EWK W^{#pm}W^{#pm}'}
+        plot_setting['WpWpJJ_QCD']={'sample':['WpWpJJ_QCD'],'color':ROOT.kBlue,'name':'QCD W^{#pm}W^{#pm}'}
+        plot_setting['WmWmJJ']={'sample':['WmWmJJ'],'color':ROOT.kCyan,'name':'EWK W^{#pm}W^{#pm}'}
+        plot_setting['DPS']={'sample':['DPS'],'color':ROOT.kYellow,'name':'DPS W^{#pm}W^{#pm}'}
+        plot_setting['Wrong_sign']={'sample':['WWJJ_EWK','DY','top','WW','ggWW'],'color':ROOT.kOrange,'name':'Wrong sign'}
+        plot_setting['Vg']={'sample':['WGJJ','ZG'],'color':ROOT.kGray,'name':'V#gamma'}
+        plot_setting['ZZ']={'sample':['ZZ','ggZZ'],'color':ROOT.kGreen+3,'name':'ZZ'}
+        plot_setting['WZ']={'sample':['WZ0'],'color':ROOT.kGreen,'name':'WZ'}
+        plot_setting['VVV']={'sample':['VVV'],'color':ROOT.kPink+1,'name':'VVV'}
+        plot_setting['Non-prompt']={'sample':['fake_SingleMuon','fake_SingleElectron','fake_MuonEG','fake_DoubleMuon','fake_DoubleEG'],'color':ROOT.kMagenta,'name':'non-prompt'}
+        plot_setting['Data']={'sample':['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG'],'color':ROOT.kBlack,'name':'Data','markstyle':ROOT.kFullCircle,'errorstyle':'E'}
+
+    elif _year=='2017':
+        data_chain = ['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG']
+        mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','DY0','DY1','DY2','DY3','ZG','ZZ','WW','ggWW','top','ggZZ','DPS0','DPS1','WWJJ_EWK0','WWJJ_EWK1','WGJJ','WZ0','WZ1','WZ2','VVV']
+    else:
+        data_chain = ['SingleMuon','MuonEG','DoubleMuon','EGamma']
+        mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','DY0','DY1','DY2','DY3','ZG','ZZ','WW','ggWW','top','ggZZ','DPS0','DPS1','WWJJ_EWK0','WWJJ_EWK1','WGJJ','WZ0','WZ1','WZ2','VVV']
+
 
 def insertStr(instr,pos_str,add_str):
     # change str to list
@@ -137,12 +163,52 @@ def add_files(_year,input, samples, chain, exclude, include, postfix):
                     print('>>>>>>>>>>>>>>>>>>>> %s not in chain') % i
             if isample in include:
                 for i in range(0,len(samples[isample])):
-                    realname=insertStr(input+_year+'/'+samples[isample][i],'.root',postfix)
+                    realname=insertStr(input+_year+'/'+postfix+'/'+samples[isample][i])
                     files.append(realname)
         else:
             for i in range(0,len(samples[isample])):
-                realname=insertStr(input+_year+'/'+samples[isample][i],'.root',postfix)
+                realname=insertStr(input+_year+'/'+postfix+'/'+samples[isample][i])
                 files.append(realname)
+    return files
+
+def add_files2(_year,input, samples, chain, exclude, include, postfix):
+    files = {}
+    if not len(exclude)==0 and not len(include)==0:
+        try:
+            sys.exit(0)
+        except:
+            print('>>>>>>>>>>>>>>>>>>>> include and exclude can not be used at same time')
+        finally:
+            print('>>>>>>>>>>>>>>>>>>>> end this run')
+
+    exclude_flag=False
+    if len(exclude)>0:
+        exclude_flag=True
+    include_flag=False
+    if len(include)>0:
+        include_flag=True
+
+    for isample in chain:
+        if exclude_flag:
+            for i in exclude:
+                if not i in chain:
+                    print('>>>>>>>>>>>>>>>>>>>> %s not in chain') % i
+            if not isample in exclude:
+                for i in range(0,len(samples[isample])):
+                    realname=insertStr(input+_year+'/'+samples[isample][i],'.root',postfix)
+                    files[isample].append(realname)
+        elif include_flag:
+            for i in include:
+                if not i in chain:
+                    print('>>>>>>>>>>>>>>>>>>>> %s not in chain') % i
+            if isample in include:
+                for i in range(0,len(samples[isample])):
+                    realname=insertStr(input+_year+'/'+postfix+'/'+samples[isample][i])
+                    files[isample].append(realname)
+        else:
+            for i in range(0,len(samples[isample])):
+                realname=insertStr(input+_year+'/'+postfix+'/'+samples[isample][i])
+                files[isample].append(realname)
     return files
 
 def trigger_maker(_year,branch_list,dataset):

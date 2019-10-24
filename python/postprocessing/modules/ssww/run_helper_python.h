@@ -17,6 +17,10 @@
 #include "TStyle.h"
 #include "deltaR.h"
 
+using namespace ROOT::VecOps;
+using RNode = ROOT::RDF::RNode;
+using rvec_f = const RVec<float> &;
+using rvec_i = const RVec<int> &;
 
 // match leptons to gen information
 // reference to: https://github.com/root-project/root/blob/master/tutorials/dataframe/df103_NanoAODHiggsAnalysis_python.h
@@ -25,4 +29,12 @@ float calc_mjj(float j1_pt, float j1_eta, float j1_phi, float j1_mass, float j2_
     ROOT::Math::PtEtaPhiMVector p1(j1_pt, j1_eta, j1_phi, j1_mass);
     ROOT::Math::PtEtaPhiMVector p2(j2_pt, j2_eta, j2_phi, j2_mass);
     return (p1 + p2).M();
+}
+bool bveto_helper(rvec_f j_pt, rvec_f j_eta, rvec_f j_tagger, float wp)
+{
+    for (auto i=0U;i < j_pt.size(); ++i) {
+        if(j_pt[i]>20 && abs(j_eta[i])<2.4 && j_tagger[i]>wp)
+            return false;
+    }
+    return true;
 }

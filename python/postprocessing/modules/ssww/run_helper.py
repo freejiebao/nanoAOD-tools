@@ -114,7 +114,7 @@ if __name__ == '__main__':
                 branch_list=df.GetColumnNames()
                 # trigger cut
                 if 'MuonEG' in idata:
-                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"MuonEG")
+                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"MuonEG")  # type: str
                 elif 'SingleMuon' in idata:
                     trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"SingleMuon")
                 elif 'SingleElectron' in idata:

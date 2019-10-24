@@ -38,6 +38,7 @@ class sswwProducer(Module):
         self.out.branch("npvs", "I")
         self.out.branch("gen_weight", "F")
         self.out.branch("tauTag", "B")
+        self.out.branch("sofmuonTag", "B")
         self.out.branch("n_tight_leptons", "I")
         self.out.branch("n_fakeable_leptons", "I")
         self.out.branch("lepton_idx", "I", lenVar="nlepton")
@@ -196,7 +197,7 @@ class sswwProducer(Module):
         if self.selector: leptons = filter(lambda (obj, j, i): self.selector[j](obj), leptons)
         leptons.sort(key=self.sortkey, reverse=self.reverse)
         # electrons = Collection(event, "Electron")
-        # muons = Collection(event, "Muon")
+        muons = Collection(event, "Muon")
         jets = Collection(event, "Jet")
         taus = Collection(event, "Tau")
 
@@ -271,15 +272,29 @@ class sswwProducer(Module):
         # tau veto
         #tauVeto = True
         tauTag = False
-
+        dr_flag = True
         for i in range(0, len(taus)):
             # if taus[i].pt > 18 and abs(taus[i].eta) < 2.3 and taus[i].idDecayMode and taus[i].idDecayModeNewDMs and taus[i].rawIso < 5:
-            if taus[i].pt > 18 and abs(taus[i].eta) < 2.3 and taus[i].idMVAoldDM2017v2>=2 and taus[i].idDecayModeNewDMs:
+            if taus[i].pt > 18 and abs(taus[i].eta) < 2.3 and taus[i].rawIso<5 and taus[i].idDecayMode and taus[i].idDecayModeNewDMs:
                 for j in range(0, len(loose_leptons)):
-                    if deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, taus[i].eta, taus[i].phi) > 0.4:
-                        tauTag = True
+                    dr_flag*=(deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, taus[i].eta, taus[i].phi) > 0.4)
+                if dr_flag:
+                    tauTag = True
+
         #if tauTag:
         #    tauVeto = False
+
+        #soft muon tag
+        softmuonTag=False
+        dr_flag = True
+        for i in range(0, len(muons)):
+            # if taus[i].pt > 18 and abs(taus[i].eta) < 2.3 and taus[i].idDecayMode and taus[i].idDecayModeNewDMs and taus[i].rawIso < 5:
+            if abs(muons[i].dxy) < 0.02 and abs(muons[i].dz) < 0.1 and muons[i].softId and muons[i].pt>5:
+                for j in range(0, len(loose_leptons)):
+                    dr_flag*=(deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, muons[i].eta, muons[i].phi) > 0.4)
+                if dr_flag:
+                    softmuonTag = True
+
 
         # jets
         # if jet multiplicity is needed, then remove below cut
@@ -425,6 +440,7 @@ class sswwProducer(Module):
             self.out.fillBranch("gen_weight", 0)
 
         self.out.fillBranch("tauTag", tauTag)
+        self.out.fillBranch("softmuonTag", softmuonTag)
         self.out.fillBranch("n_tight_leptons", n_tight_leptons)
         self.out.fillBranch("n_fakeable_leptons", n_fakeable_leptons)
         self.out.fillBranch("lepton_idx", lepton_idx)
