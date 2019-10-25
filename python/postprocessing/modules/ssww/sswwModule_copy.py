@@ -38,7 +38,7 @@ class sswwProducer(Module):
         self.out.branch("npvs", "I")
         self.out.branch("gen_weight", "F")
         self.out.branch("tauTag", "B")
-        self.out.branch("sofmuonTag", "B")
+        self.out.branch("softmuonTag", "B")
         self.out.branch("n_tight_leptons", "I")
         self.out.branch("n_fakeable_leptons", "I")
         self.out.branch("lepton_idx", "I", lenVar="nlepton")
