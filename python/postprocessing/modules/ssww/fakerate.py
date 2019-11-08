@@ -138,11 +138,6 @@ def calc(_channel,_year):
     c1.SaveAs("fakerate.pdf")
     c2=ROOT.TCanvas("c2", "c2", 1200, 900)
 
-    fout = ROOT.TFile(_year+'_'+'fakerate_'+_channel+'.root','recreate')
-    h2_fake_data.Write()
-    h2_true_data.Write()
-    h2_ratio.Write()
-
     if args.subtract:
         for imc in mc_chain:
             mc_chain_single = []
@@ -162,15 +157,21 @@ def calc(_channel,_year):
         h2_ratio_subtract.SetTitle('fakerate_subtract')
         h2_ratio_subtract.Divide(h2_fake_tmp)
 
+        h2_ratio_subtract.Draw("texte colz")
+        c2.SaveAs("fakerate_subtract.pdf")
+
+    fout = ROOT.TFile(_year+'_'+'fakerate_'+_channel+'.root','recreate')
+    h2_fake_data.Write()
+    h2_true_data.Write()
+    h2_ratio.Write()
+
+    if args.subtract:
         for i in range(0,len(h2_fake_mc_plot)):
             h2_fake_mc_plot[i].Write()
             h2_true_mc_plot[i].Write()
         h2_fake_tmp.Write()
         h2_true_tmp.Write()
         h2_ratio_subtract.Write()
-
-        h2_ratio_subtract.Draw("texte colz")
-        c2.SaveAs("fakerate_subtract.pdf")
 
     fout.Write()
     fout.Close()
