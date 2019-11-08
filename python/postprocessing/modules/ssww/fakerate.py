@@ -4,7 +4,7 @@ import SAMPLE
 from array import array
 
 parser = argparse.ArgumentParser(description='manual to this script')
-parser.add_argument('-s','--subtract', help='subtract real lepton, default is true',action='store_false', default= True)
+parser.add_argument('-s','--subtract', help='subtract real lepton, default is false',action='store_true', default= False)
 parser.add_argument('-i','--input', help='input path', default= '/home/cmsdas/testuser01/jie/ssww_ntuple/')
 parser.add_argument('-y','--year', help='which year, default is 2016', default= '2016', choices=('2016','2017','2018'))
 group = parser.add_mutually_exclusive_group()  # type: _MutuallyExclusiveGroup
@@ -106,7 +106,7 @@ def calc(_channel,_year):
         for i in range(0,len(files)):
             sig[i]=files[i]
     elif _channel == 'electron':
-        trigger = 'HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30 || HLT_Ele17_CaloIdL_TrackIdL_IsoVL_PFJet30 || HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30'
+        trigger = '(HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30 || HLT_Ele17_CaloIdL_TrackIdL_IsoVL_PFJet30 || HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30)'
         PID = '11'
         if _year=='2018':
             exdata=['SingleMuon','DoubleMuon','MuonEG']
