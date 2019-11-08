@@ -35,8 +35,9 @@ def set_samples(_year):
         sample['top']=['TTTo2L2Nu.root','TTZToQQ.root','TTZToLLNuNu_M-10.root','TTWJetsToLNu.root','TTWJetsToQQ.root','ST_tW_top.root','ST_tW_antitop.root']
         sample['ggZZ']=['GluGluToContinToZZTo2e2mu.root','GluGluToContinToZZTo2e2nu.root','GluGluToContinToZZTo2e2tau.root','GluGluToContinToZZTo2mu2nu.root','GluGluToContinToZZTo2mu2tau.root','GluGluToContinToZZTo4e.root','GluGluToContinToZZTo4mu.root','GluGluToContinToZZTo4tau.root']
         sample['VVV']=['ZZZ.root','WZZ.root','WWZ.root','WWW.root']
+        sample['WJets']=['WJetsToLNu.root']
         data_chain = ['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG']
-        mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','WWJJ_EWK','WGJJ','DY','ZG','ZZ','WW','ggWW','WZ0','WZ1','WZ2','top','ggZZ','VVV']
+        mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','WWJJ_EWK','WGJJ','DY','ZG','ZZ','WW','ggWW','WZ0','WZ1','WZ2','top','ggZZ','VVV','WJets']
     elif _year=='2017':
         sample['SingleMuon']=['SingleMuon_Run2017B.root','SingleMuon_Run2017C.root','SingleMuon_Run2017D.root','SingleMuon_Run2017E.root','SingleMuon_Run2017F.root']
         sample['SingleElectron']=['SingleElectron_Run2017B.root','SingleElectron_Run2017C.root','SingleElectron_Run2017D.root','SingleElectron_Run2017E.root','SingleElectron_Run2017F.root']
@@ -103,11 +104,11 @@ def plot_scheme(_year):
         data_chain = ['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG']
         mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','WWJJ_EWK','WGJJ','DY','ZG','ZZ','WW','ggWW','WZ0','WZ1','WZ2','top','ggZZ','VVV']
         plot_setting={}
-        plot_setting['WpWpJJ_EWK']={'sample':['WpWpJJ_EWK'],'color':ROOT.kCyan,'name':'EWK W^{#pm}W^{#pm}'}
-        plot_setting['WpWpJJ_QCD']={'sample':['WpWpJJ_QCD'],'color':ROOT.kBlue,'name':'QCD W^{#pm}W^{#pm}'}
-        plot_setting['WmWmJJ']={'sample':['WmWmJJ'],'color':ROOT.kCyan,'name':'EWK W^{#pm}W^{#pm}'}
+        plot_setting['WpWpJJ_EWK']={'sample':['WpWpJJ_EWK'],'color':ROOT.kCyan,'name':'EWK W^{#pm}W^{#pm}jj'}
+        plot_setting['WpWpJJ_QCD']={'sample':['WpWpJJ_QCD'],'color':ROOT.kBlue,'name':'QCD W^{#pm}W^{#pm}jj'}
+        plot_setting['WmWmJJ']={'sample':['WmWmJJ'],'color':ROOT.kCyan,'name':'EWK W^{#pm}W^{#pm}jj'}
         plot_setting['DPS']={'sample':['DPS'],'color':ROOT.kYellow,'name':'DPS W^{#pm}W^{#pm}'}
-        plot_setting['Wrong_sign']={'sample':['WWJJ_EWK','DY','top','WW','ggWW'],'color':ROOT.kOrange,'name':'Wrong sign'}
+        plot_setting['Wrong-sign']={'sample':['WWJJ_EWK','DY','top','WW','ggWW'],'color':ROOT.kOrange,'name':'Wrong sign'}
         plot_setting['Vg']={'sample':['WGJJ','ZG'],'color':ROOT.kGray,'name':'V#gamma'}
         plot_setting['ZZ']={'sample':['ZZ','ggZZ'],'color':ROOT.kGreen+3,'name':'ZZ'}
         plot_setting['WZ']={'sample':['WZ0'],'color':ROOT.kGreen,'name':'WZ'}
@@ -155,7 +156,7 @@ def add_files(_year,input, samples, chain, exclude, include, postfix):
                     print('>>>>>>>>>>>>>>>>>>>> %s not in chain') % i
             if not isample in exclude:
                 for i in range(0,len(samples[isample])):
-                    realname=insertStr(input+_year+'/'+samples[isample][i],'.root',postfix)
+                    realname=input+_year+'/'+postfix+'/'+samples[isample][i]
                     files.append(realname)
         elif include_flag:
             for i in include:
@@ -163,11 +164,11 @@ def add_files(_year,input, samples, chain, exclude, include, postfix):
                     print('>>>>>>>>>>>>>>>>>>>> %s not in chain') % i
             if isample in include:
                 for i in range(0,len(samples[isample])):
-                    realname=insertStr(input+_year+'/'+postfix+'/'+samples[isample][i])
+                    realname=input+_year+'/'+postfix+'/'+samples[isample][i]
                     files.append(realname)
         else:
             for i in range(0,len(samples[isample])):
-                realname=insertStr(input+_year+'/'+postfix+'/'+samples[isample][i])
+                realname=input+_year+'/'+postfix+'/'+samples[isample][i]
                 files.append(realname)
     return files
 

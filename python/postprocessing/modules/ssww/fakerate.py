@@ -17,7 +17,7 @@ group_data.add_argument('-ex','--exclude', help='exclude samples',nargs='*',defa
 '''
 group_mc = parser.add_mutually_exclusive_group()  # type: _MutuallyExclusiveGroup
 group_mc.add_argument('-in','--include', help='include samples only',nargs='*',default=[])
-group_mc.add_argument('-ex','--exclude', help='exclude samples',nargs='*',default=['WZ1','WZ2'])
+group_mc.add_argument('-ex','--exclude', help='exclude samples',nargs='*',default=['WZ0','WZ2'])
 args = parser.parse_args()
 
 

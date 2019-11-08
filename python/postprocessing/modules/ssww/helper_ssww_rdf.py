@@ -42,8 +42,9 @@ def xs_weight(_year, sample, df, n_weighted_events):
     except:
         print("==================== Error: cannot find %s in XSDB") % sample
         assert False
-    df_xsweight=df.Define('xsweight','return '+str(weight)+';')
-    return df_xsweight
+    #df_xsweight=df.Define('xsweight','return '+str(weight)+';')
+    #return df_xsweight
+    return True
 
 
 if __name__ == '__main__':
@@ -55,6 +56,6 @@ if __name__ == '__main__':
             if args.theory:
                 df = theory_unc(df)
             if args.xsweight:
-                df = xs_weight(args.year,samples[imc][i],df,f.Get("nEventsGenWeighted").GetBinContent(1))
+                xs_weight(args.year,samples[imc][i],df,f.Get("nEventsGenWeighted").GetBinContent(1))
 
-            df.Snapshot("Events", args.input+args.year+'/'+"new"+samples[imc][i])
+            #df.Snapshot("Events", args.input+args.year+'/'+"new"+samples[imc][i])

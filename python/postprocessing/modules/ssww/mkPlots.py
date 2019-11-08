@@ -27,21 +27,29 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 run_helper_header_path = "run_helper_python.h"
 ROOT.gInterpreter.Declare('#include "{}"'.format(run_helper_header_path))
 
+
 def plot_variables(sample,region,df):
     plots=[]
-    plots.append(df.Histo1D(('lep1_pt', "lep1_pt;l_{1}^{pt} (GeV);Event", 5, 20,300), "lepton_pt[0]","weight"))
-    plots.append(df.Histo1D(('lep2_pt', "lep2_pt;l_{2}^{pt} (GeV);Event", 5, 20,300), "lepton_pt[1]","weight"))
-    plots.append(df.Histo1D(('jet1_pt', "jet1_pt;j_{1}^{pt} (GeV);Event", 5, 20,300), "jet_pt[0]","weight"))
-    plots.append(df.Histo1D(('jet2_pt', "jet2_pt;j_{2}^{pt} (GeV);Event", 5, 20,300), "jet_pt[1]","weight"))
-
-    plots.append(df.Histo1D(('lep1_eta', "lep1_eta;l_{1}^{#eta} (GeV);Event", 10, -2.5,2.5), "lepton_eta[0]","weight"))
-    plots.append(df.Histo1D(('lep2_eta', "lep2_eta;l_{2}^{#eta} (GeV);Event", 10, -2.5,2.5), "lepton_eta[1]","weight"))
-    plots.append(df.Histo1D(('jet1_eta', "jet1_eta;j_{1}^{#eta} (GeV);Event", 10, -2.5,2.5), "jet_eta[0]","weight"))
-    plots.append(df.Histo1D(('jet2_eta', "jet2_eta;j_{2}^{#eta} (GeV);Event", 10, -2.5,2.5), "jet_eta[1]","weight"))
-
-    plots.append(df.Histo1D(('mll', "mll;m_{ll} (GeV);Event", 5, 20,300), "mll","weight"))
-    plots.append(df.Histo1D(('mjj_low', "mjj_low;m_{jj} (GeV);Event", 5, 150,500), "mjj","weight"))
-    plots.append(df.Histo1D(('mjj', "mjj;m_{jj} (GeV);Event", 5, 500,2000), "mjj","weight"))
+    histogram_models=[
+        ['lep1_pt','lepton_pt[0]',ROOT.RDF.TH1DModel('', "lep1_pt;l_{1}^{pt} (GeV);Event", 5, 25,300)],
+        ['lep2_pt','lepton_pt[1]',ROOT.RDF.TH1DModel('', "lep2_pt;l_{2}^{pt} (GeV);Event", 5, 20,300)],
+        ['lep3_pt','lepton_pt[2]',ROOT.RDF.TH1DModel('', "lep3_pt;l_{3}^{pt} (GeV);Event", 5, 20,300)],
+        ['lep1_eta','lepton_eta[0]',ROOT.RDF.TH1DModel('', "lep1_eta;l_{1}^{#eta} (GeV);Event", 10, -2.5,2.5)],
+        ['lep2_eta','lepton_eta[1]',ROOT.RDF.TH1DModel('', "lep2_eta;l_{2}^{#eta} (GeV);Event", 10, -2.5,2.5)],
+        ['lep3_eta','lepton_eta[2]',ROOT.RDF.TH1DModel('', "lep3_eta;l_{3}^{#eta} (GeV);Event", 10, -2.5,2.5)],
+        ['jet1_pt','jet_pt[0]',ROOT.RDF.TH1DModel('', "jet1_pt;j_{1}^{pt} (GeV);Event", 5, 20,300)],
+        ['jet2_pt','jet_pt[1]',ROOT.RDF.TH1DModel('', "jet2_pt;j_{2}^{pt} (GeV);Event", 5, 20,300)],
+        ['jet1_eta','jet_eta[0]',ROOT.RDF.TH1DModel('', "jet1_eta;j_{1}^{#eta} (GeV);Event", 10, -2.5,2.5)],
+        ['jet2_eta','jet_eta[1]',ROOT.RDF.TH1DModel('', "jet2_eta;j_{2}^{#eta} (GeV);Event", 10, -2.5,2.5)],
+        ['mll','mll',ROOT.RDF.TH1DModel('', "mll;m_{ll} (GeV);Event", 5, 20,300)],
+        ['mjj_low','mjj',ROOT.RDF.TH1DModel('', "mjj_low;m_{jj} (GeV);Event", 5, 100,500)],
+        ['mjj','mjj',ROOT.RDF.TH1DModel('', "mjj;m_{jj} (GeV);Event", 5, 500,2000)],
+    ]
+    for i in range(0,len(histogram_models)):
+        histo=histogram_models[i][2].GetHistogram()
+        histo.Sumw2()
+        histo.SetName(sample+histogram_models[i][0])
+        plots.append(df.Histo1D(histogram_models[i][2],histogram_models[i][1],'weight'))
 
     f=ROOT.TFile.Open('plots_'+args.year+'.root','update')
     try:
@@ -61,10 +69,16 @@ def plot_variables(sample,region,df):
         #plots[i].SetTitle(sample)
         plots[i].Write()
         ROOT.gDirectory.cd('..')
+    f.Write("",ROOT.TObject.kOverwrite)
+    f.Close()
     return
 
 def get_stack():
     print '>>>>>>>>>>>>>>>>>>>>>>> get stack'
+    f=ROOT.TFile.Open('ssww_region.root')
+    plot_scheme=SAMPLE.plot_scheme(args.year)
+    # which directory to go
+    f.cd('lep1pt')
 
 def ssww_region(sample,df):
     print '>>>>>>>>>>>>>>>>>>>>>>> ssww region'
@@ -170,5 +184,5 @@ def calc(_year):
 if __name__ == '__main__':
 
     #print ('>>>>>>>>>>>>>>>>>>>> exclude: ',args.exclude)
-    print ('>>>>>>>>>>>>>>>>>>>> include: ',args.include)
+    #print ('>>>>>>>>>>>>>>>>>>>> include: ',args.include)
     calc(args.year)

@@ -11,7 +11,8 @@ parser.add_argument('-t','--theory', help='get the theoretic un certainty, defau
 parser.add_argument('-x','--xsweight', help='get xs scale factor, default is false',action='store_true', default= False)
 parser.add_argument('-s','--skim', help='do 1st skim, default is false',action='store_true', default= False)
 #parser.add_argument('-tr','--trigger', help='trigger maker, default is false',action='store_true', default= False)
-parser.add_argument('-p','--prestep', help='declare prestep path postfix', default= 'skim')
+parser.add_argument('-post','--poststep', help='declare poststep path postfix', default= 'skim')
+parser.add_argument('-pre','--prestep', help='declare prestep path postfix', default= '')
 args = parser.parse_args()
 
 ROOT.ROOT.EnableImplicitMT(32)
@@ -86,22 +87,32 @@ if __name__ == '__main__':
                 # python ../../../../scripts/nano_postproc.py . /afs/cern.ch/work/j/jixiao/nano/2016/CMSSW_10_2_13/src/PhysicsTools/NanoAODTools/2016_WZ_nanoAOD.root -I PhysicsTools.NanoAODTools.postprocessing.modules.ssww.helper_ssww helper_thoeretic -s _thoeretic
             if args.skim:
                 print '>>>>>>>>>>>>>>>>>>>> skim %s' % samples[imc][i]
-                df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+samples[imc][i])
-                # lepton pt > 20, jet pt > 30
-                df1 = df.Filter("nlepton>1 && njet>1") \
-                    .Filter("lepton_pt[0]>20 || lepton_corrected_pt[0]>20 || lepton_correctedUp_pt[0]>20 || lepton_correctedDown_pt[0]>20","cut lep1_pt") \
-                    .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt") \
-                    .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
-                    .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt")
-                # new variable for mjj w.r.t jes jer
-                df2 = df1.Define("mjj_nom","calc_mjj(jet_pt_nom[0],jet_eta[0],jet_phi[0],jet_mass_nom[0],jet_pt_nom[1],jet_eta[1],jet_phi[1],jet_mass_nom[1])") \
-                            .Define("mjj_jerUp","calc_mjj(jet_pt_jerUp[0],jet_eta[0],jet_phi[0],jet_mass_jerUp[0],jet_pt_jerUp[1],jet_eta[1],jet_phi[1],jet_mass_jerUp[1])") \
-                            .Define("mjj_jerDown","calc_mjj(jet_pt_jerDown[0],jet_eta[0],jet_phi[0],jet_mass_jerDown[0],jet_pt_jerDown[1],jet_eta[1],jet_phi[1],jet_mass_jerDown[1])") \
-                            .Define("mjj_jesTotalUp","calc_mjj(jet_pt_jesTotalUp[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalUp[0],jet_pt_jesTotalUp[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalUp[1])") \
-                            .Define("mjj_jesTotalDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])")
-                if not os.path.exists("skim"):
-                    os.mkdir("skim")
-                df2.Snapshot("Events","skim/"+samples[imc][i])
+                df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+args.prestep+'/'+samples[imc][i])
+                if args.poststep=='skim':
+                    # lepton pt > 20, jet pt > 30
+                    df1 = df.Filter("nlepton>1 && njet>1") \
+                        .Filter("lepton_pt[0]>20 || lepton_corrected_pt[0]>20 || lepton_correctedUp_pt[0]>20 || lepton_correctedDown_pt[0]>20","cut lep1_pt") \
+                        .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt") \
+                        .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
+                        .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt")
+                    # new variable for mjj w.r.t jes jer
+                    df2 = df1.Define("mjj_nom","calc_mjj(jet_pt_nom[0],jet_eta[0],jet_phi[0],jet_mass_nom[0],jet_pt_nom[1],jet_eta[1],jet_phi[1],jet_mass_nom[1])") \
+                                .Define("mjj_jerUp","calc_mjj(jet_pt_jerUp[0],jet_eta[0],jet_phi[0],jet_mass_jerUp[0],jet_pt_jerUp[1],jet_eta[1],jet_phi[1],jet_mass_jerUp[1])") \
+                                .Define("mjj_jerDown","calc_mjj(jet_pt_jerDown[0],jet_eta[0],jet_phi[0],jet_mass_jerDown[0],jet_pt_jerDown[1],jet_eta[1],jet_phi[1],jet_mass_jerDown[1])") \
+                                .Define("mjj_jesTotalUp","calc_mjj(jet_pt_jesTotalUp[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalUp[0],jet_pt_jesTotalUp[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalUp[1])") \
+                                .Define("mjj_jesTotalDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])")
+                elif args.poststep=='skim_l2':
+                    df2 = df.Filter("nlepton==2").Filter("met > 30 && mll > 20 && (mjj > 100 || mjj_nom > 100 || mjj_jerUp > 100 || mjj_jerDown > 100 || mjj_jesTotalUp > 100 || mjj_jesTotalDown > 100)","common cuts for two leptons")
+                elif args.poststep=='skim_l3':
+                    df2 = df.Filter('nlepton==3','common cuts for three leptons')
+                    #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
+                elif args.poststep=='skim_l4':
+                    df2 = df.Filter('nlepton==4','common cuts for four leptons')
+                    #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
+
+                if not os.path.exists(args.input+'/'+args.prestep):
+                    os.mkdir(args.input+'/'+args.prestep)
+                df2.Snapshot("Events",args.input+'/'+args.prestep+'/'+samples[imc][i])
                 allCutsReport = df.Report()
                 allCutsReport.Print()
 
@@ -110,32 +121,40 @@ if __name__ == '__main__':
         for i in range(0,len(samples[idata])):
             if args.skim:
                 print '>>>>>>>>>>>>>>>>>>>> skim %s' % samples[idata][i]
-                df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+samples[idata][i])
-                branch_list=df.GetColumnNames()
-                # trigger cut
-                if 'MuonEG' in idata:
-                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"MuonEG")  # type: str
-                elif 'SingleMuon' in idata:
-                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"SingleMuon")
-                elif 'SingleElectron' in idata:
-                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"SingleElectron")
-                elif 'DoubleMuon' in idata:
-                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"DoubleMuon")
-                elif 'DoubleEG' in idata:
-                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"DoubleEG")
-                elif 'EGamma' in idata:
-                    trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"EGamma")
-                df1=df.Filter(trigger_cut,"trigger cut")
-                # lepton pt > 20, jet pt > 30
-                df2 = df1.Filter("nlepton>1 && njet>1") \
-                    .Filter("lepton_pt[0]>20 || lepton_corrected_pt[0]>20 || lepton_correctedUp_pt[0]>20 || lepton_correctedDown_pt[0]>20","cut lep1_pt") \
-                    .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt") \
-                    .Filter("jet_pt[0]>30","cut jet1_pt") \
-                    .Filter("jet_pt[1]>30","cut jet2_pt")
+                df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+args.prestep+'/'+samples[idata][i])
+                if args.poststep=='skim':
+                    branch_list=df.GetColumnNames()
+                    # trigger cut
+                    if 'MuonEG' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"MuonEG")  # type: str
+                    elif 'SingleMuon' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"SingleMuon")
+                    elif 'SingleElectron' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"SingleElectron")
+                    elif 'DoubleMuon' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"DoubleMuon")
+                    elif 'DoubleEG' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"DoubleEG")
+                    elif 'EGamma' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"EGamma")
+                    df1=df.Filter(trigger_cut,"trigger cut")
+                    # lepton pt > 20, jet pt > 30
+                    df2 = df1.Filter("nlepton>1 && njet>1") \
+                        .Filter("lepton_pt[0]>20 || lepton_corrected_pt[0]>20 || lepton_correctedUp_pt[0]>20 || lepton_correctedDown_pt[0]>20","cut lep1_pt") \
+                        .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt") \
+                        .Filter("jet_pt[0]>30","cut jet1_pt") \
+                        .Filter("jet_pt[1]>30","cut jet2_pt")
+                elif args.poststep=='skim_l2':
+                    df2 = df.Filter("nlepton==2").Filter("met > 30 && mll > 20 && (mjj > 100 || mjj_nom > 100 || mjj_jerUp > 100 || mjj_jerDown > 100 || mjj_jesTotalUp > 100 || mjj_jesTotalDown > 100)","common cuts for two leptons")
+                elif args.poststep=='skim_l3':
+                    df2 = df.Filter('nlepton==3','common cuts for three leptons')
+                    #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
+                elif args.poststep=='skim_l4':
+                    df2 = df.Filter('nlepton==4','common cuts for four leptons')
+                    #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
 
-                # new variable for mjj w.r.t jes jer
-                if not os.path.exists("skim"):
-                    os.mkdir("skim")
-                df2.Snapshot("Events","skim/"+samples[idata][i])
+                if not os.path.exists(args.input+'/'+args.prestep):
+                    os.mkdir(args.input+'/'+args.prestep)
+                df2.Snapshot("Events",args.input+'/'+args.prestep+'/'+samples[idata][i])
                 allCutsReport = df.Report()
                 allCutsReport.Print()
