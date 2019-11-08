@@ -110,9 +110,9 @@ if __name__ == '__main__':
                     df2 = df.Filter('nlepton==4','common cuts for four leptons')
                     #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
 
-                if not os.path.exists(args.input+'/'+args.prestep):
-                    os.mkdir(args.input+'/'+args.prestep)
-                df2.Snapshot("Events",args.input+'/'+args.prestep+'/'+samples[imc][i])
+                if not os.path.exists(args.input+'/'+args.year+'/'+args.prestep):
+                    os.mkdir(args.input+'/'+args.year+'/'+args.prestep)
+                df2.Snapshot("Events",args.input+'/'+args.year+'/'+args.prestep+'/'+samples[imc][i])
                 allCutsReport = df.Report()
                 allCutsReport.Print()
 
@@ -153,8 +153,8 @@ if __name__ == '__main__':
                     df2 = df.Filter('nlepton==4','common cuts for four leptons')
                     #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
 
-                if not os.path.exists(args.input+'/'+args.prestep):
-                    os.mkdir(args.input+'/'+args.prestep)
-                df2.Snapshot("Events",args.input+'/'+args.prestep+'/'+samples[idata][i])
+                if not os.path.exists(args.input+'/'+args.year+'/'+args.prestep):
+                    os.mkdir(args.input+'/'+args.year+'/'+args.prestep)
+                df2.Snapshot("Events",args.input+'/'+args.year+'/'+args.prestep+'/'+samples[idata][i])
                 allCutsReport = df.Report()
                 allCutsReport.Print()
