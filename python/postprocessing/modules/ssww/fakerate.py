@@ -26,7 +26,7 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 
 def get_plot(name, trigger, PID, files, isdata):
     eta_bin = array('f',[0., 0.5, 1., 1.479, 2., 2.5])
-    pt_bin = array('f',[20, 25, 30, 35])
+    pt_bin = array('f',[20, 25, 30, 40, 60])
     fake_cut = trigger + '&& lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
     tight_cut = trigger + '&& lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
     real_fake = trigger + '&& lepton_real[0] && lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
@@ -59,19 +59,19 @@ def get_plot(name, trigger, PID, files, isdata):
         df = ROOT.ROOT.RDataFrame("Events", files[i])
         print '>>>>>>>>>>>>>>>>>>>> the opened file: ',files[i]
         # For simplicity, select only events with exactly two muons and require opposite charge
-        tmpplot=df.Filter('nlepton == 1 && njet>0').Filter(fake_selections) \
+        tmpplot=df.Filter('lepton_pt.size() == 1 && njet>0').Filter(fake_selections) \
             .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
-            .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];')\
+            .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>59) return 50.; else return (double)lepton_pt[0];')\
             .Define('weight',weight) \
-            .Histo2D(("fake_"+name+"_"+str(i), "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
+            .Histo2D(("fake_"+name+"_"+str(i), "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 4, pt_bin), "abs_eta", "pt_tmp","weight")
         tmpplot.Sumw2()
         fake_plot.append(tmpplot)
 
-        tmpplot = df.Filter('nlepton == 1 && njet>0').Filter(true_selections) \
+        tmpplot = df.Filter('lepton_pt.size() == 1 && njet>0').Filter(true_selections) \
             .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
-            .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>35) return 32.5; else return (double)lepton_pt[0];') \
+            .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>59) return 50; else return (double)lepton_pt[0];') \
             .Define('weight',weight) \
-            .Histo2D(("tight_"+name+"_"+str(i), "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 3, pt_bin), "abs_eta", "pt_tmp","weight")
+            .Histo2D(("tight_"+name+"_"+str(i), "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 4, pt_bin), "abs_eta", "pt_tmp","weight")
         tmpplot.Sumw2()
         tight_plot.append(tmpplot)
 
@@ -106,7 +106,7 @@ def calc(_channel,_year):
         for i in range(0,len(files)):
             sig[i]=files[i]
     elif _channel == 'electron':
-        trigger = '(HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30 || HLT_Ele17_CaloIdL_TrackIdL_IsoVL_PFJet30 || HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30)'
+        trigger = '(HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30 || HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30 || HLT_Ele17_CaloIdL_TrackIdL_IsoVL_PFJet30 || HLT_Ele23_CaloIdL_TrackIdL_IsoVL_PFJet30)'
         PID = '11'
         if _year=='2018':
             exdata=['SingleMuon','DoubleMuon','MuonEG']
