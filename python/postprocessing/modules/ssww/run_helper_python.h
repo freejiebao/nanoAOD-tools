@@ -29,9 +29,9 @@ using rvec_i = const RVec<int> &;
 // lepton sf file
 TFile electron_id_2016_sf_file("../../data/leptonSF/2016/electron/2016LegacyReReco_ElectronMVA80_Fall17V2.root","read");
 TH2F * electron_id_2016_sf = (TH2F*) electron_id_2016_sf_file.Get("EGamma_SF2D");
-TFile electron_id_2017_sf_file("../../data/leptonSF/2017/electron/2017_ElectronMedium.root","read");
+TFile electron_id_2017_sf_file("../../data/leptonSF/2017/electron/2017_ElectronTight.root","read");
 TH2F * electron_id_2017_sf = (TH2F*)electron_id_2017_sf_file.Get("EGamma_SF2D");
-TFile electron_id_2018_sf_file("../../data/leptonSF/2018/electron/2018_ElectronMedium.root","read");
+TFile electron_id_2018_sf_file("../../data/leptonSF/2018/electron/2018_ElectronMVA80.root","read");
 TH2F * electron_id_2018_sf = (TH2F*)electron_id_2018_sf_file.Get("EGamma_SF2D");
 TFile electron_reco_2016_sf_file("../../data/leptonSF/2016/electron/EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root","read");
 TH2F * electron_reco_2016_sf = (TH2F*) electron_reco_2016_sf_file.Get("EGamma_SF2D");
@@ -44,13 +44,13 @@ TFile muon_iso_2016_sf_file("../../data/leptonSF/2016/muon/RunBCDEF_SF_ISO_tight
 TH2D * muon_iso_2016_sf = (TH2D*) muon_iso_2016_sf_file.Get("NUM_TightRelIso_DEN_TightIDandIPCut_eta_pt");
 TFile muon_id_2016_sf_file("../../data/leptonSF/2016/muon/RunBCDEF_SF_ID.root","read");
 TH2D * muon_id_2016_sf = (TH2D*) muon_id_2016_sf_file.Get("NUM_TightID_DEN_genTracks_eta_pt");
-TFile muon_iso_2017_sf_file("../../data/leptonSF/2017/electron/RunBCDEF_SF_ISO.root","read");
+TFile muon_iso_2017_sf_file("../../data/leptonSF/2017/muon/RunBCDEF_SF_ISO_syst_tight.root","read");
 TH2D * muon_iso_2017_sf = (TH2D*) muon_iso_2017_sf_file.Get("NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta");
-TFile muon_id_2017_sf_file("../../data/leptonSF/2017/electron/RunBCDEF_SF_ID.root","read");
+TFile muon_id_2017_sf_file("../../data/leptonSF/2017/muon/RunBCDEF_SF_ID_syst.root","read");
 TH2D * muon_id_2017_sf = (TH2D*) muon_id_2017_sf_file.Get("NUM_TightID_DEN_genTracks_pt_abseta");
-TFile muon_iso_2018_sf_file("../../data/leptonSF/2018/electron/RunABCD_SF_ISO.root","read");
+TFile muon_iso_2018_sf_file("../../data/leptonSF/2018/muon/RunABCD_SF_ISO_tight.root","read");
 TH2D * muon_iso_2018_sf = (TH2D*) muon_iso_2018_sf_file.Get("NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta");
-TFile muon_id_2018_sf_file("../../data/leptonSF/2018/electron/RunABCD_SF_ID.root","read");
+TFile muon_id_2018_sf_file("../../data/leptonSF/2018/muon/RunABCD_SF_ID.root","read");
 TH2D * muon_id_2018_sf = (TH2D*)muon_id_2018_sf_file.Get("NUM_TightID_DEN_TrackerMuons_pt_abseta");
 
 // fake lepton weight files

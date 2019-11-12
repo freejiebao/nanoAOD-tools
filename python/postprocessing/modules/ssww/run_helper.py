@@ -148,6 +148,9 @@ if __name__ == '__main__':
                         .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt") \
                         .Filter("jet_pt[0]>30","cut jet1_pt") \
                         .Filter("jet_pt[1]>30","cut jet2_pt")
+                elif args.poststep=='skim_l1':
+                    print '>>>>> skim_l1'
+                    df2 = df.Filter('nlepton==1','common cuts for one lepton')
                 elif args.poststep=='skim_l2':
                     df2 = df.Filter("nlepton==2").Filter("met > 30 && mll > 20 && (mjj > 100 || mjj_nom > 100 || mjj_jerUp > 100 || mjj_jerDown > 100 || mjj_jesTotalUp > 100 || mjj_jesTotalDown > 100)","common cuts for two leptons")
                 elif args.poststep=='skim_l3':
