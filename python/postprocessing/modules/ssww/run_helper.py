@@ -114,9 +114,9 @@ if __name__ == '__main__':
                     #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
                 else:
                     assert(0)
-                if not os.path.exists(args.input+'/'+args.year+'/'+args.prestep):
+                if not os.path.exists(args.input+'/'+args.year+'/'+args.poststep):
                     os.mkdir(args.input+'/'+args.year+'/'+args.prestep)
-                df2.Snapshot("Events",args.input+'/'+args.year+'/'+args.prestep+'/'+samples[imc][i])
+                df2.Snapshot("Events",args.input+'/'+args.year+'/'+args.poststep+'/'+samples[imc][i])
                 allCutsReport = df.Report()
                 allCutsReport.Print()
 
@@ -162,8 +162,8 @@ if __name__ == '__main__':
                 else:
                     assert(0)
 
-                if not os.path.exists(args.input+'/'+args.year+'/'+args.prestep):
+                if not os.path.exists(args.input+'/'+args.year+'/'+args.poststep):
                     os.mkdir(args.input+'/'+args.year+'/'+args.prestep)
-                df2.Snapshot("Events",args.input+'/'+args.year+'/'+args.prestep+'/'+samples[idata][i])
+                df2.Snapshot("Events",args.input+'/'+args.year+'/'+args.poststep+'/'+samples[idata][i])
                 allCutsReport = df.Report()
                 allCutsReport.Print()
