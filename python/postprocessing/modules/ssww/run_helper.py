@@ -159,6 +159,8 @@ if __name__ == '__main__':
                 elif args.poststep=='skim_l4':
                     df2 = df.Filter('nlepton==4','common cuts for four leptons')
                     #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
+                else:
+                    assert(0)
 
                 if not os.path.exists(args.input+'/'+args.year+'/'+args.prestep):
                     os.mkdir(args.input+'/'+args.year+'/'+args.prestep)
