@@ -115,7 +115,7 @@ if __name__ == '__main__':
                 else:
                     assert(0)
                 if not os.path.exists(args.input+'/'+args.year+'/'+args.poststep):
-                    os.mkdir(args.input+'/'+args.year+'/'+args.prestep)
+                    os.mkdir(args.input+'/'+args.year+'/'+args.poststep)
                 df2.Snapshot("Events",args.input+'/'+args.year+'/'+args.poststep+'/'+samples[imc][i])
                 allCutsReport = df.Report()
                 allCutsReport.Print()
@@ -163,7 +163,7 @@ if __name__ == '__main__':
                     assert(0)
 
                 if not os.path.exists(args.input+'/'+args.year+'/'+args.poststep):
-                    os.mkdir(args.input+'/'+args.year+'/'+args.prestep)
+                    os.mkdir(args.input+'/'+args.year+'/'+args.poststep)
                 df2.Snapshot("Events",args.input+'/'+args.year+'/'+args.poststep+'/'+samples[idata][i])
                 allCutsReport = df.Report()
                 allCutsReport.Print()
