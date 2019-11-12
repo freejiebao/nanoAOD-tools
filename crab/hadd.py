@@ -7,7 +7,7 @@ from argparse import _MutuallyExclusiveGroup
 parser = argparse.ArgumentParser(description='manual to this script')
 parser.add_argument('-t','--transfer', help='transfer to some site by scp, defalut is False', action='store_true', default=False)
 parser.add_argument('-s','--server', help='transfer to the server', default='xiaoj@hepfarm02.phy.pku.edu.cn')
-parser.add_argument('-o','--output', help='output path', default='/eos/user/l/llinwei/jie/ssww_ntuple/')
+parser.add_argument('-o','--output', help='output path', default='/home/cmsdas/testuser01/jie/ssww_ntuple/')
 group = parser.add_mutually_exclusive_group()  # type: _MutuallyExclusiveGroup
 # group.add_argument('-s', '--sample', help='give explicit sample names', nargs='*')
 group.add_argument('-y', '--year', help='chose all jobs in this year', choices=('2016', '2017', '2018'))
