@@ -29,7 +29,7 @@ ROOT.gInterpreter.Declare('#include "{}"'.format(run_helper_header_path))
 
 
 def plot_variables(sample,region,df):
-    plots=[]
+    plots={}
     histogram_models=[
         ['lep1_pt','lepton_pt[0]',ROOT.RDF.TH1DModel('', "lep1_pt;l_{1}^{pt} (GeV);Event", 5, 25,300)],
         ['lep2_pt','lepton_pt[1]',ROOT.RDF.TH1DModel('', "lep2_pt;l_{2}^{pt} (GeV);Event", 5, 20,300)],
@@ -48,37 +48,40 @@ def plot_variables(sample,region,df):
     for i in range(0,len(histogram_models)):
         histo=histogram_models[i][2].GetHistogram()
         histo.Sumw2()
-        histo.SetName(sample+histogram_models[i][0])
-        plots.append(df.Histo1D(histogram_models[i][2],histogram_models[i][1],'weight'))
+        histo.SetName(sample+'_'+histogram_models[i][0])
+        plots[sample+'_'+histogram_models[i][0]]=df.Histo1D(histogram_models[i][2],histogram_models[i][1],'weight')
 
-    f=ROOT.TFile.Open('plots_'+args.year+'.root','update')
-    try:
-        f.cd(region)
-    except:
-        f.mkdir(region)
-        f.cd(region)
+    f=ROOT.TFile.Open('plots_'+region+'_'+args.year+'.root','update')
 
-    for i in range(0,len(plots)):
-        plot_name=plots[i].GetName()
+    for i in range(0,len(histogram_models)):
         try:
-            ROOT.gDirectory.cd(plot_name)
+            ROOT.gDirectory.cd(histogram_models[i][0])
         except:
-            ROOT.gDirectory.mkdir(plot_name)
-            ROOT.gDirectory.cd(plot_name)
-        plots[i].SetName(sample)
-        #plots[i].SetTitle(sample)
-        plots[i].Write()
+            ROOT.gDirectory.mkdir(histogram_models[i][0])
+            ROOT.gDirectory.cd(histogram_models[i][0])
+        plots[sample+'_'+histogram_models[i][0]].Write()
         ROOT.gDirectory.cd('..')
     f.Write("",ROOT.TObject.kOverwrite)
     f.Close()
     return
 
-def get_stack():
+def get_stack(region):
     print '>>>>>>>>>>>>>>>>>>>>>>> get stack'
-    f=ROOT.TFile.Open('ssww_region.root')
+    f=ROOT.TFile.Open('plots_'+region+'_'+args.year+'.root')
     plot_scheme=SAMPLE.plot_scheme(args.year)
     # which directory to go
-    f.cd('lep1pt')
+    dirs=[]
+    for tkey in f.GetListOfKeys():
+        key=tkey.GetName()
+        #htmp=ROOT.TH1F
+        #print(key)
+        dir=f.cd(key)
+        for i in dir.GetListOfKeys():
+            print '>>>>> variable:',dir
+            for j in plot_scheme:
+                for k in plot_scheme[j]['sample']:
+                    htmp.Add(k+'_'+key)
+
 
 def ssww_region(sample,df):
     print '>>>>>>>>>>>>>>>>>>>>>>> ssww region'

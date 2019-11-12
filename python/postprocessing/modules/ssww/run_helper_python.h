@@ -67,26 +67,6 @@ TH2D * electron_2017_fr_hist = (TH2D*)electron_2017_file.Get("electron_frs");
 TH2D * muon_2018_fr_hist = (TH2D*)muon_2018_file.Get("muon_frs");
 TH2D * electron_2018_fr_hist = (TH2D*)electron_2018_file.Get("electron_frs");
 
- RVec<float> compute_z_masses_2el2mu(rvec_f el_pt, rvec_f el_eta, rvec_f el_phi, rvec_f el_mass, rvec_f mu_pt,
-                                   rvec_f mu_eta, rvec_f mu_phi, rvec_f mu_mass)
- {
-    ROOT::Math::PtEtaPhiMVector p1(mu_pt[0], mu_eta[0], mu_phi[0], mu_mass[0]);
-    ROOT::Math::PtEtaPhiMVector p2(mu_pt[1], mu_eta[1], mu_phi[1], mu_mass[1]);
-    ROOT::Math::PtEtaPhiMVector p3(el_pt[0], el_eta[0], el_phi[0], el_mass[0]);
-    ROOT::Math::PtEtaPhiMVector p4(el_pt[1], el_eta[1], el_phi[1], el_mass[1]);
-    auto mu_z = (p1 + p2).M();
-    auto el_z = (p3 + p4).M();
-    RVec<float> z_masses(2);
-    if (std::abs(mu_z - z_mass) < std::abs(el_z - z_mass)) {
-       z_masses[0] = mu_z;
-       z_masses[1] = el_z;
-    } else {
-       z_masses[0] = el_z;
-       z_masses[1] = mu_z;
-    }
-    return z_masses;
- }
-
 RVec<float> electron_efficiency_scale_factor(rvec_f pt, rvec_f eta, string year,bool id_err_up=false, bool reco_err_up=false) {
     TH2F * electron_reco_sf = 0;
     TH2F * electron_id_sf = 0;

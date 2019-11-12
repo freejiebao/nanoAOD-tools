@@ -101,6 +101,9 @@ if __name__ == '__main__':
                                 .Define("mjj_jerDown","calc_mjj(jet_pt_jerDown[0],jet_eta[0],jet_phi[0],jet_mass_jerDown[0],jet_pt_jerDown[1],jet_eta[1],jet_phi[1],jet_mass_jerDown[1])") \
                                 .Define("mjj_jesTotalUp","calc_mjj(jet_pt_jesTotalUp[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalUp[0],jet_pt_jesTotalUp[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalUp[1])") \
                                 .Define("mjj_jesTotalDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])")
+                elif args.poststep=='skim_l1':
+                    print '>>>>> skim_l1'
+                    df2 = df.Filter('nlepton==1','common cuts for one lepton')
                 elif args.poststep=='skim_l2':
                     df2 = df.Filter("nlepton==2").Filter("met > 30 && mll > 20 && (mjj > 100 || mjj_nom > 100 || mjj_jerUp > 100 || mjj_jerDown > 100 || mjj_jesTotalUp > 100 || mjj_jesTotalDown > 100)","common cuts for two leptons")
                 elif args.poststep=='skim_l3':
@@ -109,7 +112,8 @@ if __name__ == '__main__':
                 elif args.poststep=='skim_l4':
                     df2 = df.Filter('nlepton==4','common cuts for four leptons')
                     #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
-
+                else:
+                    assert(0)
                 if not os.path.exists(args.input+'/'+args.year+'/'+args.prestep):
                     os.mkdir(args.input+'/'+args.year+'/'+args.prestep)
                 df2.Snapshot("Events",args.input+'/'+args.year+'/'+args.prestep+'/'+samples[imc][i])

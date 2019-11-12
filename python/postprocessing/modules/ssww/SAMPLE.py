@@ -24,8 +24,9 @@ def set_samples(_year):
         sample['DPS']=['WWTo2L2Nu_DoubleScattering.root']
         sample['WWJJ_EWK']=['WWJJToLNuLNu_EWK.root']
         sample['WGJJ']=['WGJJToLNu_EWK_QCD.root']
-        #sample['DY']=['DYJetsToLL_Pt-50To100.root','DYJetsToLL_Pt-100To250.root','DYJetsToLL_Pt-250To400.root','DYJetsToLL_Pt-400To650.root','DYJetsToLL_Pt-650ToInf.root','DYJetsToLL_M-50.root','DYJetsToTauTau_ForcedMuEleDecay_M-50.root','DYJetsToTauTau_ForcedMuEleDecay_M-50_ext1.root']
-        #sample['DY']=['DY1JetsToLL_M-10to50.root','DY2JetsToLL_M-10to50.root','DY3JetsToLL_M-10to50.root','DY4JetsToLL_M-10to50.root','DY1JetsToLL_M-50.root','DY2JetsToLL_M-50.root','DY3JetsToLL_M-50.root','DY4JetsToLL_M-50.root']
+        #sample['DY1']=['DYJetsToLL_Pt-50To100.root','DYJetsToLL_Pt-100To250.root','DYJetsToLL_Pt-250To400.root','DYJetsToLL_Pt-400To650.root','DYJetsToLL_Pt-650ToInf.root','DYJetsToLL_M-50.root','DYJetsToTauTau_ForcedMuEleDecay_M-50.root','DYJetsToTauTau_ForcedMuEleDecay_M-50_ext1.root']
+        #sample['DY2']=['DY1JetsToLL_M-10to50.root','DY2JetsToLL_M-10to50.root','DY3JetsToLL_M-10to50.root','DY4JetsToLL_M-10to50.root','DY1JetsToLL_M-50.root','DY2JetsToLL_M-50.root','DY3JetsToLL_M-50.root','DY4JetsToLL_M-50.root']
+        #sample['DY3']=['DYJetsToLL_M-50.root','DYJetsToLL_M-10to50.root']
         sample['DY']=['DYJetsToLL_M-50.root']
         sample['ZG']=['ZGTo2LG.root']
         sample['ZZ']=['ZZTo2L2Nu.root','ZZTo4L.root','ZZTo2L2Q.root']
@@ -38,7 +39,8 @@ def set_samples(_year):
         sample['ggZZ']=['GluGluToContinToZZTo2e2mu.root','GluGluToContinToZZTo2e2nu.root','GluGluToContinToZZTo2e2tau.root','GluGluToContinToZZTo2mu2nu.root','GluGluToContinToZZTo2mu2tau.root','GluGluToContinToZZTo4e.root','GluGluToContinToZZTo4mu.root','GluGluToContinToZZTo4tau.root']
         sample['VVV']=['ZZZ.root','WZZ.root','WWZ.root','WWW.root']
         sample['WJets']=['WJetsToLNu.root']
-        data_chain = ['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG']
+        #data_chain = ['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG']
+        data_chain = ['DoubleMuon','DoubleEG']
         #mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','WWJJ_EWK','WGJJ','DY','ZG','ZZ','WW','ggWW','WZ0','WZ1','WZ2','top','ggZZ','VVV','WJets']
         mc_chain = ['DY','WJets']
     elif _year=='2017':
@@ -125,7 +127,7 @@ def plot_scheme(_year):
     else:
         data_chain = ['SingleMuon','MuonEG','DoubleMuon','EGamma']
         mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','DY0','DY1','DY2','DY3','ZG','ZZ','WW','ggWW','top','ggZZ','DPS0','DPS1','WWJJ_EWK0','WWJJ_EWK1','WGJJ','WZ0','WZ1','WZ2','VVV']
-
+    return plot_setting
 
 def insertStr(instr,pos_str,add_str):
     # change str to list

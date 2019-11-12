@@ -62,9 +62,12 @@ def submit(year):
             if args.transfer:
                 os.system('ssh ' + server + ' mkdir -p ' + destiny)
                 os.system('scp ' + tmp_path+iSample + '.root ' + server + ':' + destiny)
-                os.remove(tmp_path+iSample + '.root')
             else:
                 os.system('mv ' + tmp_path+iSample + '.root '+destiny)
+            try:
+                os.remove(tmp_path+iSample + '.root')
+            except:
+                pass
             new = 'Hadd[\'' + iSample + '\'] = ' + str(size) + '\n'
             with open('hadd_collection' + year + '.py', 'a+') as collect:
                 collect.write(new)
