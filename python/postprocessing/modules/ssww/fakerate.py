@@ -5,8 +5,9 @@ from array import array
 
 parser = argparse.ArgumentParser(description='manual to this script')
 parser.add_argument('-s','--subtract', help='subtract real lepton, default is false',action='store_true', default= False)
-parser.add_argument('-i','--input', help='input path', default= '/home/cmsdas/testuser01/jie/ssww_ntuple/skim_l1/')
+parser.add_argument('-i','--input', help='input path', default= '/home/cmsdas/testuser01/jie/ssww_ntuple/')
 parser.add_argument('-y','--year', help='which year, default is 2016', default= '2016', choices=('2016','2017','2018'))
+parser.add_argument('-post','--poststep', help='declare poststep path postfix', default= 'skim_l1')
 group = parser.add_mutually_exclusive_group()  # type: _MutuallyExclusiveGroup
 group.add_argument('-c','--channel', help='muon/electron fake rate', choices=('muon','electron'),default='muon')
 group.add_argument('-a','--all', help='muon and electron fake rate',action='store_true', default= False)
@@ -100,7 +101,7 @@ def calc(_channel,_year):
         else:
             exdata=['SingleMuon','SingleElectron','MuonEG','DoubleEG']
 
-        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[],'')
+        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[],args.poststep)
         # files = ['DoubleMuon_Run2017C.root']
         sig = ROOT.std.vector("string")(len(files))
         for i in range(0,len(files)):
@@ -142,7 +143,7 @@ def calc(_channel,_year):
         for imc in mc_chain:
             mc_chain_single = []
             mc_chain_single.append(imc)
-            files = SAMPLE.add_files(_year,args.input, samples, mc_chain_single,args.exclude,args.include,'')
+            files = SAMPLE.add_files(_year,args.input, samples, mc_chain_single,args.exclude,args.include,args.poststep)
             bkg = ROOT.std.vector("string")(len(files))
             if not len(files)==0:
                 for i in range(0,len(files)):
