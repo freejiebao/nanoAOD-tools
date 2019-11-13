@@ -36,8 +36,8 @@ def new_py(year):
     exec (handle)
     _Samples = Samples
 
-    #site = "T2_CN_Beijing"
-    site = "T2_CH_CERNBOX"
+    site = "T2_CN_Beijing"
+    #site = "T2_CH_CERNBOX"
 
     print(">>>>>>>>>>>>>>>>>>>> created directory for %s :" + b) % year
     print(">>>>>>>>>>>>>>>>>>>> the created configuration files:")
@@ -58,7 +58,7 @@ def new_py(year):
                 bsh = 'crab_script_data_%s.sh' % year
                 script = 'crab_script_data_%s.py' % year
                 split = 'LumiBased'
-                unitsPerJob = '87'
+                unitsPerJob = '47'
                 lumiMask = "config.Data.lumiMask = %s" % golden_json
             tmp_str = _Samples[iSample][iiSample]  # dataset
             # str_list.append(iSample)    # sample name

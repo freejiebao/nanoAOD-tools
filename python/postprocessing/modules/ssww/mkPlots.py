@@ -28,38 +28,43 @@ run_helper_header_path = "run_helper_python.h"
 ROOT.gInterpreter.Declare('#include "{}"'.format(run_helper_header_path))
 
 
+def histogram_model():
+    histogram_models={
+        'lep1_pt':['lepton_pt[0]',ROOT.RDF.TH1DModel('', "lep1_pt;l_{1}^{pt} (GeV);Event", 5, 25,300)],
+        'lep2_pt':['lepton_pt[1]',ROOT.RDF.TH1DModel('', "lep2_pt;l_{2}^{pt} (GeV);Event", 5, 20,300)],
+        'lep3_pt':['lepton_pt[2]',ROOT.RDF.TH1DModel('', "lep3_pt;l_{3}^{pt} (GeV);Event", 5, 20,300)],
+        'lep1_eta':['lepton_eta[0]',ROOT.RDF.TH1DModel('', "lep1_eta;l_{1}^{#eta} (GeV);Event", 10, -2.5,2.5)],
+        'lep2_eta':['lepton_eta[1]',ROOT.RDF.TH1DModel('', "lep2_eta;l_{2}^{#eta} (GeV);Event", 10, -2.5,2.5)],
+        'lep3_eta':['lepton_eta[2]',ROOT.RDF.TH1DModel('', "lep3_eta;l_{3}^{#eta} (GeV);Event", 10, -2.5,2.5)],
+        'jet1_pt':['jet_pt[0]',ROOT.RDF.TH1DModel('', "jet1_pt;j_{1}^{pt} (GeV);Event", 5, 20,300)],
+        'jet2_pt':['jet_pt[1]',ROOT.RDF.TH1DModel('', "jet2_pt;j_{2}^{pt} (GeV);Event", 5, 20,300)],
+        'jet1_eta':['jet_eta[0]',ROOT.RDF.TH1DModel('', "jet1_eta;j_{1}^{#eta} (GeV);Event", 10, -2.5,2.5)],
+        'jet2_eta':['jet_eta[1]',ROOT.RDF.TH1DModel('', "jet2_eta;j_{2}^{#eta} (GeV);Event", 10, -2.5,2.5)],
+        'mll':['mll',ROOT.RDF.TH1DModel('', "mll;m_{ll} (GeV);Event", 5, 20,300)],
+        'mjj_low':['mjj',ROOT.RDF.TH1DModel('', "mjj_low;m_{jj} (GeV);Event", 5, 100,500)],
+        'mjj':['mjj',ROOT.RDF.TH1DModel('', "mjj;m_{jj} (GeV);Event", 5, 500,2000)],
+    }
+
+    return histogram_models
+
 def plot_variables(sample,region,df):
     plots={}
-    histogram_models=[
-        ['lep1_pt','lepton_pt[0]',ROOT.RDF.TH1DModel('', "lep1_pt;l_{1}^{pt} (GeV);Event", 5, 25,300)],
-        ['lep2_pt','lepton_pt[1]',ROOT.RDF.TH1DModel('', "lep2_pt;l_{2}^{pt} (GeV);Event", 5, 20,300)],
-        ['lep3_pt','lepton_pt[2]',ROOT.RDF.TH1DModel('', "lep3_pt;l_{3}^{pt} (GeV);Event", 5, 20,300)],
-        ['lep1_eta','lepton_eta[0]',ROOT.RDF.TH1DModel('', "lep1_eta;l_{1}^{#eta} (GeV);Event", 10, -2.5,2.5)],
-        ['lep2_eta','lepton_eta[1]',ROOT.RDF.TH1DModel('', "lep2_eta;l_{2}^{#eta} (GeV);Event", 10, -2.5,2.5)],
-        ['lep3_eta','lepton_eta[2]',ROOT.RDF.TH1DModel('', "lep3_eta;l_{3}^{#eta} (GeV);Event", 10, -2.5,2.5)],
-        ['jet1_pt','jet_pt[0]',ROOT.RDF.TH1DModel('', "jet1_pt;j_{1}^{pt} (GeV);Event", 5, 20,300)],
-        ['jet2_pt','jet_pt[1]',ROOT.RDF.TH1DModel('', "jet2_pt;j_{2}^{pt} (GeV);Event", 5, 20,300)],
-        ['jet1_eta','jet_eta[0]',ROOT.RDF.TH1DModel('', "jet1_eta;j_{1}^{#eta} (GeV);Event", 10, -2.5,2.5)],
-        ['jet2_eta','jet_eta[1]',ROOT.RDF.TH1DModel('', "jet2_eta;j_{2}^{#eta} (GeV);Event", 10, -2.5,2.5)],
-        ['mll','mll',ROOT.RDF.TH1DModel('', "mll;m_{ll} (GeV);Event", 5, 20,300)],
-        ['mjj_low','mjj',ROOT.RDF.TH1DModel('', "mjj_low;m_{jj} (GeV);Event", 5, 100,500)],
-        ['mjj','mjj',ROOT.RDF.TH1DModel('', "mjj;m_{jj} (GeV);Event", 5, 500,2000)],
-    ]
-    for i in range(0,len(histogram_models)):
-        histo=histogram_models[i][2].GetHistogram()
+    histogram_models=histogram_model()
+    for ihis in histogram_models:
+        histo=histogram_models[ihis][1].GetHistogram()
         histo.Sumw2()
-        histo.SetName(sample+'_'+histogram_models[i][0])
-        plots[sample+'_'+histogram_models[i][0]]=df.Histo1D(histogram_models[i][2],histogram_models[i][1],'weight')
+        histo.SetName(sample+'_'+ihis)
+        plots[sample+'_'+ihis]=df.Histo1D(histogram_models[ihis][1],histogram_models[ihis][0],'weight')
 
     f=ROOT.TFile.Open('plots_'+region+'_'+args.year+'.root','update')
 
-    for i in range(0,len(histogram_models)):
+    for ihis in histogram_models:
         try:
-            ROOT.gDirectory.cd(histogram_models[i][0])
+            ROOT.gDirectory.cd(ihis)
         except:
-            ROOT.gDirectory.mkdir(histogram_models[i][0])
-            ROOT.gDirectory.cd(histogram_models[i][0])
-        plots[sample+'_'+histogram_models[i][0]].Write()
+            ROOT.gDirectory.mkdir(ihis)
+            ROOT.gDirectory.cd(ihis)
+        plots[sample+'_'+ihis].Write()
         ROOT.gDirectory.cd('..')
     f.Write("",ROOT.TObject.kOverwrite)
     f.Close()
@@ -69,19 +74,26 @@ def get_stack(region):
     print '>>>>>>>>>>>>>>>>>>>>>>> get stack'
     f=ROOT.TFile.Open('plots_'+region+'_'+args.year+'.root')
     plot_scheme=SAMPLE.plot_scheme(args.year)
-    # which directory to go
-    dirs=[]
+    histogram_models=histogram_model()
     for tkey in f.GetListOfKeys():
         key=tkey.GetName()
         #htmp=ROOT.TH1F
         #print(key)
         dir=f.cd(key)
+        plots=[]
         for i in dir.GetListOfKeys():
             print '>>>>> variable:',dir
+            hs=ROOT.THStack("hs","")
+            htotal=histogram_models[key].GetHistogram()
+            htotal.SetName('total_'+key)
             for j in plot_scheme:
+                htmp=histogram_models[key].GetHistogram()
+                htmp.SetName(j+'_'+key)
                 for k in plot_scheme[j]['sample']:
                     htmp.Add(k+'_'+key)
-
+                    htotal.Add(k+'_'+key)
+                #plots.append(htmp)
+                hs.Add(htmp)
 
 def ssww_region(sample,df):
     print '>>>>>>>>>>>>>>>>>>>>>>> ssww region'

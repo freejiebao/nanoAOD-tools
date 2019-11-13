@@ -275,7 +275,7 @@ class sswwProducer(Module):
         dr_flag = True
         for i in range(0, len(taus)):
             # if taus[i].pt > 18 and abs(taus[i].eta) < 2.3 and taus[i].idDecayMode and taus[i].idDecayModeNewDMs and taus[i].rawIso < 5:
-            if taus[i].pt > 18 and abs(taus[i].eta) < 2.3 and taus[i].rawIso<5 and taus[i].idDecayMode and taus[i].idDecayModeNewDMs:
+            if taus[i].pt > 18 and abs(taus[i].eta) < 2.3 and taus[i].idDecayMode and (taus[i].idMVAoldDM2017v2 >> 2 & 1):
                 for j in range(0, len(loose_leptons)):
                     dr_flag*=(deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, taus[i].eta, taus[i].phi) > 0.4)
                 if dr_flag:
@@ -301,7 +301,7 @@ class sswwProducer(Module):
         #if len(jets) < 2:
         #    return False
         for i in range(0, len(jets)):
-            if jets[i].pt < 30:
+            if jets[i].pt < 20: # for btag the jets pt just need to > 20
                 continue
 
             if abs(jets[i].eta) > 4.7:
@@ -315,8 +315,11 @@ class sswwProducer(Module):
             # actually jet related lepton maybe not loose
             loose_jets.append(i)
         # if jet multiplicity is needed, then remove below cut
-        #if len(loose_jets) < 2:
-        #    return False
+        if self.preSel:
+            if len(loose_jets) < 2:
+                return False
+            elif loose_jets[1].pt<30:
+                return False
 
         # decide whether lepton real
         #isprompt_mask = (0 << 0)  # isPrompt
@@ -507,8 +510,8 @@ class sswwProducer(Module):
         return True
 
 
-sswwModule2016 = lambda: sswwProducer(minObjects=1, maxObjects=4, preSel=True, year='2016')
-sswwModule2017 = lambda: sswwProducer(minObjects=1, maxObjects=4, preSel=True, year='2017')
-sswwModule2018 = lambda: sswwProducer(minObjects=1, maxObjects=4, preSel=True, year='2018')
+sswwModule2016 = lambda: sswwProducer(minObjects=2, maxObjects=4, preSel=True, year='2016')
+sswwModule2017 = lambda: sswwProducer(minObjects=2, maxObjects=4, preSel=True, year='2017')
+sswwModule2018 = lambda: sswwProducer(minObjects=2, maxObjects=4, preSel=True, year='2018')
 
 #python scripts/nano_postproc.py . /afs/cern.ch/work/j/jixiao/nano/2016/CMSSW_10_2_13/src/PhysicsTools/NanoAODTools/2016_DY_nanoAODv5.root -I PhysicsTools.NanoAODTools.postprocessing.modules.ssww.sswwModule_copy sswwModule2016 --bi python/postprocessing/scripts/ssww_keep_and_drop_2016.txt --bo python/postprocessing/scripts/ssww_output_branch_selection_2016.txt
