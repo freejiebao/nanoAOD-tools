@@ -27,7 +27,7 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 
 def get_plot(name, trigger, PID, files, isdata):
     eta_bin = array('f',[0., 0.5, 1., 1.479, 2., 2.5])
-    pt_bin = array('f',[10, 20, 25, 30, 35, 45])
+    pt_bin = array('f',[20, 25, 30, 35, 45])
     fake_cut = trigger + '&& lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
     tight_cut = trigger + '&& lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
     real_fake = trigger + '&& lepton_real[0] && lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
@@ -64,7 +64,7 @@ def get_plot(name, trigger, PID, files, isdata):
             .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
             .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>44.9) return 40.; else return (double)lepton_pt[0];') \
             .Define('weight',weight) \
-            .Histo2D(("fake_"+name+"_"+str(i), "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 5, pt_bin), "abs_eta", "pt_tmp","weight")
+            .Histo2D(("fake_"+name+"_"+str(i), "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 4, pt_bin), "abs_eta", "pt_tmp","weight")
         tmpplot.Sumw2()
         fake_plot.append(tmpplot)
 
@@ -72,7 +72,7 @@ def get_plot(name, trigger, PID, files, isdata):
             .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
             .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>44.9) return 40.; else return (double)lepton_pt[0];') \
             .Define('weight',weight) \
-            .Histo2D(("tight_"+name+"_"+str(i), "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 5, pt_bin), "abs_eta", "pt_tmp","weight")
+            .Histo2D(("tight_"+name+"_"+str(i), "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 4, pt_bin), "abs_eta", "pt_tmp","weight")
         tmpplot.Sumw2()
         tight_plot.append(tmpplot)
 

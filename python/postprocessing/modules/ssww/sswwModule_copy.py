@@ -318,7 +318,7 @@ class sswwProducer(Module):
         if self.preSel:
             if len(loose_jets) < 2:
                 return False
-            elif loose_jets[1].pt<30:
+            elif jets[loose_jets[1]].pt<30:
                 return False
 
         # decide whether lepton real
