@@ -200,7 +200,7 @@ class wgFakeLeptonProducer(Module):
             if abs(leptons[loose_leptons[0]][0].pdgId)==13:
                 if not (event.HLT_Mu17_TrkIsoVVL or event.HLT_Mu8):
                     return False
-                lepton_tkIsoId[0]=leptons[loose_leptons[0]][0].mishits
+                lepton_tkIsoId[0]=leptons[loose_leptons[0]][0].tkIsoId
             elif abs(leptons[loose_leptons[0]][0].pdgId)==11:
                 if not (event.HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30):
                     return False
