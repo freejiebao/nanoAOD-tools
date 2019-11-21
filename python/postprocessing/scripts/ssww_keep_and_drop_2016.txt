@@ -11,8 +11,13 @@ keep PuppiMET_phi
 keep RawMET_pt
 keep RawMET_phi
 keep PV_npvs
+keep Pileup_nTrueInt
 keep nTau
 keep Tau_*
+keep Tau_*
+# photon collection is used in prefiring weight
+keep nPhoton
+keep Photon_*
 keep Electron_*
 keep Muon_*
 keep nJet

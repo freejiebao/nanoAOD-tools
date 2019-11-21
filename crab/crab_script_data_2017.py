@@ -12,7 +12,7 @@ from  PhysicsTools.NanoAODTools.postprocessing.modules.common.PrefireCorr_ssww i
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.muonScaleResProducer_ssww import *
 # from  PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties import *
 
-p=PostProcessor(".",inputFiles(),None,os.environ['CMSSW_BASE']+"/python/PhysicsTools/NanoAODTools/postprocessing/scripts/ssww_keep_and_drop_2017.txt",modules=[countHistogramsModule(),PrefCorr_2017(),sswwModule2017(),muonScaleRes2017()],provenance=True,justcount=False,noOut=False,fwkJobReport=True,outputbranchsel = os.environ['CMSSW_BASE']+"/python/PhysicsTools/NanoAODTools/postprocessing/scripts/ssww_output_branch_selection_2017.txt")
+p=PostProcessor(".",inputFiles(),None,os.environ['CMSSW_BASE']+"/python/PhysicsTools/NanoAODTools/postprocessing/scripts/ssww_keep_and_drop_2017.txt",modules=[countHistogramsModule(),PrefCorr_2017(),sswwModule2017(),muonScaleRes2017()],provenance=True,justcount=False,noOut=False,fwkJobReport=True,jsonInput=runsAndLumis(),outputbranchsel = os.environ['CMSSW_BASE']+"/python/PhysicsTools/NanoAODTools/postprocessing/scripts/ssww_output_branch_selection_2017.txt")
 p.run()
 
 print "DONE"
