@@ -1,25 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="608f19c0-e35a-4ca5-b9bb-e7fc39aef6d9" name="Default Changelist" comment="update">
-      <change afterPath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crab/crab_script_2016_fake.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crab/crab_script_2016_fake.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crab/crab_script_data_2016_fake.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crab/crab_script_data_2016_fake.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/.idea/ssww.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python/postprocessing/scripts/ssww_keep_and_drop_2016_fake.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python/postprocessing/scripts/ssww_output_branch_selection_2016_fake.txt" afterDir="false" />
+    <list default="true" id="608f19c0-e35a-4ca5-b9bb-e7fc39aef6d9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crab/crab_script_2016.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/crab_script_2016.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crab/crab_script_2017.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/crab_script_2017.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crab/crab_script_2018.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/crab_script_2018.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crab/crab_script_data_2016.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/crab_script_data_2016.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crab/crab_script_data_2017.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/crab_script_data_2017.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crab/crab_script_data_2018.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/crab_script_data_2018.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/scripts/ssww_keep_and_drop_2016.txt" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/scripts/ssww_keep_and_drop_2016.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/scripts/ssww_keep_and_drop_2017.txt" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/scripts/ssww_keep_and_drop_2017.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/scripts/ssww_keep_and_drop_2018.txt" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/scripts/ssww_keep_and_drop_2018.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -166,14 +149,7 @@
       <workItem from="1573739025081" duration="10133000" />
       <workItem from="1574106069365" duration="407000" />
       <workItem from="1574106496211" duration="1755000" />
-      <workItem from="1574334034577" duration="8657000" />
-    </task>
-    <task id="LOCAL-00157" summary="update">
-      <created>1569723973817</created>
-      <option name="number" value="00157" />
-      <option name="presentableId" value="LOCAL-00157" />
-      <option name="project" value="LOCAL" />
-      <updated>1569723973817</updated>
+      <workItem from="1574334034577" duration="9244000" />
     </task>
     <task id="LOCAL-00158" summary="update">
       <created>1569724388365</created>
@@ -511,7 +487,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573731169969</updated>
     </task>
-    <option name="localTasksCounter" value="206" />
+    <task id="LOCAL-00206" summary="update">
+      <created>1574353245279</created>
+      <option name="number" value="00206" />
+      <option name="presentableId" value="LOCAL-00206" />
+      <option name="project" value="LOCAL" />
+      <updated>1574353245280</updated>
+    </task>
+    <option name="localTasksCounter" value="207" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
