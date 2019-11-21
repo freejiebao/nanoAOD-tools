@@ -180,7 +180,7 @@ class wgFakeLeptonProducer(Module):
                         is_loose_id = True
                     else:
                         is_loose_id = False
-                    store, is_fakeable_id, is_tight_id, n_fakeable_leptons, n_tight_leptons = self.electronID(leptons[i][0], n_fakeable_leptons, n_tight_leptons)
+                    store, is_fakeable_id, is_tight_id = self.electronID(leptons[i][0])
                     if store:
                         is_fakeable.append(is_fakeable_id)
                         is_tight.append(is_tight_id)
