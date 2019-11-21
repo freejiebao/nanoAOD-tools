@@ -29,6 +29,7 @@ class wgFakeLeptonProducer(Module):
         self.out.branch("event",  "l")
         self.out.branch("met",  "F")
         self.out.branch("mt",  "F")
+        self.out.branch("lepton_idx", "I", lenVar="nlepton")
         self.out.branch("lepton_pdg_id",  "I", lenVar="nlepton")
         self.out.branch("lepton_tight", "B", lenVar="nlepton")
         self.out.branch("lepton_fakeable", "B", lenVar="nlepton")
@@ -229,6 +230,7 @@ class wgFakeLeptonProducer(Module):
         if not found_other_jet:
             return False
 
+        lepton_idx=[loose_leptons[0]]
         lepton_pdg_id=[leptons[loose_leptons[0]][0].pdgId]
         lepton_tight=[is_tight[0]]
         lepton_fakeable=[is_fakeable[0]]
@@ -240,6 +242,7 @@ class wgFakeLeptonProducer(Module):
         self.out.fillBranch("event",event.event)
         self.out.fillBranch("met",event.MET_pt)
         self.out.fillBranch("mt",sqrt(2*leptons[loose_leptons[0]][0].pt*event.MET_pt*(1 - cos(event.MET_phi - leptons[loose_leptons[0]][0].phi))))
+        self.out.fillBranch("lepton_idx",lepton_idx)
         self.out.fillBranch("lepton_pdg_id",lepton_pdg_id)
         self.out.fillBranch("lepton_tight",lepton_tight)
         self.out.fillBranch("lepton_fakeable",lepton_fakeable)
