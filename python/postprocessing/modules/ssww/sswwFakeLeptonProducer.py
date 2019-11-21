@@ -39,6 +39,7 @@ class wgFakeLeptonProducer(Module):
         self.out.branch("lepton_mass", "F", lenVar="nlepton")
         self.out.branch("lepton_mishits", "I", lenVar="nlepton")
         self.out.branch("lepton_tkIsoId", "I", lenVar="nlepton")
+        self.out.branch("lepton_real", "B", lenVar="nlepton")
         self.out.branch("gen_weight", "F")
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         pass
@@ -241,6 +242,17 @@ class wgFakeLeptonProducer(Module):
         lepton_phi=[leptons[loose_leptons[0]][0].phi]
         lepton_mass=[leptons[loose_leptons[0]][0].mass]
 
+        lepton_real=[False]
+        if hasattr(event, 'nGenPart'):
+            genparts = Collection(event, "GenPart")
+            try:
+                for j in range(0, len(genparts)):
+                    if genparts[j].pt > 5 and abs(genparts[j].pdgId) == abs(leptons[loose_leptons[0]][0].pdgId) and ((genparts[j].statusFlags >> 0 & 1) or (genparts[j].statusFlags >> 5 & 1)) and deltaR(leptons[loose_leptons[0]][0].eta, leptons[loose_leptons[0]][0].phi, genparts[j].eta, genparts[j].phi) < 0.3:
+                        lepton_real[0]=True
+                        break
+            except:
+                pass
+
         self.out.fillBranch("run",event.run)
         self.out.fillBranch("lumi",event.luminosityBlock)
         self.out.fillBranch("event",event.event)
@@ -256,6 +268,7 @@ class wgFakeLeptonProducer(Module):
         self.out.fillBranch("lepton_mass",lepton_mass)
         self.out.fillBranch("lepton_mishits",lepton_mishits)
         self.out.fillBranch("lepton_tkIsoId",lepton_tkIsoId)
+        self.out.fillBranch("lepton_real",lepton_real)
         if hasattr(event,'Generator_weight'):
             self.out.fillBranch("gen_weight",event.Generator_weight)
 
