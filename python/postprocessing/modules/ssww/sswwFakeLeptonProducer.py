@@ -35,6 +35,8 @@ class wgFakeLeptonProducer(Module):
         self.out.branch("lepton_fakeable", "B", lenVar="nlepton")
         self.out.branch("lepton_pt", "F", lenVar="nlepton")
         self.out.branch("lepton_eta", "F", lenVar="nlepton")
+        self.out.branch("lepton_phi", "F", lenVar="nlepton")
+        self.out.branch("lepton_mass", "F", lenVar="nlepton")
         self.out.branch("lepton_mishits", "I", lenVar="nlepton")
         self.out.branch("lepton_tkIsoId", "I", lenVar="nlepton")
         self.out.branch("gen_weight", "F")
@@ -236,6 +238,8 @@ class wgFakeLeptonProducer(Module):
         lepton_fakeable=[is_fakeable[0]]
         lepton_pt=[leptons[loose_leptons[0]][0].pt]
         lepton_eta=[leptons[loose_leptons[0]][0].eta]
+        lepton_phi=[leptons[loose_leptons[0]][0].phi]
+        lepton_mass=[leptons[loose_leptons[0]][0].mass]
 
         self.out.fillBranch("run",event.run)
         self.out.fillBranch("lumi",event.luminosityBlock)
@@ -248,6 +252,8 @@ class wgFakeLeptonProducer(Module):
         self.out.fillBranch("lepton_fakeable",lepton_fakeable)
         self.out.fillBranch("lepton_pt",lepton_pt)
         self.out.fillBranch("lepton_eta",lepton_eta)
+        self.out.fillBranch("lepton_phi",lepton_phi)
+        self.out.fillBranch("lepton_mass",lepton_mass)
         self.out.fillBranch("lepton_mishits",lepton_mishits)
         self.out.fillBranch("lepton_tkIsoId",lepton_tkIsoId)
         if hasattr(event,'Generator_weight'):
