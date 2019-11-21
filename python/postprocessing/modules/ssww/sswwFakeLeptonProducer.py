@@ -157,7 +157,7 @@ class wgFakeLeptonProducer(Module):
             if (leptons[i][0].pdgId) == 13:
                 if leptons[i][0].pt < 10:
                     continue
-                if abs(leptons[i].eta) > 2.4:
+                if abs(leptons[i][0].eta) > 2.4:
                     continue
                 store, is_fakeable_id, is_tight_id = self.muonID(leptons[i][0])
 
