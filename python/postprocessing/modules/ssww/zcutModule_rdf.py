@@ -69,38 +69,38 @@ if __name__ == '__main__':
             if args.type=='data':
                 df1=df.Filter('nlepton==2','nlepton cut') \
                     .Filter('lepton_pt[0]>=23 && lepton_pt[1]>=10','lepton pt cut') \
-                    .Filter('abs(lepton_pdgId[0]*lepton_pdgId[1])==11*11','ee channel') \
+                    .Filter('abs(lepton_pdg_id[0]*lepton_pdg_id[1])==11*11','ee channel') \
                     .Filter('mll>60 && mll<120','mll cut')\
                     .Filter('HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ','trigger cut')\
                     .Define('lep1_pt','lepton_pt[0]') \
                     .Define('lep1_eta','lepton_eta[0]') \
-                    .Define('lep1_pdgId','lepton_pdgId[0]') \
+                    .Define('lep1_pdgId','lepton_pdg_id[0]') \
                     .Define('lep1_tight','lepton_tight[0]') \
                     .Define('lep1_mishits','lepton_mishits[0]') \
                     .Define('lep1_tkIsoId','lepton_tkIsoId[0]') \
                     .Define('lep2_pt','lepton_pt[1]') \
                     .Define('lep2_eta','lepton_eta[1]') \
-                    .Define('lep2_pdgId','lepton_pdgId[1]') \
+                    .Define('lep2_pdgId','lepton_pdg_id[1]') \
                     .Define('lep2_tight','lepton_tight[1]') \
                     .Define('lep2_mishits','lepton_mishits[1]') \
                     .Define('lep2_tkIsoId','lepton_tkIsoId[1]')
                 df1.Snapshot("Events",args.input+'/'+args.year+'/'+args.poststep+'/'+samples[args.dataset][i],KeepColumns())
 
             elif args.type=='mc':
-                df1=df.Filter('nLepton==2','nlepton cut')\
+                df1=df.Filter('nlepton==2','nlepton cut')\
                     .Filter('lepton_pt[0]>=23 && lepton_pt[1]>=10','lepton pt cut')\
-                    .Filter('abs(lepton_pdgId[0]*lepton_pdgId[1])==11*11','ee channel')\
+                    .Filter('abs(lepton_pdg_id[0]*lepton_pdg_id[1])==11*11','ee channel')\
                     .Filter('mll>60 && mll<120','mll cut') \
                     .Filter('HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ','trigger cut') \
                     .Define('lep1_pt','lepton_pt[0]') \
                     .Define('lep1_eta','lepton_eta[0]') \
-                    .Define('lep1_pdgId','lepton_pdgId[0]') \
+                    .Define('lep1_pdgId','lepton_pdg_id[0]') \
                     .Define('lep1_tight','lepton_tight[0]') \
                     .Define('lep1_mishits','lepton_mishits[0]') \
                     .Define('lep1_tkIsoId','lepton_tkIsoId[0]') \
                     .Define('lep2_pt','lepton_pt[1]') \
                     .Define('lep2_eta','lepton_eta[1]') \
-                    .Define('lep2_pdgId','lepton_pdgId[1]') \
+                    .Define('lep2_pdgId','lepton_pdg_id[1]') \
                     .Define('lep2_tight','lepton_tight[1]') \
                     .Define('lep2_mishits','lepton_mishits[1]') \
                     .Define('lep2_tkIsoId','lepton_tkIsoId[1]') \
