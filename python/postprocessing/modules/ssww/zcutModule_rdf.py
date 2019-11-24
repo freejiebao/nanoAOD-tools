@@ -25,13 +25,13 @@ def KeepColumns():
     branchList = ROOT.vector('string')()
 
     branches_data_2016=['run','lumi','event','lep1_pt','lep1_eta','lep1_pdgId','lep1_tight','lep1_mishits','lep1_tkIsoId','lep2_pt','lep2_eta','lep2_pdgId','lep2_tight','lep2_mishits','lep2_tkIsoId','mll']
-    branches_mc_2016=['run','lumi','event','lep1_pt','lep1_eta','lep1_pdgId','lep1_tight','lep1_mishits','lep1_tkIsoId','lep2_pt','lep2_eta','lep2_pdgId','lep2_tight','lep2_mishits','lep2_tkIsoId','genmatch2l','mll']
+    branches_mc_2016=['run','lumi','event','lep1_pt','lep1_eta','lep1_pdgId','lep1_tight','lep1_mishits','lep1_tkIsoId','lep2_pt','lep2_eta','lep2_pdgId','lep2_tight','lep2_mishits','lep2_tkIsoId','genmatch2l','mll','genweight']
 
     branches_data_2017=['run','lumi','event','lep1_pt','lep1_eta','lep1_pdgId','lep1_tight','lep1_mishits','lep1_tkIsoId','lep2_pt','lep2_eta','lep2_pdgId','lep2_tight','lep2_mishits','lep2_tkIsoId','mll']
-    branches_mc_2017=['run','lumi','event','lep1_pt','lep1_eta','lep1_pdgId','lep1_tight','lep1_mishits','lep1_tkIsoId','lep2_pt','lep2_eta','lep2_pdgId','lep2_tight','lep2_mishits','lep2_tkIsoId','genmatch2l','mll']
+    branches_mc_2017=['run','lumi','event','lep1_pt','lep1_eta','lep1_pdgId','lep1_tight','lep1_mishits','lep1_tkIsoId','lep2_pt','lep2_eta','lep2_pdgId','lep2_tight','lep2_mishits','lep2_tkIsoId','genmatch2l','mll','genweight']
 
     branches_data_2018=['run','lumi','event','lep1_pt','lep1_eta','lep1_pdgId','lep1_tight','lep1_mishits','lep1_tkIsoId','lep2_pt','lep2_eta','lep2_pdgId','lep2_tight','lep2_mishits','lep2_tkIsoId','mll']
-    branches_mc_2018=['run','lumi','event','lep1_pt','lep1_eta','lep1_pdgId','lep1_tight','lep1_mishits','lep1_tkIsoId','lep2_pt','lep2_eta','lep2_pdgId','lep2_tight','lep2_mishits','lep2_tkIsoId','genmatch2l','mll']
+    branches_mc_2018=['run','lumi','event','lep1_pt','lep1_eta','lep1_pdgId','lep1_tight','lep1_mishits','lep1_tkIsoId','lep2_pt','lep2_eta','lep2_pdgId','lep2_tight','lep2_mishits','lep2_tkIsoId','genmatch2l','mll','genweight']
 
     if args.type=='data':
         if args.year=='2016':
