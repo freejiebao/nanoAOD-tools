@@ -8,7 +8,7 @@ import numpy as np
 from array import array
 from math import sqrt
 
-from python.postprocessing.modules.ssww import SAMPLE
+import SAMPLE
 
 ROOT.ROOT.EnableImplicitMT(32)
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
@@ -74,7 +74,7 @@ def save_plot(files,weight,prefix):
     }
 
     for ifile in range(0,len(files)):
-        df=ROOT.ROOT.RDataFrame('Event',args.input+'/'+args.year+'/'+args.poststep+'/'+files[ifile])
+        df=ROOT.ROOT.RDataFrame('Event',args.input+'/'+args.year+'/'+args.prestep+'/'+files[ifile])
         df1=df.Filter(pt_cut)
         # pt_bin=['0.','20.']
         #eta_bin = ['0.','0.5','1.0','1.5','2.0','2.5']
