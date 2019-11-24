@@ -4,7 +4,7 @@ import ROOT
 import argparse
 from array import array
 import SAMPLE
-ROOT.ROOT.EnableImplicitMT(8)
+ROOT.ROOT.EnableImplicitMT(32)
 
 import numpy
 from math import sqrt
