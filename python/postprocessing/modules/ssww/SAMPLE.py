@@ -42,7 +42,8 @@ def set_samples(_year):
         sample['WJets']=['WJetsToLNu.root']
         #data_chain = ['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG']
         data_chain = ['DoubleMuon','DoubleEG']
-        mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','WWJJ_EWK','WGJJ','ZG','ZZ','WW','ggWW','WZ0','WZ1','WZ2','top','ggZZ','VVV','WJets','DY1','DY2','DY3','DY4']#,'DY']        #mc_chain = ['DY','WJets']
+        mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','WWJJ_EWK','WGJJ','ZG','ZZ','WW','ggWW','WZ0','WZ1','WZ2','top','ggZZ','VVV','WJets','DY1','DY2','DY3','DY4']#,'DY']
+        #mc_chain = ['DY','WJets']
     elif _year=='2017':
         sample['SingleMuon']=['SingleMuon_Run2017B.root','SingleMuon_Run2017C.root','SingleMuon_Run2017D.root','SingleMuon_Run2017E.root','SingleMuon_Run2017F.root']
         sample['SingleElectron']=['SingleElectron_Run2017B.root','SingleElectron_Run2017C.root','SingleElectron_Run2017D.root','SingleElectron_Run2017E.root','SingleElectron_Run2017F.root']

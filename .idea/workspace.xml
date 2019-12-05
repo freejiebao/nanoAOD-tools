@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="608f19c0-e35a-4ca5-b9bb-e7fc39aef6d9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/zcutModule_rdf.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/zcutModule_rdf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/SAMPLE.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/SAMPLE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/chargeflip_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/chargeflip_plot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/fakerate.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/fakerate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/run_helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/run_helper.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -152,14 +155,10 @@
       <workItem from="1574106496211" duration="1755000" />
       <workItem from="1574334034577" duration="9506000" />
       <workItem from="1574369080286" duration="6224000" />
-      <workItem from="1574463956679" duration="10987000" />
-    </task>
-    <task id="LOCAL-00173" summary="update">
-      <created>1569745916260</created>
-      <option name="number" value="00173" />
-      <option name="presentableId" value="LOCAL-00173" />
-      <option name="project" value="LOCAL" />
-      <updated>1569745916260</updated>
+      <workItem from="1574463956679" duration="13245000" />
+      <workItem from="1574954017582" duration="729000" />
+      <workItem from="1575405357822" duration="590000" />
+      <workItem from="1575579347105" duration="1536000" />
     </task>
     <task id="LOCAL-00174" summary="update">
       <created>1569746329838</created>
@@ -497,7 +496,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574556922919</updated>
     </task>
-    <option name="localTasksCounter" value="222" />
+    <task id="LOCAL-00222" summary="update">
+      <created>1574557070695</created>
+      <option name="number" value="00222" />
+      <option name="presentableId" value="LOCAL-00222" />
+      <option name="project" value="LOCAL" />
+      <updated>1574557070695</updated>
+    </task>
+    <option name="localTasksCounter" value="223" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

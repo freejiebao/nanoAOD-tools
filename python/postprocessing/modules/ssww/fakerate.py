@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser(description='manual to this script')
 parser.add_argument('-s','--subtract', help='subtract real lepton, default is false',action='store_true', default= False)
 parser.add_argument('-i','--input', help='input path', default= '/home/cmsdas/testuser01/jie/ssww_ntuple/')
 parser.add_argument('-y','--year', help='which year, default is 2016', default= '2016', choices=('2016','2017','2018'))
-parser.add_argument('-post','--poststep', help='declare poststep path postfix', default= 'skim_l1')
+parser.add_argument('-post','--poststep', help='declare poststep path postfix', default= 'fakelepton')
 group = parser.add_mutually_exclusive_group()  # type: _MutuallyExclusiveGroup
 group.add_argument('-c','--channel', help='muon/electron fake rate', choices=('muon','electron'),default='muon')
 group.add_argument('-a','--all', help='muon and electron fake rate',action='store_true', default= False)
@@ -28,10 +28,16 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 def get_plot(name, trigger, PID, files, isdata):
     eta_bin = array('f',[0., 0.5, 1., 1.479, 2., 2.5])
     pt_bin = array('f',[20, 25, 30, 35, 45])
+    '''
     fake_cut = trigger + '&& lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
     tight_cut = trigger + '&& lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
     real_fake = trigger + '&& lepton_real[0] && lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
     real_tight = trigger + '&& lepton_real[0] && lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
+    '''
+    fake_cut = 'lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
+    tight_cut = 'lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
+    real_fake = 'lepton_real[0] && lepton_fakeable[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
+    real_tight = 'lepton_real[0] && lepton_tight[0] && abs(lepton_pdg_id[0]) ==' + PID + '&& met < 30'
 
     tight_plot = []
     fake_plot = []
@@ -60,16 +66,14 @@ def get_plot(name, trigger, PID, files, isdata):
         df = ROOT.ROOT.RDataFrame("Events", files[i])
         print '>>>>>>>>>>>>>>>>>>>> the opened file: ',files[i]
         # For simplicity, select only events with exactly two muons and require opposite charge
-        tmpplot=df.Filter('nlepton == 1 && njet>0').Filter(fake_selections) \
-            .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
+        tmpplot=df.Filter('nlepton == 1 && njet>0').Filter(fake_selections).Filter('mt<20') \
             .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>44.9) return 40.; else return (double)lepton_pt[0];') \
             .Define('weight',weight) \
             .Histo2D(("fake_"+name+"_"+str(i), "fake;|#eta|;p_{T} (GeV)", 5, eta_bin, 4, pt_bin), "abs_eta", "pt_tmp","weight")
         tmpplot.Sumw2()
         fake_plot.append(tmpplot)
 
-        tmpplot = df.Filter('nlepton == 1 && njet>0').Filter(true_selections) \
-            .Define('mt','sqrt(2*lepton_pt[0]*met*(1 - cos(met_phi - lepton_phi[0])))').Filter('mt<20') \
+        tmpplot = df.Filter('nlepton == 1 && njet>0').Filter(true_selections).Filter('mt<20')\
             .Define('abs_eta','abs(lepton_eta[0])').Define('pt_tmp','if(lepton_pt[0]>44.9) return 40.; else return (double)lepton_pt[0];') \
             .Define('weight',weight) \
             .Histo2D(("tight_"+name+"_"+str(i), "tight;|#eta|;p_{T} (GeV)", 5, eta_bin, 4, pt_bin), "abs_eta", "pt_tmp","weight")

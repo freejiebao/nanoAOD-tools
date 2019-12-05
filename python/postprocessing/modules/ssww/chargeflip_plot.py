@@ -43,7 +43,7 @@ def save_plot(files,weight,prefix):
     '''
     pt_cut=''
     if args.ptbin=='highpt':
-        pt_cut='lep1_pt > 23 &&  lep2_pt > 50 && lep1_tight && lep2_tight && abs(mll-91.2)<15'
+        pt_cut='lep1_pt > 23 &&  lep2_pt > 23 && lep1_tight && lep2_tight && abs(mll-91.2)<15'
     elif args.ptbin=='lowpt2':
         pt_cut='lep1_pt > 23 &&  lep2_pt <= 50 && lep2_pt > 35 && lep1_tight && lep2_tight && abs(mll-91.2)<15'
     elif args.ptbin=='lowpt1':
