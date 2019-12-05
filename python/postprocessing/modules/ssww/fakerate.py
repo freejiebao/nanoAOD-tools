@@ -58,7 +58,7 @@ def get_plot(name, trigger, PID, files, isdata):
             tmp_name=files[i].split('/')
             sample_name=tmp_name[len(tmp_name)-1]
             xsweight=str(_XSDB[sample_name[:len(sample_name)-5]]['xsweight'])
-            weight=str(xsweight)+'*gen_weight/abs(gen_weight)'
+            weight=str(xsweight)+'*(gen_weight/abs(gen_weight))'
             #tmpfile=ROOT.TFile(files[i])
             #xsweight=tmpfile.Get("xsweight").GetBinContent(1)
             #tmpfile.Close()
@@ -117,7 +117,7 @@ def calc(_channel,_year):
             exdata=['SingleMuon','DoubleMuon','MuonEG']
         else:
             exdata=['SingleMuon','SingleElectron','MuonEG','DoubleMuon']
-        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[],'')
+        files = SAMPLE.add_files(_year,args.input, samples, data_chain,exdata,[],args.poststep)
         sig = ROOT.std.vector("string")(len(files))
         for i in range(0,len(files)):
             sig[i]=files[i]
@@ -151,7 +151,9 @@ def calc(_channel,_year):
             bkg = ROOT.std.vector("string")(len(files))
             if not len(files)==0:
                 for i in range(0,len(files)):
+                    print ">>>>>>>> i", files[i]
                     bkg[i] = files[i]
+                print ">>>>>>>", imc, PID, bkg
                 h2_fake_mc, h2_true_mc = get_plot(imc,trigger, PID, bkg, False)
                 h2_fake_mc_plot.append(h2_fake_mc)
                 h2_true_mc_plot.append(h2_true_mc)
