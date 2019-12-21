@@ -3,9 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="608f19c0-e35a-4ca5-b9bb-e7fc39aef6d9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crab/crab_collection2016.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/crab_collection2016.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/fakerate.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/fakerate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/run_helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/run_helper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/sswwFakeLeptonProducer.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/sswwFakeLeptonProducer.py" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,6 +27,11 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1OcgJ1JI1pp36YiX61DCPqbZp2o" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -51,18 +58,6 @@
       <recent name="$PROJECT_DIR$/interface" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="RunManager">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="nanoAOD-tools" />
@@ -86,6 +81,18 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -155,14 +162,15 @@
       <workItem from="1574463956679" duration="13245000" />
       <workItem from="1574954017582" duration="729000" />
       <workItem from="1575405357822" duration="590000" />
-      <workItem from="1575579347105" duration="2544000" />
-    </task>
-    <task id="LOCAL-00175" summary="update">
-      <created>1569767093459</created>
-      <option name="number" value="00175" />
-      <option name="presentableId" value="LOCAL-00175" />
-      <option name="project" value="LOCAL" />
-      <updated>1569767093459</updated>
+      <workItem from="1575579347105" duration="15881000" />
+      <workItem from="1575885195542" duration="229000" />
+      <workItem from="1576041907357" duration="837000" />
+      <workItem from="1576165096709" duration="641000" />
+      <workItem from="1576342146248" duration="625000" />
+      <workItem from="1576484620209" duration="14000" />
+      <workItem from="1576843215652" duration="1441000" />
+      <workItem from="1576845550538" duration="417000" />
+      <workItem from="1576909841792" duration="2394000" />
     </task>
     <task id="LOCAL-00176" summary="update">
       <created>1569817352893</created>
@@ -500,7 +508,14 @@
       <option name="project" value="LOCAL" />
       <updated>1575585723524</updated>
     </task>
-    <option name="localTasksCounter" value="224" />
+    <task id="LOCAL-00224" summary="update">
+      <created>1575587539046</created>
+      <option name="number" value="00224" />
+      <option name="presentableId" value="LOCAL-00224" />
+      <option name="project" value="LOCAL" />
+      <updated>1575587539046</updated>
+    </task>
+    <option name="localTasksCounter" value="225" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -536,5 +551,23 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update" />
     <option name="LAST_COMMIT_MESSAGE" value="update" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="452" y="203" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1576845488042">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="452" y="203" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1576845488042" />
+    <state x="528" y="261" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1576909780741">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="528" y="261" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1576909780741" />
+    <state x="341" y="164" key="SettingsEditor" timestamp="1576845524901">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="341" y="164" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1576845524901" />
+    <state x="494" y="359" key="com.intellij.ide.util.TipDialog" timestamp="1576845549270">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="494" y="359" key="com.intellij.ide.util.TipDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1576845549270" />
   </component>
 </project>

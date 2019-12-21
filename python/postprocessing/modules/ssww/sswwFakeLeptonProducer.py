@@ -142,6 +142,7 @@ class wgFakeLeptonProducer(Module):
         """process event, return True (go to next module) or False (fail, go to next event)"""
         input = ["Electron", "Muon"]
         coll = [Collection(event, x) for x in input]
+        # merge muon and electron collections together, and ordered according pt
         leptons = [(coll[j][i], j, i) for j in xrange(len(input)) for i in xrange(len(coll[j]))]
         if self.selector: leptons = filter(lambda (obj, j, i): self.selector[j](obj), leptons)
         leptons.sort(key=self.sortkey, reverse=self.reverse)
@@ -158,12 +159,12 @@ class wgFakeLeptonProducer(Module):
 
         for i in range(0,len(leptons)):
 
-            if (leptons[i][0].pdgId) == 13:
+            if abs(leptons[i][0].pdgId) == 13:
                 if leptons[i][0].pt < 10:
                     continue
                 if abs(leptons[i][0].eta) > 2.4:
                     continue
-                store, is_fakeable_id, is_tight_id = self.muonID(leptons[i][0])
+                store, is_fakeable_id, is_tight_id = self.muonID(leptons[i][0]) # is this muon fakeable or tight
 
                 if store:
                     is_fakeable.append(is_fakeable_id)

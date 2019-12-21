@@ -23,6 +23,15 @@ run_helper_header_path = "run_helper_python.h"
 
 ROOT.gInterpreter.Declare('#include "{}"'.format(run_helper_header_path))
 
+def DropColumns(column_list,drop_branches):
+    branchList = ROOT.vector('string')()
+    for i in range(0,len(column_list)):
+        if not (column_list[i] in drop_branches):
+            branchList.push_back(column_list[i])
+    #for i in range(0,len(branchList)):
+    #    print branchList[i]
+    return branchList
+
 def remove_text(a, year):
     xs_file_path='../../../../crab/'
     with open(xs_file_path+'xs_' + year + '_nano_v4.py', 'r') as f:
@@ -41,14 +50,20 @@ if __name__ == '__main__':
         for i in range(0,len(samples[imc])):
             # xs weight must go the first, or the input name will change
             if args.xsweight:
+                tmp_path='/tmp/jixiao%s/' % year
+                if not os.path.exists(tmp_path):
+                    os.mkdir(tmp_path)
+                print '>>>>>>>>>>>>>>>>>>>> skim %s' % samples[imc][i]
+                f=ROOT.TFile.Open(args.input+args.year+'/'+args.prestep+'/'+samples[imc][i])
+                df = ROOT.ROOT.RDataFrame("Events",f)
+                '''
                 if not os.path.exists('xs_' + args.year + '_nano_v4_v1.py'):
                     collect = open('xs_' + args.year + '_nano_v4_v1.py', "w")
                     collect.write('XSDB = {} \n')
                     collect.close()
                 else:
                     pass
-
-                f=ROOT.TFile(args.input+args.year+'/'+samples[imc][i])
+                '''
                 xs_file_path='../../../../crab/'
                 sample_sub=samples[imc][i].strip('.root')
                 lumi=SAMPLE.get_lumi(args.year)
@@ -58,18 +73,22 @@ if __name__ == '__main__':
                 #print _XSDB
                 try:
                     weight=_XSDB[sample_sub]['xs']*_XSDB[sample_sub]['kFactor']*lumi*1000/(f.Get("nEventsGenWeighted").GetBinContent(1))
+                    df1=df.Define('xsweight',str(weight)+'*(gen_weight/abs(gen_weight))')
+                    df1.Snapshot("Events",tmp_path+'/'+samples[imc][i],DropColumns(df1.GetColumnNames(),['gen_weight']))
+                    f.Close()
+                    os.system('mv ' +tmp_path+'/'+samples[imc][i]+' '+args.input+args.year+'/'+args.prestep)
                     print '>>>>>>>>>>>>>>>>>>>> xs weight for %s: %s' % (samples[imc][i],weight)
                 except:
                     print("==================== Error: cannot find %s in XSDB") % samples[imc][i]
+                    f.Close()
                     assert False
+
+                '''
                 _XSDB[sample_sub]['xsweight']=weight
                 new = 'XSDB[\"' + sample_sub + '\"] = ' + str(_XSDB[sample_sub]) + '\n'
                 with open('xs_' + args.year + '_nano_v4_v1.py', 'a+') as collect:
                     collect.write(new)
-                #h_xsweight=ROOT.TH1D('xsweight','xsweight',1,0,1)
-                #h_xsweight.SetBinContent(1,weight)
-                #h_xsweight.Write()
-                f.Close()
+                '''
 
             #if args.fixreal:
             #    df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+samples[imc][i])
