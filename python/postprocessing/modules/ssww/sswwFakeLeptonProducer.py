@@ -203,12 +203,12 @@ class wgFakeLeptonProducer(Module):
         lepton_tkIsoId=[-9999]
         if len(loose_leptons)==1:
             if abs(leptons[loose_leptons[0]][0].pdgId)==13:
-                if not (event.HLT_Mu17_TrkIsoVVL or event.HLT_Mu8):
-                    return False
+                #if not (event.HLT_Mu17_TrkIsoVVL or event.HLT_Mu8):
+                #    return False
                 lepton_tkIsoId[0]=leptons[loose_leptons[0]][0].tkIsoId
             elif abs(leptons[loose_leptons[0]][0].pdgId)==11:
-                if not (event.HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30):
-                    return False
+                #if not (event.HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30):
+                #    return False
                 lepton_mishits[0]=leptons[loose_leptons[0]][0].lostHits
         else:
             return False
@@ -230,6 +230,7 @@ class wgFakeLeptonProducer(Module):
 
             if deltaR(leptons[loose_leptons[0]][0].eta,leptons[loose_leptons[0]][0].phi,jets[i].eta,jets[i].phi) > 0.3:
                 found_other_jet = True
+                break
 
         if not found_other_jet:
             return False

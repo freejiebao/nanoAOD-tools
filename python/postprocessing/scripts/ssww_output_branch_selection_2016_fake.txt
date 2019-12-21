@@ -7,3 +7,4 @@ keep Flag_HBHENoiseIsoFilter
 keep Flag_EcalDeadCellTriggerPrimitiveFilter
 keep Flag_BadPFMuonFilter
 keep Flag_eeBadScFilter
+keep HLT_*

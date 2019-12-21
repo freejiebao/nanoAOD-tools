@@ -14,9 +14,7 @@ keep Electron_*
 keep Muon_*
 keep nJet
 keep Jet_*
-keep HLT_Mu17_TrkIsoVVL
-keep HLT_Mu8
-keep HLT_Ele12_CaloIdL_TrackIdL_IsoVL_PFJet30
+keep HLT_*
 keep nGenPart
 keep GenPart_*
 keep nGenDressedLepton
