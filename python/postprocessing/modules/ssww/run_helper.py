@@ -246,11 +246,11 @@ if __name__ == '__main__':
                     print "==================== Error: directory does not exist"
                     assert False
 
-                f=ROOT.TFile.Open(args.input+args.year+'/'+args.poststep+'/'+samples[imc][i])
+                f=ROOT.TFile.Open(args.input+args.year+'/'+args.poststep+'/'+samples[idata][i])
                 df = ROOT.ROOT.RDataFrame("Events",f)
                 brach_list=df.GetColumnNames()
                 if ("lepton_fake_weight" in brach_list):
-                    print "==================== Warning: lepton_fake_weight already exist in %s, please check" %samples[imc][i]
+                    print "==================== Warning: lepton_fake_weight already exist in %s, please check" %samples[idata][i]
                     continue
 
                 df1=df.Define("lepton_fake_weight","get_fake_lepton_weight(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"nominal\")") \
@@ -260,5 +260,5 @@ if __name__ == '__main__':
                 tmp_path='/tmp/jixiao%s/' % args.year
                 if not os.path.exists(tmp_path):
                     os.mkdir(tmp_path)
-                df1.Snapshot("Events",tmp_path+'/'+samples[imc][i],DropColumns(df1.GetColumnNames(),[]))
-                os.system('mv ' +tmp_path+'/'+samples[imc][i]+' '+args.input+args.year+'/'+args.poststep)
+                df1.Snapshot("Events",tmp_path+'/'+samples[idata][i],DropColumns(df1.GetColumnNames(),[]))
+                os.system('mv ' +tmp_path+'/'+samples[idata][i]+' '+args.input+args.year+'/'+args.poststep)
