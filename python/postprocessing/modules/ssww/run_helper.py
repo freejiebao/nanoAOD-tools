@@ -10,6 +10,8 @@ parser.add_argument('-i','--input', help='input path', default= '/home/cmsdas/te
 parser.add_argument('-t','--theory', help='get the theoretic un certainty, default is false',action='store_true', default= False)
 parser.add_argument('-x','--xsweight', help='get xs scale factor, default is false',action='store_true', default= False)
 parser.add_argument('-s','--skim', help='do 1st skim, default is false',action='store_true', default= False)
+parser.add_argument('-e','--eff_sf', help='calculate efficiency sf for electron and muon, default is false',action='store_true', default= False)
+parser.add_argument('-f','--fake_weight', help='calculate fake weight for each event, default is false',action='store_true', default= False)
 #parser.add_argument('-tr','--trigger', help='trigger maker, default is false',action='store_true', default= False)
 parser.add_argument('-post','--poststep', help='declare poststep path postfix', default= 'skim')
 parser.add_argument('-pre','--prestep', help='declare prestep path postfix', default= '')
@@ -50,10 +52,10 @@ if __name__ == '__main__':
         for i in range(0,len(samples[imc])):
             # xs weight must go the first, or the input name will change
             if args.xsweight:
-                tmp_path='/tmp/jixiao%s/' % year
+                tmp_path='/tmp/jixiao%s/' % args.year
                 if not os.path.exists(tmp_path):
                     os.mkdir(tmp_path)
-                print '>>>>>>>>>>>>>>>>>>>> skim %s' % samples[imc][i]
+                print '>>>>>>>>>>>>>>>>>>>> xsweight %s' % samples[imc][i]
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.prestep+'/'+samples[imc][i])
                 df = ROOT.ROOT.RDataFrame("Events",f)
                 '''
@@ -82,7 +84,6 @@ if __name__ == '__main__':
                     print("==================== Error: cannot find %s in XSDB") % samples[imc][i]
                     f.Close()
                     assert False
-
                 '''
                 _XSDB[sample_sub]['xsweight']=weight
                 new = 'XSDB[\"' + sample_sub + '\"] = ' + str(_XSDB[sample_sub]) + '\n'
@@ -90,10 +91,56 @@ if __name__ == '__main__':
                     collect.write(new)
                 '''
 
-            #if args.fixreal:
-            #    df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+samples[imc][i])
-            #    df01=df.Filter("nGenPart>0").Define("lepton_real_new","lepton_real_code(nlepton,lepton_pdg_id,lepton_pt,lepton_eta,lepton_phi,nGenPart,GenPart_pdgId,GenPart_pt,GenPart_statusFlags,GenPart_eta,GenPart_phi)")
-            #    df01.Snapshot("Events",args.input+args.year+'/fix_'+samples[imc][i])
+            if args.eff_sf:
+                if not os.path.exists(args.input+'/'+args.year+'/'+args.poststep):
+                    print "==================== Error: directory does not exist"
+                    assert False
+
+                f=ROOT.TFile.Open(args.input+args.year+'/'+args.poststep+'/'+samples[imc][i])
+                df = ROOT.ROOT.RDataFrame("Events",f)
+                brach_list=df.GetColumnNames()
+                if ("lepton_sf" in brach_list) or ("lepton_sf_up" in brach_list) or ("lepton_sf_down" in brach_list):
+                    print "==================== Warning: lepton_sf already exist in %s, please check" %samples[imc][i]
+                    continue
+                df1=df.Define("lepton_sf","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"nom\")")\
+                    .Define("lepton_sf_muon_id_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"muon_id_up\")")\
+                    .Define("lepton_sf_muon_id_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"muon_id_down\")")\
+                    .Define("lepton_sf_muon_iso_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"muon_iso_up\")")\
+                    .Define("lepton_sf_muon_iso_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"muon_iso_down\")") \
+                    .Define("lepton_sf_electron_id_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"electron_id_up\")") \
+                    .Define("lepton_sf_electron_id_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"electron_id_down\")") \
+                    .Define("lepton_sf_electron_reco_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"electron_reco_up\")") \
+                    .Define("lepton_sf_electron_reco_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"electron_reco_down\")")
+                '''
+                df1=df.Define("lepton_sf","efficiency_scale_factor(lepton_pt,lepton_eta,"+args.year+",\"nom\")")
+                '''
+                tmp_path='/tmp/jixiao%s/' % args.year
+                if not os.path.exists(tmp_path):
+                    os.mkdir(tmp_path)
+                df1.Snapshot("Events",tmp_path+'/'+samples[imc][i],DropColumns(df1.GetColumnNames(),[]))
+                os.system('mv ' +tmp_path+'/'+samples[imc][i]+' '+args.input+args.year+'/'+args.poststep)
+
+            if args.fake_weight:
+                if not os.path.exists(args.input+'/'+args.year+'/'+args.poststep):
+                    print "==================== Error: directory does not exist"
+                    assert False
+
+                f=ROOT.TFile.Open(args.input+args.year+'/'+args.poststep+'/'+samples[imc][i])
+                df = ROOT.ROOT.RDataFrame("Events",f)
+                brach_list=df.GetColumnNames()
+                if ("lepton_fake_weight" in brach_list):
+                    print "==================== Warning: lepton_fake_weight already exist in %s, please check" %samples[imc][i]
+                    continue
+
+                df1=df.Define("lepton_fake_weight","get_fake_lepton_weight(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"nominal\")") \
+                    .Define("lepton_fake_weight_up","get_fake_lepton_weight(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"up\")")\
+                    .Define("lepton_fake_weight_down","get_fake_lepton_weight(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"down\")")
+
+                tmp_path='/tmp/jixiao%s/' % args.year
+                if not os.path.exists(tmp_path):
+                    os.mkdir(tmp_path)
+                df1.Snapshot("Events",tmp_path+'/'+samples[imc][i],DropColumns(df1.GetColumnNames(),[]))
+                os.system('mv ' +tmp_path+'/'+samples[imc][i]+' '+args.input+args.year+'/'+args.poststep)
 
             # theoretic uncertainties using nanoAOD framework
             if args.theory:
@@ -193,3 +240,25 @@ if __name__ == '__main__':
                 df2.Snapshot("Events",args.input+'/'+args.year+'/'+args.poststep+'/'+samples[idata][i])
                 allCutsReport = df.Report()
                 allCutsReport.Print()
+
+            if args.fake_weight:
+                if not os.path.exists(args.input+'/'+args.year+'/'+args.poststep):
+                    print "==================== Error: directory does not exist"
+                    assert False
+
+                f=ROOT.TFile.Open(args.input+args.year+'/'+args.poststep+'/'+samples[imc][i])
+                df = ROOT.ROOT.RDataFrame("Events",f)
+                brach_list=df.GetColumnNames()
+                if ("lepton_fake_weight" in brach_list):
+                    print "==================== Warning: lepton_fake_weight already exist in %s, please check" %samples[imc][i]
+                    continue
+
+                df1=df.Define("lepton_fake_weight","get_fake_lepton_weight(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"nominal\")") \
+                    .Define("lepton_fake_weight_up","get_fake_lepton_weight(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"up\")") \
+                    .Define("lepton_fake_weight_down","get_fake_lepton_weight(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"down\")")
+
+                tmp_path='/tmp/jixiao%s/' % args.year
+                if not os.path.exists(tmp_path):
+                    os.mkdir(tmp_path)
+                df1.Snapshot("Events",tmp_path+'/'+samples[imc][i],DropColumns(df1.GetColumnNames(),[]))
+                os.system('mv ' +tmp_path+'/'+samples[imc][i]+' '+args.input+args.year+'/'+args.poststep)
