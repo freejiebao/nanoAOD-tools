@@ -198,7 +198,6 @@ RVec<float> efficiency_scale_factor(rvec_f pt,rvec_f eta,rvec_i pdg_id,string ye
         electron_err_reco="down";
     }
 
-    RVec<float> sf(pdg_id.size());
     for (size_t i = 0; i < pdg_id.size(); i++) {
         if (abs(pdg_id[i])==13){
             sf[i]=muon_efficiency_scale_factor(pt[i],eta[i],year, muon_id_sf,muon_iso_sf,muon_err_id,muon_err_iso);
@@ -236,7 +235,7 @@ RVec<float> get_fake_lepton_weight(rvec_f pt, rvec_f eta, rvec_i pdg_id, string 
         int etabin;
         int ptbin;
         float prob;
-        if (abs(pdg_id[i]==13)){
+        if (abs(pdg_id[i])==13){
             etabin = fr_hist_muon->GetXaxis()->FindFixBin(myeta);
             ptbin = fr_hist_muon->GetYaxis()->FindFixBin(mypt);
             prob = fr_hist_muon->GetBinContent(etabin,ptbin);
@@ -244,7 +243,7 @@ RVec<float> get_fake_lepton_weight(rvec_f pt, rvec_f eta, rvec_i pdg_id, string 
             else if (syst == "down") prob -= fr_hist_muon->GetBinError(etabin,ptbin);
             else assert(syst == "nominal");
         }
-        else if (abs(pdg_id[i]==11)){
+        else if (abs(pdg_id[i])==11){
             etabin = fr_hist_electron->GetXaxis()->FindFixBin(myeta);
             ptbin = fr_hist_electron->GetYaxis()->FindFixBin(mypt);
             prob = fr_hist_electron->GetBinContent(etabin,ptbin);
