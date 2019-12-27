@@ -58,6 +58,10 @@ if __name__ == '__main__':
                 print '>>>>>>>>>>>>>>>>>>>> xsweight %s' % samples[imc][i]
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.prestep+'/'+samples[imc][i])
                 df = ROOT.ROOT.RDataFrame("Events",f)
+                brach_list=df.GetColumnNames()
+                if ("xsweight" in brach_list):
+                    print "==================== Warning: xsweight already exist in %s, please check" %samples[imc][i]
+                    continue
                 '''
                 if not os.path.exists('xs_' + args.year + '_nano_v4_v1.py'):
                     collect = open('xs_' + args.year + '_nano_v4_v1.py', "w")
