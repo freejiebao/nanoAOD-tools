@@ -89,7 +89,7 @@ float electron_efficiency_scale_factor(float pt, float eta, TH2F* electron_reco_
     return sf_id*sf_reco;
 }
 
-float muon_efficiency_scale_factor(float pt,float eta,TH2D * muon_iso_sf, TH2D * muon_id_sf, string year,string id_err="nom",string iso_err="nom") {
+float muon_efficiency_scale_factor(float pt,float eta, string year,TH2D * muon_iso_sf, TH2D * muon_id_sf,string id_err="nom",string iso_err="nom") {
     int muon_iso_sf_xaxisbin = -1;
     int muon_iso_sf_yaxisbin = -1;
     if (year == "2016") {
