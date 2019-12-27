@@ -132,9 +132,9 @@ if __name__ == '__main__':
                     print "==================== Warning: lepton_fake_weight already exist in %s, please check" %samples[imc][i]
                     continue
 
-                df1=df.Define("lepton_fake_weight","get_fake_lepton_weight(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"nominal\")") \
-                    .Define("lepton_fake_weight_up","get_fake_lepton_weight(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"up\")")\
-                    .Define("lepton_fake_weight_down","get_fake_lepton_weight(lepton_pt,lepton_eta,lepton_pdg_id,"+args.year+",\"down\")")
+                df1=df.Define("lepton_fake_weight","get_fake_lepton_weight(lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"nominal\")") \
+                    .Define("lepton_fake_weight_up","get_fake_lepton_weight(lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"up\")")\
+                    .Define("lepton_fake_weight_down","get_fake_lepton_weight(lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"down\")")
 
                 tmp_path='/tmp/jixiao%s/' % args.year
                 if not os.path.exists(tmp_path):
