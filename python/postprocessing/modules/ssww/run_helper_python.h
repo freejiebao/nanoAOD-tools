@@ -21,6 +21,7 @@ using namespace ROOT::VecOps;
 using RNode = ROOT::RDF::RNode;
 using rvec_f = const RVec<float> &;
 using rvec_i = const RVec<int> &;
+using rvec_b = const RVec<bool> &;
 
 // match leptons to gen information
 // reference to: https://github.com/root-project/root/blob/master/tutorials/dataframe/df103_NanoAODHiggsAnalysis_python.h
@@ -212,7 +213,7 @@ RVec<float> efficiency_scale_factor(rvec_f pt,rvec_f eta,rvec_i pdg_id,string ye
 
 
 
-RVec<float> get_fake_lepton_weight(rvec_f pt, rvec_f eta, rvec_i pdg_id, string year, string syst = "nominal")
+RVec<float> get_fake_lepton_weight(rvec_b fakeable, rvec_b tight, rvec_f pt, rvec_f eta, rvec_i pdg_id, string year, string syst = "nominal")
 {
     TH2D * fr_hist_muon = 0;
     TH2D * fr_hist_electron = 0;
@@ -235,23 +236,26 @@ RVec<float> get_fake_lepton_weight(rvec_f pt, rvec_f eta, rvec_i pdg_id, string 
         int etabin;
         int ptbin;
         float prob;
-        if (abs(pdg_id[i])==13){
-            etabin = fr_hist_muon->GetXaxis()->FindFixBin(myeta);
-            ptbin = fr_hist_muon->GetYaxis()->FindFixBin(mypt);
-            prob = fr_hist_muon->GetBinContent(etabin,ptbin);
-            if (syst == "up") prob += fr_hist_muon->GetBinError(etabin,ptbin);
-            else if (syst == "down") prob -= fr_hist_muon->GetBinError(etabin,ptbin);
-            else assert(syst == "nominal");
+        if (fakeable[i] && !tight[i]){
+            if (abs(pdg_id[i])==13){
+                etabin = fr_hist_muon->GetXaxis()->FindFixBin(myeta);
+                ptbin = fr_hist_muon->GetYaxis()->FindFixBin(mypt);
+                prob = fr_hist_muon->GetBinContent(etabin,ptbin);
+                if (syst == "up") prob += fr_hist_muon->GetBinError(etabin,ptbin);
+                else if (syst == "down") prob -= fr_hist_muon->GetBinError(etabin,ptbin);
+                else assert(syst == "nominal");
+            }
+            else if (abs(pdg_id[i])==11){
+                etabin = fr_hist_electron->GetXaxis()->FindFixBin(myeta);
+                ptbin = fr_hist_electron->GetYaxis()->FindFixBin(mypt);
+                prob = fr_hist_electron->GetBinContent(etabin,ptbin);
+                if (syst == "up") prob += fr_hist_electron->GetBinError(etabin,ptbin);
+                else if (syst == "down") prob -= fr_hist_electron->GetBinError(etabin,ptbin);
+                else assert(syst == "nominal");
+            }
+            wgt[i]=prob/(1-prob);
         }
-        else if (abs(pdg_id[i])==11){
-            etabin = fr_hist_electron->GetXaxis()->FindFixBin(myeta);
-            ptbin = fr_hist_electron->GetYaxis()->FindFixBin(mypt);
-            prob = fr_hist_electron->GetBinContent(etabin,ptbin);
-            if (syst == "up") prob += fr_hist_electron->GetBinError(etabin,ptbin);
-            else if (syst == "down") prob -= fr_hist_electron->GetBinError(etabin,ptbin);
-            else assert(syst == "nominal");
-        }
-        wgt[i]=prob/(1-prob);
+        else {wgt[i]=1.;}
     }
     return wgt;
 }

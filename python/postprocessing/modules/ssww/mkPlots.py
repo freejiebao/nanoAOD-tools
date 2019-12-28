@@ -54,7 +54,7 @@ def plot_variables(sample,region,df):
         histo=histogram_models[ihis][1].GetHistogram()
         histo.Sumw2()
         histo.SetName(sample+'_'+ihis)
-        plots[sample+'_'+ihis]=df.Histo1D(histogram_models[ihis][1],histogram_models[ihis][0],'weight')
+        plots[sample+'_'+ihis]=df.Histo1D(histogram_models[ihis][1],histogram_models[ihis][0],'xsweight*')
 
     f=ROOT.TFile.Open('plots_'+region+'_'+args.year+'.root','update')
 
@@ -95,7 +95,7 @@ def get_stack(region):
                 #plots.append(htmp)
                 hs.Add(htmp)
 
-def ssww_region(sample,df):
+def ssww_region(datasets,sample,df):
     print '>>>>>>>>>>>>>>>>>>>>>>> ssww region'
     df1=df.Filter('nlepton==2 && njet>1','basic selection') \
         .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && mll>20','lepton selection') \
@@ -112,7 +112,7 @@ def ssww_region(sample,df):
     plot_variables(sample,'ssww_region',df1)
     return
 
-def top_region(sample,df):
+def top_region(datasets,sample,df):
     df1=df.Filter('nlepton==2 && njet>1','basic selection') \
         .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && mll>20','lepton selection') \
         .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign') \
@@ -124,7 +124,7 @@ def top_region(sample,df):
     plot_variables(sample,'top_region',df1)
     return
 
-def lowmjj_region(sample,df):
+def lowmjj_region(datasets,sample,df):
     df1=df.Filter('nlepton==2 && njet>1','basic selection') \
         .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && mll>20','lepton selection') \
         .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign') \
@@ -136,7 +136,7 @@ def lowmjj_region(sample,df):
     plot_variables(sample,'lowmjj_region',df1)
     return
 
-def wz_region(sample,df):
+def wz_region(datasets,sample,df):
     df1=df.Filter('nlepton==3 && njet>1','basic selection') \
         .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && lepton_pt[2]>10','lepton selection') \
         .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign') \
@@ -148,7 +148,7 @@ def wz_region(sample,df):
     plot_variables(sample,'wz_region',df1)
     return
 
-def zz_region(sample,df):
+def zz_region(datasets,sample,df):
     df1=df.Filter('nlepton==4 && njet>1','basic selection') \
         .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && lepton_pt[2]>10','lepton selection') \
         .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign') \
@@ -168,33 +168,45 @@ def calc(_year):
     # exclude = []
     samples, data_chain, mc_chain = SAMPLE.set_samples(_year)
 
-    for idata in data_chain:
-        data_chain_single = []
-        data_chain_single.append(idata)
-        files = SAMPLE.add_files(_year,args.input, samples, data_chain_single,[],[],'skim')
-        data_files = ROOT.std.vector("string")(len(files))
-        if not len(files)==0:
-            for i in range(0,len(files)):
-                data_files[i] = files[i]
-            ssww_region(idata, data_files)
-            #top_region(idata, data_files)
-            #lowmjj_region(idata, data_files)
-            #wz_region(idata, data_files)
-            #zz_region(idata, data_files)
+    datasets={
+        'Data':['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG'],
+        'non-prompt':['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG'],
+        'mc':['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','WGJJ','ZG','ZZ','WZ0','WZ1','WZ2','top','ggZZ','VVV','WJets'],
+        'chargeflip':['WWJJ_EWK','WW','ggWW','DY1','DY2','DY3','DY4']
+    }
 
-    for imc in mc_chain:
-        mc_chain_single = []
-        mc_chain_single.append(imc)
-        files = SAMPLE.add_files(_year,args.input, samples, mc_chain_single,[],[],'skim')
-        mc_files = ROOT.std.vector("string")(len(files))
-        if not len(files)==0:
-            for i in range(0,len(files)):
-                mc_files[i] = files[i]
-            ssww_region(imc, data_files)
-            #top_region(imc, data_files)
-            #lowmjj_region(imc, data_files)
-            #wz_region(imc, data_files)
-            #zz_region(imc, data_files)
+    sample_chain=data_chain+mc_chain
+    #data_chain = ['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG']
+    #mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','WWJJ_EWK','WGJJ','ZG','ZZ','WW','ggWW','WZ0','WZ1','WZ2','top','ggZZ','VVV','WJets','DY1','DY2','DY3','DY4']
+    for isample in sample_chain:
+
+        files_l2 = SAMPLE.add_files(_year,args.input, samples, [isample],[],[],'skim_l2')
+        files_l3 = SAMPLE.add_files(_year,args.input, samples, [isample],[],[],'skim_l3')
+        files_l4 = SAMPLE.add_files(_year,args.input, samples, [isample],[],[],'skim_l4')
+        sample_files_l2 = ROOT.std.vector("string")(len(files_l2))
+        sample_files_l3 = ROOT.std.vector("string")(len(files_l3))
+        sample_files_l4 = ROOT.std.vector("string")(len(files_l4))
+
+        if not len(files_l2)==0:
+            for i in range(0,len(files_l2)):
+                sample_files_l2[i] = files_l2[i]
+            ssww_region(datasets,isample, sample_files_l2)
+            top_region(datasets,isample, sample_files_l2)
+            lowmjj_region(datasets,isample, sample_files_l2)
+            #wz_region(datasets,isample, sample_files_l4)
+            #zz_region(datasets,isample, sample_files_l4)
+
+        if not len(files_l3)==0:
+            for i in range(0,len(files_l3)):
+                sample_files_l3[i] = files_l3[i]
+            wz_region(datasets,isample, sample_files_l3)
+            #zz_region(datasets,isample, sample_files_l4)
+
+        if not len(files_l4)==0:
+            for i in range(0,len(files_l4)):
+                sample_files_l4[i] = files_l4[i]
+            zz_region(datasets,isample, sample_files_l4)
+
 
 if __name__ == '__main__':
 
