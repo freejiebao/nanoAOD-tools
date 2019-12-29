@@ -104,7 +104,8 @@ def ssww_region(datasets,sample,df):
         .Filter('met>40','met selection')\
         .Filter('lepton_zep[0]<0.75 && lepton_zep[1]<0.75','zepp selection')\
         .Filter('!tauTag','tau veto')\
-        .Define('bveto','bveto_helper(jet_pt,jet_eta,jet_btagCSVV2,0.8484)').Filter('bveto')
+        .Define('bveto','bveto_helper(jet_pt,jet_eta,jet_btagCSVV2,0.8484)').Filter('bveto')\
+        .Filter('!softmuonTag','softmuon veto')
 
     allCutsReport = df.Report()
     allCutsReport.Print()
@@ -234,11 +235,11 @@ def calc(_year):
             for i in range(0,len(files_l2)):
                 sample_files_l2[i] = files_l2[i]
             ssww_region(datasets,isample, sample_files_l2)
-            top_region(datasets,isample, sample_files_l2)
-            lowmjj_region(datasets,isample, sample_files_l2)
+            #top_region(datasets,isample, sample_files_l2)
+            #lowmjj_region(datasets,isample, sample_files_l2)
             #wz_region(datasets,isample, sample_files_l4)
             #zz_region(datasets,isample, sample_files_l4)
-
+        '''
         if not len(files_l3)==0:
             for i in range(0,len(files_l3)):
                 sample_files_l3[i] = files_l3[i]
@@ -249,7 +250,7 @@ def calc(_year):
             for i in range(0,len(files_l4)):
                 sample_files_l4[i] = files_l4[i]
             zz_region(datasets,isample, sample_files_l4)
-
+        '''
 
 if __name__ == '__main__':
 
