@@ -51,20 +51,21 @@ def plot_variables(sample,region,df,type='base'):
     plots={}
     histogram_models=histogram_model()
     for ihis in histogram_models:
-        histo=histogram_models[ihis][1].GetHistogram()
-        histo.Sumw2()
+        histo=df.Define("variable",histogram_models[ihis][0]).Histo1D(histogram_models[ihis][1],'variable','weight')
         histo.SetName(sample+'_'+type+'_'+ihis)
-        plots[sample+'_'+ihis]=df.Histo1D(histogram_models[ihis][1],histogram_models[ihis][0],'weight')
-
+        histo.Sumw2()
+        plots[sample+'_'+ihis]=histo
     f=ROOT.TFile.Open('plots_'+region+'_'+args.year+'.root','update')
 
     for ihis in histogram_models:
         try:
             ROOT.gDirectory.cd(ihis)
+            print ihis,' exist'
         except:
             ROOT.gDirectory.mkdir(ihis)
             ROOT.gDirectory.cd(ihis)
-        plots[sample+'_'+ihis].Write()
+            print ihis,' doesn\'t exist'
+        plots[sample+'_'+type+'_'+ihis].Write()
         ROOT.gDirectory.cd('..')
     f.Write("",ROOT.TObject.kOverwrite)
     f.Close()
@@ -152,7 +153,7 @@ def ssww_region(datasets,sample,df):
     elif sample in datasets['chargeflip']:
         df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]<0','opposite sign')
         df_base=df2.Filter("lepton_real[0] && lepton_real[1] && lepton_tight[0] && lepton_tight[1]")\
-            .Define('chargeflip_weight',"lepton_chargeflip_weight[0]*lepton_chargeflip_weight[1]").Define("weight","return 1.")
+            .Define('chargeflip_weight',"lepton_chargeflip_weight[0]*lepton_chargeflip_weight[1]").Define("weight","1.")
 
         plot_variables(sample,'ssww_region',df_base,'chargeflip')
 
