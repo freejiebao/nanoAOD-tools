@@ -54,7 +54,7 @@ def plot_variables(sample,region,df,type='base'):
         histo=histogram_models[ihis][1].GetHistogram()
         histo.Sumw2()
         histo.SetName(sample+'_'+type+'_'+ihis)
-        plots[sample+'_'+ihis]=df.Histo1D(histogram_models[ihis][1],histogram_models[ihis][0],'xsweight*')
+        plots[sample+'_'+ihis]=df.Histo1D(histogram_models[ihis][1],histogram_models[ihis][0],'weight')
 
     f=ROOT.TFile.Open('plots_'+region+'_'+args.year+'.root','update')
 
@@ -112,23 +112,26 @@ def ssww_region(datasets,sample,df):
 
     if sample in datasets['data']:
         df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')
-        df_base=df2.Filter("lepton_tight[0] && lepton_tight[1]")
+        df_base=df2.Filter("lepton_tight[0] && lepton_tight[1]")\
+            .Define("weight","return 1.;")
         df_single_fake=df2.Filter("(lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0])")\
-            .Define('fake_weight',"lepton_fake_weight[0]*lepton_fake_weight[1]")
+            .Define('fake_weight',"lepton_fake_weight[0]*lepton_fake_weight[1]")\
+            .Define("weight","fake_weight")
         df_double_fake=df2.Filter("lepton_fakeable[0] && !lepton_tight[0] && lepton_fakeable[1] && !lepton_tight[1]") \
-            .Define('fake_weight',"-1*lepton_fake_weight[0]*lepton_fake_weight[1]")
+            .Define('fake_weight',"-1*lepton_fake_weight[0]*lepton_fake_weight[1]")\
+            .Define("weight","fake_weight")
 
         plot_variables(sample,'ssww_region',df_base)
-        plot_variables(sample,'ssww_region',df_single_fake,'fake')
-        plot_variables(sample,'ssww_region',df_double_fake,'fake')
+        plot_variables(sample,'ssww_region',df_single_fake,'1fake')
+        plot_variables(sample,'ssww_region',df_double_fake,'2fake')
 
     elif sample in datasets['mc']:
         df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')
-        df_base=df2.Filter("lepton_real[0] && lepton_real[1] && lepton_tight[0] && lepton_tight[1]")
+        df_base=df2.Filter("lepton_real[0] && lepton_real[1] && lepton_tight[0] && lepton_tight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]")
         df_single_fake=df2.Filter("lepton_real[0] && lepton_real[1] && (lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0])") \
-            .Define('fake_weight',"-1*lepton_fake_weight[0]*lepton_fake_weight[1]")
+            .Define('fake_weight',"-1*lepton_fake_weight[0]*lepton_fake_weight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]*fake_weight")
         df_double_fake=df2.Filter("lepton_real[0] && lepton_real[1] && lepton_fakeable[0] && !lepton_tight[0] && lepton_fakeable[1] && !lepton_tight[1]") \
-            .Define('fake_weight',"lepton_fake_weight[0]*lepton_fake_weight[1]")
+            .Define('fake_weight',"lepton_fake_weight[0]*lepton_fake_weight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]*fake_weight")
 
         plot_variables(sample,'ssww_region',df_base)
         plot_variables(sample,'ssww_region',df_single_fake,'1fake')
@@ -136,11 +139,11 @@ def ssww_region(datasets,sample,df):
 
     elif sample in datasets['vgamma']:
         df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')
-        df_base=df2.Filter("lepton_tight[0] && lepton_tight[1]")
+        df_base=df2.Filter("lepton_tight[0] && lepton_tight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]")
         df_single_fake=df2.Filter("(lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0])") \
-            .Define('fake_weight',"-1*lepton_fake_weight[0]*lepton_fake_weight[1]")
+            .Define('fake_weight',"-1*lepton_fake_weight[0]*lepton_fake_weight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]*fake_weight")
         df_double_fake=df2.Filter("lepton_fakeable[0] && !lepton_tight[0] && lepton_fakeable[1] && !lepton_tight[1]") \
-            .Define('fake_weight',"lepton_fake_weight[0]*lepton_fake_weight[1]")
+            .Define('fake_weight',"lepton_fake_weight[0]*lepton_fake_weight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]*fake_weight")
 
         plot_variables(sample,'ssww_region',df_base)
         plot_variables(sample,'ssww_region',df_single_fake,'1fake')
@@ -149,7 +152,7 @@ def ssww_region(datasets,sample,df):
     elif sample in datasets['chargeflip']:
         df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]<0','opposite sign')
         df_base=df2.Filter("lepton_real[0] && lepton_real[1] && lepton_tight[0] && lepton_tight[1]")\
-            .Define('chargeflip_weight',"lepton_chargeflip_weight[0]*lepton_chargeflip_weight[1]")
+            .Define('chargeflip_weight',"lepton_chargeflip_weight[0]*lepton_chargeflip_weight[1]").Define("weight","return 1.")
 
         plot_variables(sample,'ssww_region',df_base,'chargeflip')
 
