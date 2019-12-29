@@ -47,13 +47,13 @@ def histogram_model():
 
     return histogram_models
 
-def plot_variables(sample,region,df):
+def plot_variables(sample,region,df,type='base'):
     plots={}
     histogram_models=histogram_model()
     for ihis in histogram_models:
         histo=histogram_models[ihis][1].GetHistogram()
         histo.Sumw2()
-        histo.SetName(sample+'_'+ihis)
+        histo.SetName(sample+'_'+type+'_'+ihis)
         plots[sample+'_'+ihis]=df.Histo1D(histogram_models[ihis][1],histogram_models[ihis][0],'xsweight*')
 
     f=ROOT.TFile.Open('plots_'+region+'_'+args.year+'.root','update')
@@ -99,7 +99,6 @@ def ssww_region(datasets,sample,df):
     print '>>>>>>>>>>>>>>>>>>>>>>> ssww region'
     df1=df.Filter('nlepton==2 && njet>1','basic selection') \
         .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && mll>20','lepton selection') \
-        .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')\
         .Filter('(lepton_pdg_id[0]*lepton_pdg_id[1]!=11*11 || abs(mll-91.2)>15)','zveto selection')\
         .Filter('jet_pt[0]>30 && jet_pt[1]>30 && mjj>500 && abs(detajj)>2.5','jet selection') \
         .Filter('met>40','met selection')\
@@ -109,7 +108,50 @@ def ssww_region(datasets,sample,df):
 
     allCutsReport = df.Report()
     allCutsReport.Print()
-    plot_variables(sample,'ssww_region',df1)
+
+    if sample in datasets['data']:
+        df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')
+        df_base=df2.Filter("lepton_tight[0] && lepton_tight[1]")
+        df_single_fake=df2.Filter("(lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0])")\
+            .Define('fake_weight',"lepton_fake_weight[0]*lepton_fake_weight[1]")
+        df_double_fake=df2.Filter("lepton_fakeable[0] && !lepton_tight[0] && lepton_fakeable[1] && !lepton_tight[1]") \
+            .Define('fake_weight',"-1*lepton_fake_weight[0]*lepton_fake_weight[1]")
+
+        plot_variables(sample,'ssww_region',df_base)
+        plot_variables(sample,'ssww_region',df_single_fake,'fake')
+        plot_variables(sample,'ssww_region',df_double_fake,'fake')
+
+    elif sample in datasets['mc']:
+        df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')
+        df_base=df2.Filter("lepton_real[0] && lepton_real[1] && lepton_tight[0] && lepton_tight[1]")
+        df_single_fake=df2.Filter("lepton_real[0] && lepton_real[1] && (lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0])") \
+            .Define('fake_weight',"-1*lepton_fake_weight[0]*lepton_fake_weight[1]")
+        df_double_fake=df2.Filter("lepton_real[0] && lepton_real[1] && lepton_fakeable[0] && !lepton_tight[0] && lepton_fakeable[1] && !lepton_tight[1]") \
+            .Define('fake_weight',"lepton_fake_weight[0]*lepton_fake_weight[1]")
+
+        plot_variables(sample,'ssww_region',df_base)
+        plot_variables(sample,'ssww_region',df_single_fake,'1fake')
+        plot_variables(sample,'ssww_region',df_double_fake,'2fake')
+
+    elif sample in datasets['vgamma']:
+        df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')
+        df_base=df2.Filter("lepton_tight[0] && lepton_tight[1]")
+        df_single_fake=df2.Filter("(lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0])") \
+            .Define('fake_weight',"-1*lepton_fake_weight[0]*lepton_fake_weight[1]")
+        df_double_fake=df2.Filter("lepton_fakeable[0] && !lepton_tight[0] && lepton_fakeable[1] && !lepton_tight[1]") \
+            .Define('fake_weight',"lepton_fake_weight[0]*lepton_fake_weight[1]")
+
+        plot_variables(sample,'ssww_region',df_base)
+        plot_variables(sample,'ssww_region',df_single_fake,'1fake')
+        plot_variables(sample,'ssww_region',df_double_fake,'2fake')
+
+    elif sample in datasets['chargeflip']:
+        df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]<0','opposite sign')
+        df_base=df2.Filter("lepton_real[0] && lepton_real[1] && lepton_tight[0] && lepton_tight[1]")\
+            .Define('chargeflip_weight',"lepton_chargeflip_weight[0]*lepton_chargeflip_weight[1]")
+
+        plot_variables(sample,'ssww_region',df_base,'chargeflip')
+
     return
 
 def top_region(datasets,sample,df):
@@ -169,9 +211,10 @@ def calc(_year):
     samples, data_chain, mc_chain = SAMPLE.set_samples(_year)
 
     datasets={
-        'Data':['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG'],
+        'data':['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG'],
         'non-prompt':['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG'],
-        'mc':['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','WGJJ','ZG','ZZ','WZ0','WZ1','WZ2','top','ggZZ','VVV','WJets'],
+        'mc':['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','ZZ','WZ0','WZ1','WZ2','top','ggZZ','VVV','WJets'],
+        'vgamma':['WGJJ','ZG'],
         'chargeflip':['WWJJ_EWK','WW','ggWW','DY1','DY2','DY3','DY4']
     }
 

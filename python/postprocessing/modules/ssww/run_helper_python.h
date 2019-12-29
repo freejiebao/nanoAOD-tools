@@ -212,7 +212,6 @@ RVec<float> efficiency_scale_factor(rvec_f pt,rvec_f eta,rvec_i pdg_id,string ye
 }
 
 
-
 RVec<float> get_fake_lepton_weight(rvec_b fakeable, rvec_b tight, rvec_f pt, rvec_f eta, rvec_i pdg_id, string year, string syst = "nominal")
 {
     TH2D * fr_hist_muon = 0;
@@ -230,7 +229,7 @@ RVec<float> get_fake_lepton_weight(rvec_b fakeable, rvec_b tight, rvec_f pt, rve
     }
     else assert(0);
 
-    for (size_t i; i<pdg_id.size();i++){
+    for (size_t i=0; i<pdg_id.size();i++){
         float myeta  = TMath::Min(abs(eta[i]),float(2.4999));
         float mypt  = TMath::Min(pt[i],float(59.999));
         int etabin;
@@ -243,7 +242,6 @@ RVec<float> get_fake_lepton_weight(rvec_b fakeable, rvec_b tight, rvec_f pt, rve
                 prob = fr_hist_muon->GetBinContent(etabin,ptbin);
                 if (syst == "up") prob += fr_hist_muon->GetBinError(etabin,ptbin);
                 else if (syst == "down") prob -= fr_hist_muon->GetBinError(etabin,ptbin);
-                else assert(syst == "nominal");
             }
             else if (abs(pdg_id[i])==11){
                 etabin = fr_hist_electron->GetXaxis()->FindFixBin(myeta);
@@ -251,7 +249,6 @@ RVec<float> get_fake_lepton_weight(rvec_b fakeable, rvec_b tight, rvec_f pt, rve
                 prob = fr_hist_electron->GetBinContent(etabin,ptbin);
                 if (syst == "up") prob += fr_hist_electron->GetBinError(etabin,ptbin);
                 else if (syst == "down") prob -= fr_hist_electron->GetBinError(etabin,ptbin);
-                else assert(syst == "nominal");
             }
             wgt[i]=prob/(1-prob);
         }
