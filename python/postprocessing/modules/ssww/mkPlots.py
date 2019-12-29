@@ -234,22 +234,25 @@ def calc(_year):
         if not len(files_l2)==0:
             for i in range(0,len(files_l2)):
                 sample_files_l2[i] = files_l2[i]
-            ssww_region(datasets,isample, sample_files_l2)
-            #top_region(datasets,isample, sample_files_l2)
-            #lowmjj_region(datasets,isample, sample_files_l2)
-            #wz_region(datasets,isample, sample_files_l4)
-            #zz_region(datasets,isample, sample_files_l4)
+            df=ROOT.ROOT.TFile("Events",sample_files_l2)
+            ssww_region(datasets,isample, df)
+            #top_region(datasets,isample, df)
+            #lowmjj_region(datasets,isample, df)
+            #wz_region(datasets,isample, df)
+            #zz_region(datasets,isample, df)
         '''
         if not len(files_l3)==0:
             for i in range(0,len(files_l3)):
                 sample_files_l3[i] = files_l3[i]
-            wz_region(datasets,isample, sample_files_l3)
-            #zz_region(datasets,isample, sample_files_l4)
+            df=ROOT.ROOT.TFile("Events",sample_files_l3)
+            wz_region(datasets,isample, df)
+            #zz_region(datasets,isample, df)
 
         if not len(files_l4)==0:
             for i in range(0,len(files_l4)):
                 sample_files_l4[i] = files_l4[i]
-            zz_region(datasets,isample, sample_files_l4)
+            df=ROOT.ROOT.TFile("Events",sample_files_l4)
+            zz_region(datasets,isample, df)
         '''
 
 if __name__ == '__main__':
