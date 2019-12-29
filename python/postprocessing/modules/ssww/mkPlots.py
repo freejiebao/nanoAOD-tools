@@ -234,7 +234,7 @@ def calc(_year):
         if not len(files_l2)==0:
             for i in range(0,len(files_l2)):
                 sample_files_l2[i] = files_l2[i]
-            df=ROOT.ROOT.TFile("Events",sample_files_l2)
+            df=ROOT.ROOT.RDataFrame("Events",sample_files_l2)
             ssww_region(datasets,isample, df)
             #top_region(datasets,isample, df)
             #lowmjj_region(datasets,isample, df)
