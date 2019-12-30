@@ -54,17 +54,11 @@ def plot_variables(sample,region,df,type='base'):
         histo=df.Define("variable",histogram_models[ihis][0]).Histo1D(histogram_models[ihis][1],'variable','weight')
         histo.SetName(sample+'_'+type+'_'+ihis)
         histo.Sumw2()
-        plots[sample+'_'+ihis]=histo
+        plots[sample+'_'+type+'_'+ihis]=histo
     f=ROOT.TFile.Open('plots_'+region+'_'+args.year+'.root','update')
 
     for ihis in histogram_models:
-        try:
-            ROOT.gDirectory.cd(ihis)
-            print ihis,' exist'
-        except:
-            ROOT.gDirectory.mkdir(ihis)
-            ROOT.gDirectory.cd(ihis)
-            print ihis,' doesn\'t exist'
+        ROOT.gDirectory.cd(ihis)
         plots[sample+'_'+type+'_'+ihis].Write()
         ROOT.gDirectory.cd('..')
     f.Write("",ROOT.TObject.kOverwrite)
@@ -97,7 +91,7 @@ def get_stack(region):
                 hs.Add(htmp)
 
 def ssww_region(datasets,sample,df):
-    print '>>>>>>>>>>>>>>>>>>>>>>> ssww region'
+    print '>>>>>>>>>>>>>>>>>>>>>>> %s in ssww region' % sample
     df1=df.Filter('nlepton==2 && njet>1','basic selection') \
         .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && mll>20','lepton selection') \
         .Filter('(lepton_pdg_id[0]*lepton_pdg_id[1]!=11*11 || abs(mll-91.2)>15)','zveto selection')\
@@ -114,7 +108,7 @@ def ssww_region(datasets,sample,df):
     if sample in datasets['data']:
         df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')
         df_base=df2.Filter("lepton_tight[0] && lepton_tight[1]")\
-            .Define("weight","return 1.;")
+            .Define("weight","1.;")
         df_single_fake=df2.Filter("(lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0])")\
             .Define('fake_weight',"lepton_fake_weight[0]*lepton_fake_weight[1]")\
             .Define("weight","fake_weight")
@@ -129,7 +123,7 @@ def ssww_region(datasets,sample,df):
     elif sample in datasets['mc']:
         df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')
         df_base=df2.Filter("lepton_real[0] && lepton_real[1] && lepton_tight[0] && lepton_tight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]")
-        df_single_fake=df2.Filter("lepton_real[0] && lepton_real[1] && (lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0])") \
+        df_single_fake=df2.Filter("lepton_real[0] && lepton_real[1] && ((lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0]))") \
             .Define('fake_weight',"-1*lepton_fake_weight[0]*lepton_fake_weight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]*fake_weight")
         df_double_fake=df2.Filter("lepton_real[0] && lepton_real[1] && lepton_fakeable[0] && !lepton_tight[0] && lepton_fakeable[1] && !lepton_tight[1]") \
             .Define('fake_weight',"lepton_fake_weight[0]*lepton_fake_weight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]*fake_weight")
@@ -141,7 +135,7 @@ def ssww_region(datasets,sample,df):
     elif sample in datasets['vgamma']:
         df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')
         df_base=df2.Filter("lepton_tight[0] && lepton_tight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]")
-        df_single_fake=df2.Filter("(lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0])") \
+        df_single_fake=df2.Filter("((lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0]))") \
             .Define('fake_weight',"-1*lepton_fake_weight[0]*lepton_fake_weight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]*fake_weight")
         df_double_fake=df2.Filter("lepton_fakeable[0] && !lepton_tight[0] && lepton_fakeable[1] && !lepton_tight[1]") \
             .Define('fake_weight',"lepton_fake_weight[0]*lepton_fake_weight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]*fake_weight")
@@ -239,7 +233,14 @@ def calc(_year):
             for i in range(0,len(files_l2)):
                 sample_files_l2[i] = files_l2[i]
             df=ROOT.ROOT.RDataFrame("Events",sample_files_l2)
+
+            f=ROOT.TFile.Open('plots_ssww_region_'+args.year+'.root','recreate')
+            histogram_models=histogram_model()
+            for ihis in histogram_models:
+                ROOT.gDirectory.mkdir(ihis)
+            f.Close()
             ssww_region(datasets,isample, df)
+
             #top_region(datasets,isample, df)
             #lowmjj_region(datasets,isample, df)
             #wz_region(datasets,isample, df)
