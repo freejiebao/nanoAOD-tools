@@ -122,9 +122,9 @@ def get_stack(region):
         print '>>>>> variable:',tkey
         c1 = ROOT.TCanvas("c1", "c1",5,50,500,500)
         key=tkey.GetName()
-        htotal=histogram_models[key].GetHistogram().Reset()
+        htotal=histogram_models[key][1].GetHistogram().Reset()
         htotal.SetName('total_'+key)
-        hdata=histogram_models[key].GetHistogram().Reset()
+        hdata=histogram_models[key][1].GetHistogram().Reset()
         hdata.SetName('data_'+key)
         hs=ROOT.THStack("hs","")
 
@@ -141,7 +141,7 @@ def get_stack(region):
 
             plots={}
             for iplot in plot_scheme:
-                htmp=histogram_models[key].GetHistogram().Reset()
+                htmp=histogram_models[key][1].GetHistogram().Reset()
                 htmp.SetName(iplot+'_'+key)
 
                 if not iplot=='Data':
@@ -338,6 +338,9 @@ def calc(_year):
     # exclude = []
     samples, data_chain, mc_chain = SAMPLE.set_samples(_year)
 
+    #data_chain = ['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG']
+    #mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','WWJJ_EWK','WGJJ','ZG','ZZ','WW','ggWW','WZ0','WZ1','WZ2','top','ggZZ','VVV','WJets','DY1','DY2','DY3','DY4']
+
     datasets={
         'data':['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG'],
         'non-prompt':['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG'],
@@ -347,8 +350,6 @@ def calc(_year):
     }
 
     sample_chain=data_chain+mc_chain
-    #data_chain = ['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG']
-    #mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','WWJJ_EWK','WGJJ','ZG','ZZ','WW','ggWW','WZ0','WZ1','WZ2','top','ggZZ','VVV','WJets','DY1','DY2','DY3','DY4']
     for isample in sample_chain:
 
         files_l2 = SAMPLE.add_files(_year,args.input, samples, [isample],[],[],'skim_l2')
@@ -369,7 +370,6 @@ def calc(_year):
                 ROOT.gDirectory.mkdir(ihis)
             f.Close()
             ssww_region(datasets,isample, df)
-            get_stack('ssww_region')
             #top_region(datasets,isample, df)
             #lowmjj_region(datasets,isample, df)
             #wz_region(datasets,isample, df)
@@ -388,6 +388,7 @@ def calc(_year):
             df=ROOT.ROOT.TFile("Events",sample_files_l4)
             zz_region(datasets,isample, df)
         '''
+    get_stack('ssww_region')
 
 if __name__ == '__main__':
 
