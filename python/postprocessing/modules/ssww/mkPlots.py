@@ -56,7 +56,7 @@ def plot_variables(sample,region,df,type='base'):
         histo=df.Define("variable",histogram_models[ihis][0]).Histo1D(histogram_models[ihis][1],'variable','weight')
         histo.SetName(sample+'_'+type+'_'+ihis)
         histo.Sumw2()
-        plots[sample+'_'+type+'_'+ihis]=histo
+        plots[sample+'_'+type+'_'+ihis]=histo.Clone()
     f=ROOT.TFile.Open('plots_'+region+'_'+args.year+'.root','update')
 
     for ihis in histogram_models:
@@ -120,8 +120,11 @@ def get_stack(region):
     histogram_models=histogram_model()
     for tkey in f.GetListOfKeys():
         print '>>>>> variable:',tkey
-        c1 = ROOT.TCanvas("c1", "c1",5,50,500,500)
+
         key=tkey.GetName()
+        dir=f.Get(key)
+
+        c1 = ROOT.TCanvas("c1", "c1",5,50,500,500)
         hdata=dir.Get(plot_scheme['Data']['sample'][0]+'_base_'+key)
         hdata.Scale(0)
         hdata.SetName('data_'+key)
@@ -131,7 +134,7 @@ def get_stack(region):
 
         hs=ROOT.THStack("hs","")
 
-        dir=f.Get(key)
+
 
         for iisample in plot_scheme['Data']['sample']:
             hdata.Add(dir.Get(iisample+'_base_'+key))
@@ -348,6 +351,13 @@ def calc(_year):
     }
 
     sample_chain=data_chain+mc_chain
+
+    f=ROOT.TFile.Open('plots_ssww_region_'+args.year+'.root','recreate')
+    histogram_models=histogram_model()
+    for ihis in histogram_models:
+        ROOT.gDirectory.mkdir(ihis)
+    f.Close()
+
     for isample in sample_chain:
 
         files_l2 = SAMPLE.add_files(_year,args.input, samples, [isample],[],[],'skim_l2')
@@ -362,11 +372,6 @@ def calc(_year):
                 sample_files_l2[i] = files_l2[i]
             df=ROOT.ROOT.RDataFrame("Events",sample_files_l2)
 
-            f=ROOT.TFile.Open('plots_ssww_region_'+args.year+'.root','recreate')
-            histogram_models=histogram_model()
-            for ihis in histogram_models:
-                ROOT.gDirectory.mkdir(ihis)
-            f.Close()
             ssww_region(datasets,isample, df)
             #top_region(datasets,isample, df)
             #lowmjj_region(datasets,isample, df)
