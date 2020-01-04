@@ -369,7 +369,7 @@ def calc(_year):
                 ROOT.gDirectory.mkdir(ihis)
             f.Close()
             ssww_region(datasets,isample, df)
-
+            get_stack('ssww_region')
             #top_region(datasets,isample, df)
             #lowmjj_region(datasets,isample, df)
             #wz_region(datasets,isample, df)
