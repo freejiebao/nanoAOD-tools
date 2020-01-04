@@ -122,101 +122,99 @@ def get_stack(region):
         print '>>>>> variable:',tkey
         c1 = ROOT.TCanvas("c1", "c1",5,50,500,500)
         key=tkey.GetName()
-        htotal=histogram_models[key][1].GetHistogram().Reset()
-        htotal.SetName('total_'+key)
-        hdata=histogram_models[key][1].GetHistogram().Reset()
+        hdata=dir.Get(plot_scheme['Data']['sample'][0]+'_base_'+key)
+        hdata.Scale(0)
         hdata.SetName('data_'+key)
+
+        htotal=hdata.Clone()
+        htotal.SetName('mc_'+key)
+
         hs=ROOT.THStack("hs","")
 
         dir=f.Get(key)
 
-        for ihis in dir.GetListOfKeys():
-            _ihis=ihis.GetName()
-            print '>>>>> histogram:',_ihis
-            his=dir.Get(_ihis)
+        for iisample in plot_scheme['Data']['sample']:
+            hdata.Add(dir.Get(iisample+'_base_'+key))
 
+        plots={}
+        for iplot in plot_scheme:
+            htmp=hdata.Clone()
+            htmp.Scale(0)
+            htmp.SetName(iplot+'_'+key)
 
-            for iisample in plot_scheme['Data']['sample']:
-                hdata.Add(iisample+'_base_'+key)
+            if not iplot=='Data':
+                for iisample in plot_scheme[iplot]['sample']:
+                    if iplot=='Non-prompt':
+                        htotal.Add(dir.Get(iisample+'_1fake_'+key))
+                        htotal.Add(dir.Get(iisample+'_2fake_'+key))
+                        htmp.Add(dir.Get(iisample+'_1fake_'+key))
+                        htmp.Add(dir.Get(iisample+'_2fake_'+key))
+                    else:
+                        htotal.Add(dir.Get(iisample+'_base_'+key))
+                        htmp.Add(dir.Get(iisample+'_base_'+key))
+                htmp.SetFillColor(plot_scheme[iplot]['color'])
+                plots[iplot]=htmp
+                hs.Add(htmp)
 
-            plots={}
-            for iplot in plot_scheme:
-                htmp=histogram_models[key][1].GetHistogram().Reset()
-                htmp.SetName(iplot+'_'+key)
+        if hdata.GetMaximum() < htotal.GetMaximum():
+            hdata.SetMaximum(htotal.GetMaximum()*1.55)
+        else:
+            hdata.SetMaximum(hdata.GetMaximum()*1.55)
 
-                if not iplot=='Data':
-                    for iisample in plot_scheme[iplot]['sample']:
-                        if iplot=='Non-prompt':
-                            htotal.Add(iisample+'_1fake_'+key)
-                            htotal.Add(iisample+'_2fake_'+key)
-                            htmp.Add(iisample+'_1fake_'+key)
-                            htmp.Add(iisample+'_2fake_'+key)
-                        else:
-                            htotal.Add(iisample+'_base_'+key)
-                            htmp.Add(iisample+'_base_'+key)
-                    htmp.SetFillColor(plot_scheme[iplot]['color'])
-                    plots[iplot]=htmp
-                    hs.Add(htmp)
+        hdata.SetMinimum(0)
+        hs.SetMinimum(0)
+        htotal.SetMinimum(0)
 
-            if hdata.GetMaximum() < htotal.GetMaximum():
-                hdata.SetMaximum(htotal.GetMaximum()*1.55)
-            else:
-                hdata.SetMaximum(hdata.GetMaximum()*1.55)
+        hdata.Draw("")
+        hs.Draw("hist same")
 
-            hdata.SetMinimum(0)
-            hs.SetMinimum(0)
-            htotal.SetMinimum(0)
+        legend_count=0
+        draw_legend(xpositions[legend_count],0.84 - ypositions[legend_count]*yoffset,hdata,"Data","lp")
 
-            hdata.Draw("")
-            hs.Draw("hist same")
+        for iplot in plots:
+            legend_count+=1
+            draw_legend(xpositions[legend_count],0.84 - ypositions[legend_count]*yoffset,plots[iplot],plot_scheme[iplot].name,"f")
 
-            legend_count=0
-            draw_legend(xpositions[legend_count],0.84 - ypositions[legend_count]*yoffset,hdata,"Data","lp")
+        set_axis_fonts(hdata,"x")
+        #set_axis_fonts(hstack,"x","pt_{l}^{max} (GeV)")
+        #set_axis_fonts(data_hist,"y","Events / bin")
+        #set_axis_fonts(hstack,"y","Events / bin")
 
-            for iplot in plots:
-                legend_count+=1
-                draw_legend(xpositions[legend_count],0.84 - ypositions[legend_count]*yoffset,plots[iplot],plot_scheme[iplot].name,"f")
+        gstat = ROOT.TGraphAsymmErrors(htotal)
 
-            set_axis_fonts(hdata,"x")
-            #set_axis_fonts(hstack,"x","pt_{l}^{max} (GeV)")
-            #set_axis_fonts(data_hist,"y","Events / bin")
-            #set_axis_fonts(hstack,"y","Events / bin")
+        for j in range(0,gstat.GetN()):
+            gstat.SetPointEYlow (j, htotal.GetBinError(j+1))
+            gstat.SetPointEYhigh(j, htotal.GetBinError(j+1))
 
-            gstat = ROOT.TGraphAsymmErrors(htotal)
+        gstat.SetFillColor(12)
+        gstat.SetFillStyle(3345)
+        gstat.SetMarkerSize(0)
+        gstat.SetLineWidth(0)
+        gstat.SetLineColor(ROOT.kWhite)
+        gstat.Draw("E2same")
 
-            for j in range(0,gstat.GetN()):
-                gstat.SetPointEYlow (j, htotal.GetBinError(j+1))
-                gstat.SetPointEYhigh(j, htotal.GetBinError(j+1))
+        hdata.Draw("same")
 
-            gstat.SetFillColor(12)
-            gstat.SetFillStyle(3345)
-            gstat.SetMarkerSize(0)
-            gstat.SetLineWidth(0)
-            gstat.SetLineColor(ROOT.kWhite)
-            gstat.Draw("E2same")
+        cmslabel = ROOT.TLatex (0.18, 0.93, "")
+        cmslabel.SetNDC ()
+        cmslabel.SetTextAlign (10)
+        cmslabel.SetTextFont (42)
+        cmslabel.SetTextSize (0.040)
+        cmslabel.Draw ("same")
 
-            hdata.Draw("same")
+        s=str(SAMPLE.get_lumi(args.year))+" fb^{-1} (13 TeV)"
+        lumilabel = ROOT.TLatex (0.95, 0.93, s)
+        lumilabel.SetNDC ()
+        lumilabel.SetTextAlign (30)
+        lumilabel.SetTextFont (42)
+        lumilabel.SetTextSize (0.040)
+        lumilabel.Draw("same")
 
-            cmslabel = ROOT.TLatex (0.18, 0.93, "")
-            cmslabel.SetNDC ()
-            cmslabel.SetTextAlign (10)
-            cmslabel.SetTextFont (42)
-            cmslabel.SetTextSize (0.040)
-            cmslabel.Draw ("same")
+        c1.Update()
+        c1.ForceUpdate()
+        c1.Modified()
 
-            s=str(SAMPLE.get_lumi(args.year))+" fb^{-1} (13 TeV)"
-            lumilabel = ROOT.TLatex (0.95, 0.93, s)
-            lumilabel.SetNDC ()
-            lumilabel.SetTextAlign (30)
-            lumilabel.SetTextFont (42)
-            lumilabel.SetTextSize (0.040)
-            lumilabel.Draw("same")
-
-            c1.Update()
-            c1.ForceUpdate()
-            c1.Modified()
-
-            c1.SaveAs(args.year+'_plots/'+args.year+'_'+region+'_'+key+".png")
+        c1.SaveAs(args.year+'_plots/'+args.year+'_'+region+'_'+key+".png")
 
 
 def ssww_region(datasets,sample,df):
