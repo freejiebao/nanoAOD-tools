@@ -137,7 +137,8 @@ def get_stack(region):
 
 
         for iisample in plot_scheme['Data']['sample']:
-            hdata.Add(dir.Get(iisample+'_base_'+key))
+            _h_base=dir.Get(iisample+'_base_'+key)
+            hdata.Add(_h_base)
 
         plots={}
         for iplot in plot_scheme:
@@ -148,13 +149,16 @@ def get_stack(region):
             if not iplot=='Data':
                 for iisample in plot_scheme[iplot]['sample']:
                     if iplot=='Non-prompt':
-                        htotal.Add(dir.Get(iisample+'_1fake_'+key))
-                        htotal.Add(dir.Get(iisample+'_2fake_'+key))
-                        htmp.Add(dir.Get(iisample+'_1fake_'+key))
-                        htmp.Add(dir.Get(iisample+'_2fake_'+key))
+                        _h_1fake=dir.Get(iisample+'_1fake_'+key)
+                        _h_2fake=dir.Get(iisample+'_2fake_'+key)
+                        htotal.Add(_h_1fake)
+                        htotal.Add(_h_2fake)
+                        htmp.Add(_h_1fake)
+                        htmp.Add(_h_2fake)
                     else:
-                        htotal.Add(dir.Get(iisample+'_base_'+key))
-                        htmp.Add(dir.Get(iisample+'_base_'+key))
+                        _h_base=dir.Get(iisample+'_base_'+key)
+                        htotal.Add(_h_base)
+                        htmp.Add(_h_base)
                 htmp.SetFillColor(plot_scheme[iplot]['color'])
                 plots[iplot]=htmp
                 hs.Add(htmp)
@@ -339,6 +343,8 @@ def calc(_year):
     # exclude = []
     samples, data_chain, mc_chain = SAMPLE.set_samples(_year)
 
+    data_chain = ['MuonEG']
+    mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD']
     #data_chain = ['SingleMuon','SingleElectron','MuonEG','DoubleMuon','DoubleEG']
     #mc_chain = ['WpWpJJ_EWK','WpWpJJ_QCD','WmWmJJ','DPS','WWJJ_EWK','WGJJ','ZG','ZZ','WW','ggWW','WZ0','WZ1','WZ2','top','ggZZ','VVV','WJets','DY1','DY2','DY3','DY4']
 
