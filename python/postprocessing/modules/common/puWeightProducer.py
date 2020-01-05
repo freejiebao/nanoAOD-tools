@@ -3,7 +3,7 @@ import os
 import numpy as np
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
-from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection 
+from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
 
 class puWeightProducer(Module):
@@ -13,21 +13,21 @@ class puWeightProducer(Module):
             self.targeth_plus = self.loadHisto(targetfile,targethist+"_plus")
             self.targeth_minus = self.loadHisto(targetfile,targethist+"_minus")
         self.fixLargeWeights = True # temporary fix
-	if myfile != "auto" :
-		self.autoPU=False
-	        self.myh = self.loadHisto(myfile,myhist)
-	else :
-        	self.fixLargeWeights = False #AR: it seems to crash with it, to be deugged
-		self.autoPU=True
-		ROOT.gROOT.cd()
-		self.myh=self.targeth.Clone("autoPU")
-		self.myh.Reset()
+        if myfile != "auto" :
+            self.autoPU=False
+            self.myh = self.loadHisto(myfile,myhist)
+        else :
+            self.fixLargeWeights = False #AR: it seems to crash with it, to be deugged
+            self.autoPU=True
+            ROOT.gROOT.cd()
+            self.myh=self.targeth.Clone("autoPU")
+            self.myh.Reset()
         self.name = name
         self.norm = norm
         self.verbose = verbose
         self.nvtxVar = nvtx_var
         self.doSysVar = doSysVar
-       
+
         #Try to load module via python dictionaries
         try:
             ROOT.gSystem.Load("libPhysicsToolsNanoAODTools")
@@ -38,7 +38,7 @@ class puWeightProducer(Module):
             print "Could not load module via python, trying via ROOT", e
             if "/WeightCalculatorFromHistogram_cc.so" not in ROOT.gSystem.GetLibraries():
                 print "Load C++ Worker"
-                ROOT.gROOT.ProcessLine(".L %s/python/PhysicsTools/NanoAODTools/postprocessing/helpers/WeightCalculatorFromHistogram.cc++" % os.environ['CMSSW_BASE'])
+                ROOT.gROOT.ProcessLine(".L %s/python/PhysicsTools/NanoAODTools/postprocessing/src/WeightCalculatorFromHistogram.cc++" % os.environ['CMSSW_BASE'])
             dummy = ROOT.WeightCalculatorFromHistogram
     def loadHisto(self,filename,hname):
         tf = ROOT.TFile.Open(filename)
@@ -47,18 +47,18 @@ class puWeightProducer(Module):
         tf.Close()
         return hist
     def beginJob(self):
-	pass
+        pass
     def endJob(self):
         pass
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
-	if self.autoPU :
-                self.myh.Reset()
-		print "Computing PU profile for this file"
-		ROOT.gROOT.cd()
-		inputFile.Get("Events").Project("autoPU",self.nvtxVar)#doitfrom inputFile
-		if outputFile : 
-		    outputFile.cd()
-		    self.myh.Write()    
+        if self.autoPU :
+            self.myh.Reset()
+            print "Computing PU profile for this file"
+            ROOT.gROOT.cd()
+            inputFile.Get("Events").Project("autoPU",self.nvtxVar)#doitfrom inputFile
+            if outputFile :
+                outputFile.cd()
+                self.myh.Write()
         self._worker = ROOT.WeightCalculatorFromHistogram(self.myh,self.targeth,self.norm,self.fixLargeWeights,self.verbose)
         self.out = wrappedOutputTree
         self.out.branch(self.name, "F")
@@ -91,12 +91,12 @@ pufile_data2016="%s/python/PhysicsTools/NanoAODTools/postprocessing/data/pileup/
 puWeight_2016 = lambda : puWeightProducer(pufile_mc2016,pufile_data2016,"pu_mc","pileup",verbose=False, doSysVar=True)
 puAutoWeight_2016 = lambda : puWeightProducer("auto", pufile_data2016,"pu_mc","pileup",verbose=False)
 
-pufile_data2017="%s/python/PhysicsTools/NanoAODTools/postprocessing/data/pileup/puData2017_withVar.root" % os.environ['CMSSW_BASE']
+pufile_data2017="%s/python/PhysicsTools/NanoAODTools/postprocessing/data/pileup/PileupHistogram-goldenJSON-13tev-2017-99bins_withVar.root" % os.environ['CMSSW_BASE']
 pufile_mc2017="%s/python/PhysicsTools/NanoAODTools/postprocessing/data/pileup/mcPileup2017.root" % os.environ['CMSSW_BASE']
 puWeight_2017 = lambda : puWeightProducer(pufile_mc2017,pufile_data2017,"pu_mc","pileup",verbose=False, doSysVar=True)
 puAutoWeight_2017 = lambda : puWeightProducer("auto",pufile_data2017,"pu_mc","pileup",verbose=False)
 
-pufile_data2018="%s/python/PhysicsTools/NanoAODTools/postprocessing/data/pileup/puData2018_withVar.root" % os.environ['CMSSW_BASE']
+pufile_data2018="%s/python/PhysicsTools/NanoAODTools/postprocessing/data/pileup/PileupHistogram-goldenJSON-13tev-2018-100bins_withVar.root" % os.environ['CMSSW_BASE']
 pufile_mc2018="%s/python/PhysicsTools/NanoAODTools/postprocessing/data/pileup/mcPileup2018.root" % os.environ['CMSSW_BASE']
 puWeight_2018 = lambda : puWeightProducer(pufile_mc2018,pufile_data2018,"pu_mc","pileup",verbose=False, doSysVar=True)
 puAutoWeight_2018 = lambda : puWeightProducer("auto",pufile_data2018,"pu_mc","pileup",verbose=False)

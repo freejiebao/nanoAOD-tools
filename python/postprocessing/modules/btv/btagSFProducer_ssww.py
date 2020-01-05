@@ -31,7 +31,7 @@ class btagSFProducer(Module):
     """Calculate btagging scale factors
         algo has to be either 'csvv2' or 'cmva'
     """
-    def __init__(self, era, algo = 'csvv2', sfFileName = None, verbose = 0):
+    def __init__(self, era, algo = 'deepcsv', sfFileName = None, verbose = 0):
 
         self.era = era
 
@@ -80,7 +80,7 @@ class btagSFProducer(Module):
                     'supported_wp' : [ "L", "M", "T", "shape_corr"]
                 },
                 '2017' : {
-                    'inputFileName' : "DeepCSV_94XSF_V2_B_F.csv",
+                    'inputFileName' : "DeepCSV_94XSF_V4_B_F.csv",
                     'measurement_types' : {
                         0 : "comb",  # b
                         1 : "comb",  # c
@@ -95,8 +95,8 @@ class btagSFProducer(Module):
                         1 : "comb",  # c
                         2 : "incl"   # light
                     },
-                    'supported_wp' : [ "L", "M", "T", "shape_corr"] 
-                }    
+                    'supported_wp' : [ "L", "M", "T", "shape_corr"]
+                }
             },
             'deepjet' : {
                 'Legacy2016' : {
@@ -109,7 +109,7 @@ class btagSFProducer(Module):
                     'supported_wp' : [ "L", "M", "T", "shape_corr"]
                 },
                 '2017' : {
-                    'inputFileName' : "DeepFlavour_94XSF_V2_B_F.csv",
+                    'inputFileName' : "DeepFlavour_94XSF_V3_B_F.csv",
                     'measurement_types' : {
                         0 : "comb",  # b
                         1 : "comb",  # c
@@ -125,7 +125,7 @@ class btagSFProducer(Module):
                         2 : "incl"   # light
                     },
                     'supported_wp' : [ "L", "M", "T", "shape_corr"]
-                }    
+                }
             },
             'cmva' : {
                 '2016' : {
@@ -162,6 +162,8 @@ class btagSFProducer(Module):
             algoLabel = "deep-CSV (b)"
         elif self.algo == "cmva":
             algoLabel = "cMVA"
+        elif self.algo == "deepjet":
+            algoLabel = "DeepJet"
         else:
             raise ValueError("ERROR: Algorithm '%s' not supported for era = '%s'! Please choose among { %s }." % (self.algo, self.era, supported_algos))
         print("Loading btagSF weights for %s algorithm from file '%s'" % (algoLabel, os.path.join(self.inputFilePath, self.inputFileName)))
@@ -193,16 +195,16 @@ class btagSFProducer(Module):
         self.branchNames_central_and_systs = {}
         for central_or_syst in self.central_and_systs:
             if central_or_syst == "central":
-                self.branchNames_central_and_systs[central_or_syst] = "jet_btagSF"
+                self.branchNames_central_and_systs[central_or_syst] = "Jet_btagSF"
             else:
-                self.branchNames_central_and_systs[central_or_syst] = "jet_btagSF_%s" % central_or_syst
+                self.branchNames_central_and_systs[central_or_syst] = "Jet_btagSF_%s" % central_or_syst
 
         self.branchNames_central_and_systs_shape_corr = {}
         for central_or_syst in self.central_and_systs_shape_corr:
             if central_or_syst == "central":
-                self.branchNames_central_and_systs_shape_corr[central_or_syst] = "jet_btagSF_shape"
+                self.branchNames_central_and_systs_shape_corr[central_or_syst] = "Jet_btagSF_shape"
             else:
-                self.branchNames_central_and_systs_shape_corr[central_or_syst] = "jet_btagSF_shape_%s" % central_or_syst
+                self.branchNames_central_and_systs_shape_corr[central_or_syst] = "Jet_btagSF_shape_%s" % central_or_syst
 
     def beginJob(self):
         # initialize BTagCalibrationReader
@@ -233,9 +235,9 @@ class btagSFProducer(Module):
     def beginFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         self.out = wrappedOutputTree
         for central_or_syst in self.central_and_systs:
-            self.out.branch(self.branchNames_central_and_systs[central_or_syst], "F", lenVar="njet")
+            self.out.branch(self.branchNames_central_and_systs[central_or_syst], "F", lenVar="nJet")
         for central_or_syst in self.central_and_systs_shape_corr:
-            self.out.branch(self.branchNames_central_and_systs_shape_corr[central_or_syst], "F", lenVar="njet")
+            self.out.branch(self.branchNames_central_and_systs_shape_corr[central_or_syst], "F", lenVar="nJet")
 
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         pass
@@ -315,6 +317,8 @@ class btagSFProducer(Module):
             discr = "btagDeepB"
         elif self.algo == "cmva":
             discr = "btagCMVA"
+        elif self.algo == "deepjet":
+            discr = "btagDeepFlavB"
         else:
             raise ValueError("ERROR: Invalid algorithm '%s'! Please choose either 'csvv2' or 'cmva'." % self.algo)
 
@@ -335,6 +339,6 @@ class btagSFProducer(Module):
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 
-btagSF2016 = lambda : btagSFProducer("2016",algo = 'deepcsv')
-btagSF2017 = lambda : btagSFProducer("2017",algo = 'deepcsv')
-btagSF2018 = lambda : btagSFProducer("2018",algo = 'deepcsv')
+btagSF2016 = lambda : btagSFProducer("2016")
+btagSF2017 = lambda : btagSFProducer("2017")
+btagSF2018 = lambda : btagSFProducer("2018")

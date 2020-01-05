@@ -1,43 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="608f19c0-e35a-4ca5-b9bb-e7fc39aef6d9" name="Default Changelist" comment="update">
-      <change afterPath="$PROJECT_DIR$/crab/xs_2016_nano_v4_tmp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/btagSF/DeepCSV_94XSF_V4_B_F.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/btagSF/DeepFlavour_94XSF_V3_B_F.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/jme/Autumn18_FastSimV1_MC.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/jme/Autumn18_V19_DATA.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/jme/Autumn18_V19_MC.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/jme/Autumn18_V7_DATA.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/jme/Autumn18_V7_MC.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/jme/Fall17_FastSimV1_MC.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/jme/Spring16_25nsFastSimV1_MC.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python/postprocessing/data/pileup/PileupHistogram-goldenJSON-13tev-2017-99bins_withVar.root" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python/postprocessing/data/pileup/PileupHistogram-goldenJSON-13tev-2018-100bins_withVar.root" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python/postprocessing/data/pileup/PileupHistogram-goldenJSON-13tev-2018-99bins_withVar.root" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python/postprocessing/modules/jme/fatJetUncertainties.py" afterDir="false" />
+    <list default="true" id="608f19c0-e35a-4ca5-b9bb-e7fc39aef6d9" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/python/postprocessing/data/btagSF/DeepCSV_94XSF_V4_B_F.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/python/postprocessing/data/btagSF/DeepFlavour_94XSF_V3_B_F.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/python/postprocessing/data/jme/Autumn18_FastSimV1_MC.tgz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/python/postprocessing/data/jme/Autumn18_V19_DATA.tgz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/python/postprocessing/data/jme/Autumn18_V19_MC.tgz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/python/postprocessing/data/jme/Autumn18_V7_DATA.tgz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/python/postprocessing/data/jme/Autumn18_V7_MC.tgz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/python/postprocessing/data/jme/Fall17_FastSimV1_MC.tgz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/python/postprocessing/data/jme/Spring16_25nsFastSimV1_MC.tgz" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crab/crab_script.sh" beforeDir="false" afterPath="$PROJECT_DIR$/crab/crab_script.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crab/crab_script_2016.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/crab_script_2016.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crab/crab_script_2016_fake.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/crab_script_2016_fake.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crab/crab_script_2016_jec.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/crab_script_2016_jec.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crab/crab_script_2017.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/crab_script_2017.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crab/crab_script_2018.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/crab_script_2018.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crab/create_cfg.py" beforeDir="false" afterPath="$PROJECT_DIR$/crab/create_cfg.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/data/pileup/puData2017_withVar.root" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/data/pileup/puData2018_withVar.root" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/framework/output.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/framework/output.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/helpers/WeightCalculatorFromHistogram.cc" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/helpers/WeightCalculatorFromHistogram.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/btv/btagSFProducer.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/btv/btagSFProducer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/btv/btagSFProducer_ssww.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/btv/btagSFProducer_ssww.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/common/collectionMerger.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/common/collectionMerger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/jme/JetReCalibrator.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/jme/JetReCalibrator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/jme/jetSmearer.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/jme/jetSmearer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/jme/jetmetHelperRun2.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/jme/jetmetHelperRun2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/jme/jetmetUncertainties.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/jme/jetmetUncertainties.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/mkPlots.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/mkPlots.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/ssww/sswwModule_copy.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/ssww/sswwModule_copy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/postprocessing/src/WeightCalculatorFromHistogram.cc" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/src/WeightCalculatorFromHistogram.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/haddnano.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/haddnano.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WeightCalculatorFromHistogram.cc" beforeDir="false" afterPath="$PROJECT_DIR$/src/WeightCalculatorFromHistogram.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/common/puWeightProducer.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/common/puWeightProducer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/jme/jetmetHelperRun2_ssww.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/jme/jetmetHelperRun2_ssww.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/postprocessing/modules/jme/jetmetUncertainties_ssww.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/postprocessing/modules/jme/jetmetUncertainties_ssww.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +60,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/crab" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/python/postprocessing/data/prefire_maps" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -92,11 +75,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/python/postprocessing/data/btagSF" />
+      <recent name="$PROJECT_DIR$/python/postprocessing/data/jme" />
       <recent name="$PROJECT_DIR$/crab" />
       <recent name="$PROJECT_DIR$/python/postprocessing/modules/ssww" />
       <recent name="$PROJECT_DIR$/python/postprocessing/scripts" />
-      <recent name="$PROJECT_DIR$/python/postprocessing/modules/jme" />
-      <recent name="$PROJECT_DIR$/interface" />
     </key>
   </component>
   <component name="RunManager">
@@ -211,14 +194,7 @@
       <workItem from="1576484620209" duration="14000" />
       <workItem from="1576843215652" duration="1441000" />
       <workItem from="1576845550538" duration="417000" />
-      <workItem from="1576909841792" duration="79446000" />
-    </task>
-    <task id="LOCAL-00202" summary="update">
-      <created>1573649703739</created>
-      <option name="number" value="00202" />
-      <option name="presentableId" value="LOCAL-00202" />
-      <option name="project" value="LOCAL" />
-      <updated>1573649703739</updated>
+      <workItem from="1576909841792" duration="84126000" />
     </task>
     <task id="LOCAL-00203" summary="update">
       <created>1573652582234</created>
@@ -556,7 +532,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578203572014</updated>
     </task>
-    <option name="localTasksCounter" value="251" />
+    <task id="LOCAL-00251" summary="update">
+      <created>1578233468954</created>
+      <option name="number" value="00251" />
+      <option name="presentableId" value="LOCAL-00251" />
+      <option name="project" value="LOCAL" />
+      <updated>1578233468954</updated>
+    </task>
+    <option name="localTasksCounter" value="252" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -594,6 +577,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="510" y="335" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1578236229314">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="510" y="335" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1050@0.0.1680.1050" timestamp="1578236229314" />
     <state x="452" y="203" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1576845488042">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
@@ -602,10 +589,10 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="528" y="261" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1578147309524" />
-    <state x="421" y="125" key="CommitChangelistDialog2" timestamp="1578233406424">
+    <state x="421" y="125" key="CommitChangelistDialog2" timestamp="1578233468699">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="421" y="125" key="CommitChangelistDialog2/0.0.1680.1050@0.0.1680.1050" timestamp="1578233406424" />
+    <state x="421" y="125" key="CommitChangelistDialog2/0.0.1680.1050@0.0.1680.1050" timestamp="1578233468699" />
     <state width="516" height="442" key="Diff.GoToChangePopup" timestamp="1578232435014">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
@@ -631,10 +618,10 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="341" y="164" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1576845524901" />
-    <state x="440" y="266" key="Vcs.Push.Dialog.v2" timestamp="1578233436458">
+    <state x="440" y="266" key="Vcs.Push.Dialog.v2" timestamp="1578233474383">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="440" y="266" key="Vcs.Push.Dialog.v2/0.0.1680.1050@0.0.1680.1050" timestamp="1578233436458" />
+    <state x="440" y="266" key="Vcs.Push.Dialog.v2/0.0.1680.1050@0.0.1680.1050" timestamp="1578233474383" />
     <state x="494" y="359" key="com.intellij.ide.util.TipDialog" timestamp="1576845549270">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>

@@ -7,7 +7,7 @@ from PhysicsTools.NanoAODTools.postprocessing.framework.crabhelper import inputF
 
 from  PhysicsTools.NanoAODTools.postprocessing.modules.ssww.sswwFakeLeptonProducer import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.ssww.helper_ssww import *
-from  PhysicsTools.NanoAODTools.postprocessing.modules.common.lepSFProducer_ssww import *
+#from  PhysicsTools.NanoAODTools.postprocessing.modules.common.lepSFProducer_ssww import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.countHistogramsModule import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer import *
 from  PhysicsTools.NanoAODTools.postprocessing.modules.common.PrefireCorr_ssww import *
