@@ -333,7 +333,7 @@ class sswwProducer(Module):
         dr_flag = True
         for i in range(0, len(taus)):
             # if taus[i].pt > 18 and abs(taus[i].eta) < 2.3 and taus[i].idDecayMode and taus[i].idDecayModeNewDMs and taus[i].rawIso < 5:
-            if taus[i].pt > 20 and abs(taus[i].eta) < 2.3 and taus[i].decayModeFindingNewDMs:
+            if taus[i].pt > 20 and abs(taus[i].eta) < 2.3 and taus[i].idDecayModeNewDMs:
                 for j in range(0, len(loose_leptons)):
                     if not (deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, taus[i].eta, taus[i].phi) > 0.4):
                         dr_flag=False

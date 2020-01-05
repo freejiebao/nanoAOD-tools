@@ -14,7 +14,6 @@ keep PV_npvs
 keep Pileup_nTrueInt
 keep nTau
 keep Tau_*
-keep Tau_*
 # photon collection is used in prefiring weight
 keep nPhoton
 keep Photon_*
