@@ -407,9 +407,9 @@ class sswwProducer(Module):
 
             # clean from identified leptons
             is_clean_jet=True
-            for j in range(0, len(loose_leptons)):
+            for ilep in loose_leptons:
                 #if (is_fakeable[j] or is_tight[j]) and deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, jets[i].eta, jets[i].phi) < 0.4:
-                if deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, jets[i].eta, jets[i].phi) < 0.4:
+                if deltaR(leptons[ilep][0].eta, leptons[ilep][0].phi, jets[i].eta, jets[i].phi) < 0.4:
                     is_clean_jet=False
                     break
 
@@ -426,20 +426,20 @@ class sswwProducer(Module):
         btagDeepBMedium = False
         btagDeepBTight = False
 
-        for i in range(0,len(loose_jets)):
-            if (loose_jets[i].pt>20 and abs(loose_jets[i].eta)<2.4):
-                if loose_jets[i].btagCSVV2 > 0.5426:
+        for ijet in loose_jets:
+            if (jets[ijet].pt>20 and abs(jets[ijet].eta)<2.4):
+                if jets[ijet].btagCSVV2 > 0.5426:
                     btagCSVV2Loose = True
-                if loose_jets[i].btagCSVV2 > 0.8484:
+                if jets[ijet].btagCSVV2 > 0.8484:
                     btagCSVV2Medium = True
-                if loose_jets[i].btagCSVV2 > 0.9535:
+                if jets[ijet].btagCSVV2 > 0.9535:
                     btagCSVV2Tight = True
 
-                if loose_jets[i].btagDeepB > 0.2219:
+                if jets[ijet].btagDeepB > 0.2219:
                     btagDeepBLoose = True
-                if loose_jets[i].btagDeepB > 0.6324:
+                if jets[ijet].btagDeepB > 0.6324:
                     btagDeepBMedium = True
-                if loose_jets[i].btagDeepB > 0.8958:
+                if jets[ijet].btagDeepB > 0.8958:
                     btagDeepBTight = True
 
         # if jet multiplicity is needed, then remove below cut
