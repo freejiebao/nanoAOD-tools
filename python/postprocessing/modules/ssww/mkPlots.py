@@ -32,16 +32,16 @@ ROOT.gInterpreter.Declare('#include "{}"'.format(run_helper_header_path))
 
 def histogram_model():
     histogram_models={
-        'lep1_pt':['lepton_pt[0]',ROOT.RDF.TH1DModel('', "lep1_pt;l_{1}^{pt} (GeV);Event", 5, 25,300)],
-        'lep2_pt':['lepton_pt[1]',ROOT.RDF.TH1DModel('', "lep2_pt;l_{2}^{pt} (GeV);Event", 5, 20,300)],
-        'lep3_pt':['lepton_pt[2]',ROOT.RDF.TH1DModel('', "lep3_pt;l_{3}^{pt} (GeV);Event", 5, 20,300)],
-        'lep1_eta':['lepton_eta[0]',ROOT.RDF.TH1DModel('', "lep1_eta;l_{1}^{#eta} (GeV);Event", 10, -2.5,2.5)],
-        'lep2_eta':['lepton_eta[1]',ROOT.RDF.TH1DModel('', "lep2_eta;l_{2}^{#eta} (GeV);Event", 10, -2.5,2.5)],
-        'lep3_eta':['lepton_eta[2]',ROOT.RDF.TH1DModel('', "lep3_eta;l_{3}^{#eta} (GeV);Event", 10, -2.5,2.5)],
-        'jet1_pt':['jet_pt[0]',ROOT.RDF.TH1DModel('', "jet1_pt;j_{1}^{pt} (GeV);Event", 5, 20,300)],
-        'jet2_pt':['jet_pt[1]',ROOT.RDF.TH1DModel('', "jet2_pt;j_{2}^{pt} (GeV);Event", 5, 20,300)],
-        'jet1_eta':['jet_eta[0]',ROOT.RDF.TH1DModel('', "jet1_eta;j_{1}^{#eta} (GeV);Event", 10, -2.5,2.5)],
-        'jet2_eta':['jet_eta[1]',ROOT.RDF.TH1DModel('', "jet2_eta;j_{2}^{#eta} (GeV);Event", 10, -2.5,2.5)],
+        'lep1_pt':['lepton_pt[0]',ROOT.RDF.TH1DModel('', "lep1_pt;p^{lep1}_{#perp} (GeV);Event", 5, 25,300)],
+        'lep2_pt':['lepton_pt[1]',ROOT.RDF.TH1DModel('', "lep2_pt;p^{lep2}_{#perp} (GeV);Event", 5, 20,300)],
+        'lep3_pt':['lepton_pt[2]',ROOT.RDF.TH1DModel('', "lep3_pt;p^{lep3}_{#perp} (GeV);Event", 5, 20,300)],
+        'lep1_eta':['lepton_eta[0]',ROOT.RDF.TH1DModel('', "lep1_eta;#eta^{lep1} (GeV);Event", 10, -2.5,2.5)],
+        'lep2_eta':['lepton_eta[1]',ROOT.RDF.TH1DModel('', "lep2_eta;#eta^{lep2} (GeV);Event", 10, -2.5,2.5)],
+        'lep3_eta':['lepton_eta[2]',ROOT.RDF.TH1DModel('', "lep3_eta;#eta^{lep3} (GeV);Event", 10, -2.5,2.5)],
+        'jet1_pt':['jet_pt[0]',ROOT.RDF.TH1DModel('', "jet1_pt;p^{jet1}_{#perp} (GeV);Event", 5, 20,300)],
+        'jet2_pt':['jet_pt[1]',ROOT.RDF.TH1DModel('', "jet2_pt;p^{jet2}_{#perp} (GeV);Event", 5, 20,300)],
+        'jet1_eta':['jet_eta[0]',ROOT.RDF.TH1DModel('', "jet1_eta;#eta^{jet1} (GeV);Event", 10, -2.5,2.5)],
+        'jet2_eta':['jet_eta[1]',ROOT.RDF.TH1DModel('', "jet2_eta;#eta^{jet2} (GeV);Event", 10, -2.5,2.5)],
         'mll':['mll',ROOT.RDF.TH1DModel('', "mll;m_{ll} (GeV);Event", 5, 20,300)],
         'mjj_low':['mjj',ROOT.RDF.TH1DModel('', "mjj_low;m_{jj} (GeV);Event", 5, 100,500)],
         'mjj':['mjj',ROOT.RDF.TH1DModel('', "mjj;m_{jj} (GeV);Event", 5, 500,2000)],
@@ -138,7 +138,7 @@ def get_stack(region):
 
         for iisample in plot_scheme['Data']['sample']:
             _h_base=dir.Get(iisample+'_base_'+key)
-            hdata.Add(_h_base)
+            hdata.Add(_h_base.Clone())
 
         plots={}
         for iplot in plot_scheme:
@@ -151,14 +151,14 @@ def get_stack(region):
                     if iplot=='Non-prompt':
                         _h_1fake=dir.Get(iisample+'_1fake_'+key)
                         _h_2fake=dir.Get(iisample+'_2fake_'+key)
-                        htotal.Add(_h_1fake)
-                        htotal.Add(_h_2fake)
-                        htmp.Add(_h_1fake)
-                        htmp.Add(_h_2fake)
+                        htotal.Add(_h_1fake.Clone())
+                        htotal.Add(_h_2fake.Clone())
+                        htmp.Add(_h_1fake.Clone())
+                        htmp.Add(_h_2fake.Clone())
                     else:
                         _h_base=dir.Get(iisample+'_base_'+key)
-                        htotal.Add(_h_base)
-                        htmp.Add(_h_base)
+                        htotal.Add(_h_base.Clone())
+                        htmp.Add(_h_base.Clone())
                 htmp.SetFillColor(plot_scheme[iplot]['color'])
                 plots[iplot]=htmp
                 hs.Add(htmp)
@@ -172,6 +172,7 @@ def get_stack(region):
         hs.SetMinimum(0)
         htotal.SetMinimum(0)
 
+        hdata.SetMarkerStyle(ROOT.kFullCircle)
         hdata.Draw("")
         hs.Draw("hist same")
 
@@ -180,7 +181,7 @@ def get_stack(region):
 
         for iplot in plots:
             legend_count+=1
-            draw_legend(xpositions[legend_count],0.84 - ypositions[legend_count]*yoffset,plots[iplot],plot_scheme[iplot].name,"f")
+            draw_legend(xpositions[legend_count],0.84 - ypositions[legend_count]*yoffset,plots[iplot],plot_scheme[iplot]['name'],"f")
 
         set_axis_fonts(hdata,"x")
         #set_axis_fonts(hstack,"x","pt_{l}^{max} (GeV)")
