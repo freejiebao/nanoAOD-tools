@@ -37,7 +37,31 @@ class sswwProducer(Module):
         self.out.branch("ntruepu", "F")
         self.out.branch("npvs", "I")
         self.out.branch("gen_weight", "F")
-        self.out.branch("tauTag", "B")
+        # tau tag
+        #self.out.branch("tauTag", "B")
+        self.out.branch("tauTagVVVLooseVSe", "B")
+        self.out.branch("tauTagVVLooseVSe", "B")
+        self.out.branch("tauTagVLooseVSe", "B")
+        self.out.branch("tauTagLooseVSe", "B")
+        self.out.branch("tauTagMediumVSe", "B")
+        self.out.branch("tauTagTightVSe", "B")
+        self.out.branch("tauTagVTightVSe", "B")
+        self.out.branch("tauTagVVTightVSe", "B")
+
+        self.out.branch("tauTagVVVLooseVSjet", "B")
+        self.out.branch("tauTagVVLooseVSjet", "B")
+        self.out.branch("tauTagVLooseVSjet", "B")
+        self.out.branch("tauTagLooseVSjet", "B")
+        self.out.branch("tauTagMediumVSjet", "B")
+        self.out.branch("tauTagTightVSjet", "B")
+        self.out.branch("tauTagVTightVSjet", "B")
+        self.out.branch("tauTagVVTightVSjet", "B")
+
+        self.out.branch("tauTagVLooseVSmu", "B")
+        self.out.branch("tauTagLooseVSmu", "B")
+        self.out.branch("tauTagMediumVSmu", "B")
+        self.out.branch("tauTagTightVSmu", "B")
+
         self.out.branch("softmuonTag", "B")
         self.out.branch("n_tight_leptons", "I")
         self.out.branch("n_fakeable_leptons", "I")
@@ -55,15 +79,18 @@ class sswwProducer(Module):
         self.out.branch("lepton_softmu", "B", lenVar="nlepton")
         self.out.branch("lepton_zep", "F", lenVar="nlepton")
         self.out.branch("mll", "F")
+        '''
         self.out.branch("mll02", "F")
         self.out.branch("mll12", "F")
         self.out.branch("mlll", "F")
         self.out.branch("mll_z0", "F")
         self.out.branch("mll_z1", "F")
         self.out.branch("mllll", "F")
+        '''
         self.out.branch("detajj", "F")
         self.out.branch("jet_idx", "I", lenVar="njet")
-        self.out.branch("jet_id", "I", lenVar="njet")
+        self.out.branch("jet_jetId", "I", lenVar="njet")
+        self.out.branch("jet_puId", "I", lenVar="njet")
         self.out.branch("jet_pt", "F", lenVar="njet")
         self.out.branch("jet_eta", "F", lenVar="njet")
         self.out.branch("jet_phi", "F", lenVar="njet")
@@ -72,6 +99,15 @@ class sswwProducer(Module):
         self.out.branch("jet_btagDeepB", "F", lenVar="njet")
         self.out.branch("jet_hadronFlavour", "I", lenVar="njet")
         self.out.branch("jet_partonFlavour", "I", lenVar="njet")
+        # b tag
+        self.out.branch("btagCSVV2Loose", "B")
+        self.out.branch("btagCSVV2Medium", "B")
+        self.out.branch("btagCSVV2Tight", "B")
+
+        self.out.branch("btagDeepBLoose", "B")
+        self.out.branch("btagDeepBMedium", "B")
+        self.out.branch("btagDeepBTight", "B")
+
         self.out.branch("mjj", "F")
         self.out.branch("met", "F")
         self.out.branch("met_phi", "F")
@@ -271,18 +307,80 @@ class sswwProducer(Module):
 
         # tau veto
         #tauVeto = True
-        tauTag = False
+        tauTagVVVLooseVSe = False
+        tauTagVVLooseVSe = False
+        tauTagVLooseVSe = False
+        tauTagLooseVSe = False
+        tauTagMediumVSe = False
+        tauTagTightVSe = False
+        tauTagVTightVSe = False
+        tauTagVVTightVSe = False
+
+        tauTagVVVLooseVSjet = False
+        tauTagVVLooseVSjet = False
+        tauTagVLooseVSjet = False
+        tauTagLooseVSjet = False
+        tauTagMediumVSjet = False
+        tauTagTightVSjet = False
+        tauTagVTightVSjet = False
+        tauTagVVTightVSjet = False
+
+        tauTagVLooseVSmu = False
+        tauTagLooseVSmu = False
+        tauTagMediumVSmu = False
+        tauTagTightVSmu = False
+
         dr_flag = True
         for i in range(0, len(taus)):
             # if taus[i].pt > 18 and abs(taus[i].eta) < 2.3 and taus[i].idDecayMode and taus[i].idDecayModeNewDMs and taus[i].rawIso < 5:
-            if taus[i].pt > 18 and abs(taus[i].eta) < 2.3 and taus[i].idDecayMode and (taus[i].idMVAoldDM2017v2 >> 2 & 1):
+            if taus[i].pt > 20 and abs(taus[i].eta) < 2.3 and taus[i].decayModeFindingNewDMs:
                 for j in range(0, len(loose_leptons)):
-                    dr_flag*=(deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, taus[i].eta, taus[i].phi) > 0.4)
+                    if not (deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, taus[i].eta, taus[i].phi) > 0.4):
+                        dr_flag=False
+                        break
                 if dr_flag:
-                    tauTag = True
+                    if taus[i].idDeepTau2017v2p1VSe >> 0 & 1:
+                        tauTagVVVLooseVSe = True
+                    if taus[i].idDeepTau2017v2p1VSe >> 1 & 1:
+                        tauTagVVLooseVSe = True
+                    if taus[i].idDeepTau2017v2p1VSe >> 2 & 1:
+                        tauTagVLooseVSe = True
+                    if taus[i].idDeepTau2017v2p1VSe >> 3 & 1:
+                        tauTagLooseVSe = True
+                    if taus[i].idDeepTau2017v2p1VSe >> 4 & 1:
+                        tauTagMediumVSe = True
+                    if taus[i].idDeepTau2017v2p1VSe >> 5 & 1:
+                        tauTagTightVSe = True
+                    if taus[i].idDeepTau2017v2p1VSe >> 6 & 1:
+                        tauTagVTightVSe = True
+                    if taus[i].idDeepTau2017v2p1VSe >> 7 & 1:
+                        tauTagVVTightVSe = True
 
-        #if tauTag:
-        #    tauVeto = False
+                    if taus[i].idDeepTau2017v2p1VSjet >> 0 & 1:
+                        tauTagVVVLooseVSjet = True
+                    if taus[i].idDeepTau2017v2p1VSjet >> 1 & 1:
+                        tauTagVVLooseVSjet = True
+                    if taus[i].idDeepTau2017v2p1VSjet >> 2 & 1:
+                        tauTagVLooseVSjet = True
+                    if taus[i].idDeepTau2017v2p1VSjet >> 3 & 1:
+                        tauTagLooseVSjet = True
+                    if taus[i].idDeepTau2017v2p1VSjet >> 4 & 1:
+                        tauTagMediumVSjet = True
+                    if taus[i].idDeepTau2017v2p1VSjet >> 5 & 1:
+                        tauTagTightVSjet = True
+                    if taus[i].idDeepTau2017v2p1VSjet >> 6 & 1:
+                        tauTagVTightVSjet = True
+                    if taus[i].idDeepTau2017v2p1VSjet >> 7 & 1:
+                        tauTagVVTightVSjet = True
+
+                    if taus[i].idDeepTau2017v2p1VSmu >> 0 & 1:
+                        tauTagVLooseVSmu = True
+                    if taus[i].idDeepTau2017v2p1VSmu >> 1 & 1:
+                        tauTagLooseVSmu = True
+                    if taus[i].idDeepTau2017v2p1VSmu >> 2 & 1:
+                        tauTagMediumVSmu = True
+                    if taus[i].idDeepTau2017v2p1VSmu >> 3 & 1:
+                        tauTagTightVSmu = True
 
         #soft muon tag
         softmuonTag=False
@@ -308,18 +406,50 @@ class sswwProducer(Module):
                 continue
 
             # clean from identified leptons
+            is_clean_jet=True
             for j in range(0, len(loose_leptons)):
-                if (is_fakeable[j] or is_tight[j]) and deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, jets[i].eta, jets[i].phi) < 0.4:
-                    continue
+                #if (is_fakeable[j] or is_tight[j]) and deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, jets[i].eta, jets[i].phi) < 0.4:
+                if deltaR(leptons[loose_leptons[j]][0].eta, leptons[loose_leptons[j]][0].phi, jets[i].eta, jets[i].phi) < 0.4:
+                    is_clean_jet=False
+                    break
 
             # actually jet related lepton maybe not loose
-            loose_jets.append(i)
+            if is_clean_jet:
+                loose_jets.append(i)
+
+        # btag: discriminator value just for 2016
+        btagCSVV2Loose = False
+        btagCSVV2Medium = False
+        btagCSVV2Tight = False
+
+        btagDeepBLoose = False
+        btagDeepBMedium = False
+        btagDeepBTight = False
+
+        for i in range(0,len(loose_jets)):
+            if (loose_jets[i].pt>20 and abs(loose_jets[i].eta)<2.4):
+                if loose_jets[i].btagCSVV2 > 0.5426:
+                    btagCSVV2Loose = True
+                if loose_jets[i].btagCSVV2 > 0.8484:
+                    btagCSVV2Medium = True
+                if loose_jets[i].btagCSVV2 > 0.9535:
+                    btagCSVV2Tight = True
+
+                if loose_jets[i].btagDeepB > 0.2219:
+                    btagDeepBLoose = True
+                if loose_jets[i].btagDeepB > 0.6324:
+                    btagDeepBMedium = True
+                if loose_jets[i].btagDeepB > 0.8958:
+                    btagDeepBTight = True
+
         # if jet multiplicity is needed, then remove below cut
+        '''
         if self.preSel:
             if len(loose_jets) < 2:
                 return False
             elif jets[loose_jets[1]].pt<30:
                 return False
+        '''
 
         # decide whether lepton real
         #isprompt_mask = (0 << 0)  # isPrompt
@@ -393,7 +523,8 @@ class sswwProducer(Module):
 
         # store jets information
         jet_idx = []
-        jet_id = []
+        jet_jetId = []
+        jet_puId = []
         jet_pt = []
         jet_eta = []
         jet_phi = []
@@ -404,7 +535,8 @@ class sswwProducer(Module):
         jet_partonFlavour = []
         for i in range(0, len(loose_jets)):
             jet_idx.append(loose_jets[i])
-            jet_id.append(jets[loose_jets[i]].jetId)
+            jet_jetId.append(jets[loose_jets[i]].jetId)
+            jet_puId.append(jets[loose_jets[i]].puId)
             jet_pt.append(jets[loose_jets[i]].pt)
             jet_eta.append(jets[loose_jets[i]].eta)
             jet_phi.append(jets[loose_jets[i]].phi)
@@ -442,7 +574,30 @@ class sswwProducer(Module):
         else:
             self.out.fillBranch("gen_weight", 0)
 
-        self.out.fillBranch("tauTag", tauTag)
+        #self.out.fillBranch("tauTag", tauTag)
+        self.out.fillBranch("tauTagVVVLooseVSe", tauTagVVVLooseVSe)
+        self.out.fillBranch("tauTagVVLooseVSe", tauTagVVLooseVSe)
+        self.out.fillBranch("tauTagVLooseVSe", tauTagVLooseVSe)
+        self.out.fillBranch("tauTagLooseVSe", tauTagLooseVSe)
+        self.out.fillBranch("tauTagMediumVSe", tauTagMediumVSe)
+        self.out.fillBranch("tauTagTightVSe", tauTagTightVSe)
+        self.out.fillBranch("tauTagVTightVSe", tauTagVTightVSe)
+        self.out.fillBranch("tauTagVVTightVSe", tauTagVVTightVSe)
+
+        self.out.fillBranch("tauTagVVVLooseVSjet", tauTagVVVLooseVSjet)
+        self.out.fillBranch("tauTagVVLooseVSjet", tauTagVVLooseVSjet)
+        self.out.fillBranch("tauTagVLooseVSjet", tauTagVLooseVSjet)
+        self.out.fillBranch("tauTagLooseVSjet", tauTagLooseVSjet)
+        self.out.fillBranch("tauTagMediumVSjet", tauTagMediumVSjet)
+        self.out.fillBranch("tauTagTightVSjet", tauTagTightVSjet)
+        self.out.fillBranch("tauTagVTightVSjet", tauTagVTightVSjet)
+        self.out.fillBranch("tauTagVVTightVSjet", tauTagVVTightVSjet)
+
+        self.out.fillBranch("tauTagVLooseVSmu", tauTagVLooseVSmu)
+        self.out.fillBranch("tauTagLooseVSmu", tauTagLooseVSmu)
+        self.out.fillBranch("tauTagMediumVSmu", tauTagMediumVSmu)
+        self.out.fillBranch("tauTagTightVSmu", tauTagTightVSmu)
+
         self.out.fillBranch("softmuonTag", softmuonTag)
         self.out.fillBranch("n_tight_leptons", n_tight_leptons)
         self.out.fillBranch("n_fakeable_leptons", n_fakeable_leptons)
@@ -463,6 +618,7 @@ class sswwProducer(Module):
         if len(loose_leptons) > 1:
             mll = (leptons[loose_leptons[0]][0].p4() + leptons[loose_leptons[1]][0].p4()).M()
         self.out.fillBranch("mll", mll)
+        '''
         mll02 = -9999.
         mll12 = -9999.
         mlll = -9999.
@@ -490,9 +646,11 @@ class sswwProducer(Module):
         self.out.fillBranch("mll_z0", mll_z0)
         self.out.fillBranch("mll_z1", mll_z1)
         self.out.fillBranch("mllll", mllll)
+        '''
         self.out.fillBranch("detajj", detajj)
         self.out.fillBranch("jet_idx", jet_idx)
-        self.out.fillBranch("jet_id", jet_id)
+        self.out.fillBranch("jet_jetId", jet_jetId)
+        self.out.fillBranch("jet_puId", jet_puId)
         self.out.fillBranch("jet_pt", jet_pt)
         self.out.fillBranch("jet_eta", jet_eta)
         self.out.fillBranch("jet_phi", jet_phi)
@@ -501,6 +659,15 @@ class sswwProducer(Module):
         self.out.fillBranch("jet_btagDeepB", jet_btagDeepB)
         self.out.fillBranch("jet_hadronFlavour", jet_hadronFlavour)
         self.out.fillBranch("jet_partonFlavour", jet_partonFlavour)
+
+        self.out.fillBranch("btagCSVV2Loose", btagCSVV2Loose)
+        self.out.fillBranch("btagCSVV2Medium", btagCSVV2Medium)
+        self.out.fillBranch("btagCSVV2Tight", btagCSVV2Tight)
+
+        self.out.fillBranch("btagDeepBLoose", btagDeepBLoose)
+        self.out.fillBranch("btagDeepBMedium", btagDeepBMedium)
+        self.out.fillBranch("btagDeepBTight", btagDeepBTight)
+
         self.out.fillBranch("mjj", mjj)
         self.out.fillBranch("met", event.MET_pt)
         self.out.fillBranch("met_phi", event.MET_phi)

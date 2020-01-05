@@ -160,8 +160,9 @@ def get_stack(region):
                         htotal.Add(_h_base.Clone())
                         htmp.Add(_h_base.Clone())
                 htmp.SetFillColor(plot_scheme[iplot]['color'])
-                plots[iplot]=htmp
-                hs.Add(htmp)
+                htmp.SetLineWidth(0)
+                plots[iplot]=htmp.Clone()
+                hs.Add(plots[iplot])
 
         if hdata.GetMaximum() < htotal.GetMaximum():
             hdata.SetMaximum(htotal.GetMaximum()*1.55)
@@ -173,6 +174,7 @@ def get_stack(region):
         htotal.SetMinimum(0)
 
         hdata.SetMarkerStyle(ROOT.kFullCircle)
+        hdata.SetLineWidth(2)
         hdata.Draw("")
         hs.Draw("hist same")
 
