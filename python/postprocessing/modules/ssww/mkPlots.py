@@ -32,19 +32,19 @@ ROOT.gInterpreter.Declare('#include "{}"'.format(run_helper_header_path))
 
 def histogram_model():
     histogram_models={
-        'lep1_pt':['lepton_pt[0]',ROOT.RDF.TH1DModel('', "lep1_pt;p^{lep1}_{#perp} (GeV);Event", 5, 25,300)],
-        'lep2_pt':['lepton_pt[1]',ROOT.RDF.TH1DModel('', "lep2_pt;p^{lep2}_{#perp} (GeV);Event", 5, 20,300)],
-        'lep3_pt':['lepton_pt[2]',ROOT.RDF.TH1DModel('', "lep3_pt;p^{lep3}_{#perp} (GeV);Event", 5, 20,300)],
-        'lep1_eta':['lepton_eta[0]',ROOT.RDF.TH1DModel('', "lep1_eta;#eta^{lep1} (GeV);Event", 10, -2.5,2.5)],
-        'lep2_eta':['lepton_eta[1]',ROOT.RDF.TH1DModel('', "lep2_eta;#eta^{lep2} (GeV);Event", 10, -2.5,2.5)],
-        'lep3_eta':['lepton_eta[2]',ROOT.RDF.TH1DModel('', "lep3_eta;#eta^{lep3} (GeV);Event", 10, -2.5,2.5)],
-        'jet1_pt':['jet_pt[0]',ROOT.RDF.TH1DModel('', "jet1_pt;p^{jet1}_{#perp} (GeV);Event", 5, 20,300)],
-        'jet2_pt':['jet_pt[1]',ROOT.RDF.TH1DModel('', "jet2_pt;p^{jet2}_{#perp} (GeV);Event", 5, 20,300)],
-        'jet1_eta':['jet_eta[0]',ROOT.RDF.TH1DModel('', "jet1_eta;#eta^{jet1} (GeV);Event", 10, -2.5,2.5)],
-        'jet2_eta':['jet_eta[1]',ROOT.RDF.TH1DModel('', "jet2_eta;#eta^{jet2} (GeV);Event", 10, -2.5,2.5)],
-        'mll':['mll',ROOT.RDF.TH1DModel('', "mll;m_{ll} (GeV);Event", 5, 20,300)],
-        'mjj_low':['mjj',ROOT.RDF.TH1DModel('', "mjj_low;m_{jj} (GeV);Event", 5, 100,500)],
-        'mjj':['mjj',ROOT.RDF.TH1DModel('', "mjj;m_{jj} (GeV);Event", 5, 500,2000)],
+        'lep1_pt':['lepton_pt[0]',ROOT.RDF.TH1DModel('', ";p^{lep1}_{#perp} (GeV);Event", 5, 25,300)],
+        'lep2_pt':['lepton_pt[1]',ROOT.RDF.TH1DModel('', ";p^{lep2}_{#perp} (GeV);Event", 5, 20,300)],
+        'lep3_pt':['lepton_pt[2]',ROOT.RDF.TH1DModel('', ";p^{lep3}_{#perp} (GeV);Event", 5, 20,300)],
+        'lep1_eta':['lepton_eta[0]',ROOT.RDF.TH1DModel('', ";#eta^{lep1} (GeV);Event", 10, -2.5,2.5)],
+        'lep2_eta':['lepton_eta[1]',ROOT.RDF.TH1DModel('', ";#eta^{lep2} (GeV);Event", 10, -2.5,2.5)],
+        'lep3_eta':['lepton_eta[2]',ROOT.RDF.TH1DModel('', ";#eta^{lep3} (GeV);Event", 10, -2.5,2.5)],
+        'jet1_pt':['jet_pt[0]',ROOT.RDF.TH1DModel('', ";p^{jet1}_{#perp} (GeV);Event", 5, 20,300)],
+        'jet2_pt':['jet_pt[1]',ROOT.RDF.TH1DModel('', ";p^{jet2}_{#perp} (GeV);Event", 5, 20,300)],
+        'jet1_eta':['jet_eta[0]',ROOT.RDF.TH1DModel('', ";#eta^{jet1} (GeV);Event", 10, -2.5,2.5)],
+        'jet2_eta':['jet_eta[1]',ROOT.RDF.TH1DModel('', ";#eta^{jet2} (GeV);Event", 10, -2.5,2.5)],
+        'mll':['mll',ROOT.RDF.TH1DModel('', ";m_{ll} (GeV);Event", 5, 20,300)],
+        'mjj_low':['mjj',ROOT.RDF.TH1DModel('', ";m_{jj} (GeV);Event", 5, 100,500)],
+        'mjj':['mjj',ROOT.RDF.TH1DModel('', ";m_{jj} (GeV);Event", 5, 500,2000)],
     }
 
     return histogram_models
@@ -222,8 +222,8 @@ def get_stack(region):
         c1.ForceUpdate()
         c1.Modified()
 
-        c1.SaveAs(args.year+'_plots/'+args.year+'_'+region+'_'+key+".png")
-
+        c1.SaveAs(args.year+'_plots/'+args.year+'_'+region+'_'+key+".pdf")
+        c1.Close()
 
 def ssww_region(datasets,sample,df):
     print '>>>>>>>>>>>>>>>>>>>>>>> %s in ssww region' % sample
