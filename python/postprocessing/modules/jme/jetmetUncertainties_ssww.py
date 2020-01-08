@@ -179,6 +179,7 @@ class jetmetUncertaintiesProducer(Module):
             jet.muonIdx2=Jets[jet.idx].muonIdx2
             jet.neEmEF=Jets[jet.idx].neEmEF
             jet.chEmEF=Jets[jet.idx].chEmEF
+            jet.area=Jets[jet.idx].area
 
         # prepare the low pt jets (they don't have a rawFactor)
         for jet in lowPtJets:
