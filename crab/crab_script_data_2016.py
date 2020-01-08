@@ -16,5 +16,3 @@ p=PostProcessor(".",inputFiles(),None,os.environ['CMSSW_BASE']+"/python/PhysicsT
 p.run()
 
 print "DONE"
-os.system("ls -lR")
-
