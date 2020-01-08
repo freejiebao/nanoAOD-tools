@@ -1,11 +1,85 @@
 #pt, eta, phi, and mass are all used in in the p4 function in https://github.com/cms-nanoAOD/nanoAOD-tools/blob/master/python/postprocessing/framework/datamodel.py, so if you do not keep all of them and you use p4, it will cause runtime dependent behavior
 drop *
+keep run
+keep lumi
+keep event
+keep PrefireWeight
+keep PrefireWeight_Up
+keep PrefireWeight_Down
+keep npu
+keep ntruepu
+keep npvs
+# tau tag
+keep tauTagVVVLooseVSe
+keep tauTagVVLooseVSe
+keep tauTagVLooseVSe
+keep tauTagLooseVSe
+keep tauTagMediumVSe
+keep tauTagTightVSe
+keep tauTagVTightVSe
+keep tauTagVVTightVSe
 
+keep tauTagVVVLooseVSjet
+keep tauTagVVLooseVSjet
+keep tauTagVLooseVSjet
+keep tauTagLooseVSjet
+keep tauTagMediumVSjet
+keep tauTagTightVSjet
+keep tauTagVTightVSjet
+keep tauTagVVTightVSjet
+
+keep tauTagVLooseVSmu
+keep tauTagLooseVSmu
+keep tauTagMediumVSmu
+keep tauTagTightVSmu
+
+keep softmuonTag
+keep n_tight_leptons
+keep n_fakeable_leptons
+keep lepton_idx
+keep lepton_pdgId
+keep lepton_tight
+keep lepton_fakeable
+keep lepton_pt
+keep lepton_eta
+keep lepton_phi
+keep lepton_mass
+keep lepton_real
+keep lepton_mishits
+keep lepton_tkIsoId
+keep lepton_softmu
+keep lepton_zep
+
+keep lepton_corrected_pt
+keep lepton_correctedUp_pt
+keep lepton_correctedDown_pt
+
+keep mll
+keep detajj
+keep jet_idx
+keep jet_jetId
+keep jet_puId
+keep jet_pt
+keep jet_eta
+keep jet_phi
+keep jet_mass
+keep jet_btagCSVV2
+keep jet_btagDeepB
+# b tag
+keep btagCSVV2Loose
+keep btagCSVV2Medium
+keep btagCSVV2Tight
+
+keep btagDeepBLoose
+keep btagDeepBMedium
+keep btagDeepBTight
+
+keep mjj
 keep MET_pt
 keep MET_phi
-
 keep PuppiMET_pt
 keep PuppiMET_phi
+
 # https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2
 keep Flag_goodVertices
 keep Flag_globalSuperTightHalo2016Filter
