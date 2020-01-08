@@ -99,6 +99,7 @@ class sswwProducer(Module):
         self.out.branch("jet_btagDeepB", "F", lenVar="njet")
         self.out.branch("jet_hadronFlavour", "I", lenVar="njet")
         self.out.branch("jet_partonFlavour", "I", lenVar="njet")
+        self.out.branch("jet_rawFactor", "I", lenVar="njet")
         # b tag
         self.out.branch("btagCSVV2Loose", "B")
         self.out.branch("btagCSVV2Medium", "B")
@@ -529,6 +530,7 @@ class sswwProducer(Module):
         jet_btagDeepB = []
         jet_hadronFlavour = []
         jet_partonFlavour = []
+        jet_rawFactor = []
         for i in range(0, len(loose_jets)):
             jet_idx.append(loose_jets[i])
             jet_jetId.append(jets[loose_jets[i]].jetId)
@@ -548,6 +550,11 @@ class sswwProducer(Module):
                 jet_partonFlavour.append(jets[loose_jets[i]].partonFlavour)
             else:
                 jet_partonFlavour.append(-9999)
+
+            if hasattr(jets[loose_jets[i]], 'rawFactor'):
+                jet_rawFactor.append(jets[loose_jets[i]].rawFactor)
+            else:
+                jet_rawFactor.append(-9999)
 
         self.out.fillBranch("run", event.run)
         self.out.fillBranch("lumi", event.luminosityBlock)
@@ -655,6 +662,7 @@ class sswwProducer(Module):
         self.out.fillBranch("jet_btagDeepB", jet_btagDeepB)
         self.out.fillBranch("jet_hadronFlavour", jet_hadronFlavour)
         self.out.fillBranch("jet_partonFlavour", jet_partonFlavour)
+        self.out.fillBranch("jet_rawFactor", jet_rawFactor)
 
         self.out.fillBranch("btagCSVV2Loose", btagCSVV2Loose)
         self.out.fillBranch("btagCSVV2Medium", btagCSVV2Medium)

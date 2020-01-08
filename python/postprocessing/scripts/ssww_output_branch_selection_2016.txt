@@ -71,6 +71,7 @@ keep jet_btagCSVV2
 keep jet_btagDeepB
 keep jet_hadronFlavour
 keep jet_partonFlavour
+keep jet_rawFactor
 # jet uncertainties
 keep jet_pt_raw
 keep jet_pt_nom
