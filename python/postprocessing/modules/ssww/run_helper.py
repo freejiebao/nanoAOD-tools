@@ -106,15 +106,15 @@ if __name__ == '__main__':
                 if ("lepton_sf" in brach_list) or ("lepton_sf_up" in brach_list) or ("lepton_sf_down" in brach_list):
                     print "==================== Warning: lepton_sf already exist in %s, please check" %samples[imc][i]
                     continue
-                df1=df.Define("lepton_sf","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"nom\")")\
-                    .Define("lepton_sf_muon_id_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"muon_id_up\")")\
-                    .Define("lepton_sf_muon_id_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"muon_id_down\")")\
-                    .Define("lepton_sf_muon_iso_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"muon_iso_up\")")\
-                    .Define("lepton_sf_muon_iso_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"muon_iso_down\")") \
-                    .Define("lepton_sf_electron_id_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"electron_id_up\")") \
-                    .Define("lepton_sf_electron_id_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"electron_id_down\")") \
-                    .Define("lepton_sf_electron_reco_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"electron_reco_up\")") \
-                    .Define("lepton_sf_electron_reco_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"electron_reco_down\")")
+                df1=df.Define("lepton_sf","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"nom\")")\
+                    .Define("lepton_sf_muon_id_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"muon_id_up\")")\
+                    .Define("lepton_sf_muon_id_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"muon_id_down\")")\
+                    .Define("lepton_sf_muon_iso_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"muon_iso_up\")")\
+                    .Define("lepton_sf_muon_iso_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"muon_iso_down\")") \
+                    .Define("lepton_sf_electron_id_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"electron_id_up\")") \
+                    .Define("lepton_sf_electron_id_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"electron_id_down\")") \
+                    .Define("lepton_sf_electron_reco_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"electron_reco_up\")") \
+                    .Define("lepton_sf_electron_reco_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"electron_reco_down\")")
 
                 #df1=df.Define("lepton_sf","efficiency_scale_factor(lepton_pt,lepton_eta,\""+args.year+"\",\"nom\")")
 
@@ -136,9 +136,9 @@ if __name__ == '__main__':
                     print "==================== Warning: lepton_fake_weight already exist in %s, please check" %samples[imc][i]
                     continue
 
-                df1=df.Define("lepton_fake_weight","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"nominal\")") \
-                    .Define("lepton_fake_weight_up","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"up\")")\
-                    .Define("lepton_fake_weight_down","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"down\")")
+                df1=df.Define("lepton_fake_weight","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"nominal\")") \
+                    .Define("lepton_fake_weight_up","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"up\")")\
+                    .Define("lepton_fake_weight_down","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"down\")")
 
                 tmp_path='/tmp/jixiao%s/' % args.year
                 if not os.path.exists(tmp_path):
@@ -257,9 +257,9 @@ if __name__ == '__main__':
                     print "==================== Warning: lepton_fake_weight already exist in %s, please check" %samples[idata][i]
                     continue
 
-                df1=df.Define("lepton_fake_weight","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"nominal\")") \
-                    .Define("lepton_fake_weight_up","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"up\")") \
-                    .Define("lepton_fake_weight_down","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdg_id,\""+args.year+"\",\"down\")")
+                df1=df.Define("lepton_fake_weight","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"nominal\")") \
+                    .Define("lepton_fake_weight_up","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"up\")") \
+                    .Define("lepton_fake_weight_down","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"down\")")
 
                 tmp_path='/tmp/jixiao%s/' % args.year
                 if not os.path.exists(tmp_path):

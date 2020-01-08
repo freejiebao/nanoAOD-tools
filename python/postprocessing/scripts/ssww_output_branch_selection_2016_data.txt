@@ -3,16 +3,12 @@ drop *
 keep run
 keep lumi
 keep event
-keep puWeight
-keep puWeightUp
-keep puWeightDown
 keep PrefireWeight
 keep PrefireWeight_Up
 keep PrefireWeight_Down
 keep npu
 keep ntruepu
 keep npvs
-keep gen_weight
 # tau tag
 keep tauTagVVVLooseVSe
 keep tauTagVVLooseVSe
@@ -69,46 +65,6 @@ keep jet_phi
 keep jet_mass
 keep jet_btagCSVV2
 keep jet_btagDeepB
-keep jet_hadronFlavour
-keep jet_partonFlavour
-# jet uncertainties
-keep jet_pt_raw
-keep jet_pt_nom
-keep jet_mass_raw
-keep jet_mass_nom
-keep jet_corr_JEC
-keep jet_corr_JER
-keep jet_pt_jerUp
-keep jet_pt_jerDown
-keep jet_mass_jerUp
-keep jet_mass_jerDown
-keep jet_pt_jesTotalUp
-keep jet_pt_jesTotalDown
-keep jet_mass_jesTotalUp
-keep jet_mass_jesTotalDown
-# btag scale factor
-keep jet_btagSF
-keep jet_btagSF_up
-keep jet_btagSF_down
-keep jet_btagSF_shape
-keep jet_btagSF_shape_up_jes
-keep jet_btagSF_shape_down_jes
-keep jet_btagSF_shape_up_lf
-keep jet_btagSF_shape_down_lf
-keep jet_btagSF_shape_up_hf
-keep jet_btagSF_shape_down_hf
-keep jet_btagSF_shape_up_hfstats1
-keep jet_btagSF_shape_down_hfstats1
-keep jet_btagSF_shape_up_hfstats2
-keep jet_btagSF_shape_down_hfstats2
-keep jet_btagSF_shape_up_lfstats1
-keep jet_btagSF_shape_down_lfstats1
-keep jet_btagSF_shape_up_lfstats2
-keep jet_btagSF_shape_down_lfstats2
-keep jet_btagSF_shape_up_cferr1
-keep jet_btagSF_shape_down_cferr1
-keep jet_btagSF_shape_up_cferr2
-keep jet_btagSF_shape_down_cferr2
 # b tag
 keep btagCSVV2Loose
 keep btagCSVV2Medium
@@ -121,35 +77,9 @@ keep btagDeepBTight
 keep mjj
 keep MET_pt
 keep MET_phi
-# jet uncertainties
-keep MET_pt_nom
-keep MET_phi_nom
-keep MET_pt_jer
-keep MET_phi_jer
-keep MET_pt_jerUp
-keep MET_pt_jerDown
-keep MET_phi_jerUp
-keep MET_phi_jerDown
-keep MET_pt_jesTotalUp
-keep MET_pt_jesTotalDown
-keep MET_phi_jesTotalUp
-keep MET_phi_jesTotalDown
-keep MET_pt_unclustEnUp
-keep MET_pt_unclustEnDown
 
 keep PuppiMET_pt
 keep PuppiMET_phi
-
-keep nGenJet
-keep GenJet_*
-keep nGenPart
-keep GenPart_*
-keep nGenDressedLepton
-keep GenDressedLepton_*
-keep nLHEPdfWeight
-keep LHEPdfWeight
-keep nLHEScaleWeight
-keep LHEScaleWeight
 # https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2
 keep Flag_goodVertices
 keep Flag_globalSuperTightHalo2016Filter

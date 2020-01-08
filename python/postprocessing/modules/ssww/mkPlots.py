@@ -231,7 +231,7 @@ def ssww_region(datasets,sample,df):
     print '>>>>>>>>>>>>>>>>>>>>>>> %s in ssww region' % sample
     df1=df.Filter('nlepton==2 && njet>1','basic selection') \
         .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && mll>20','lepton selection') \
-        .Filter('(lepton_pdg_id[0]*lepton_pdg_id[1]!=11*11 || abs(mll-91.2)>15)','zveto selection')\
+        .Filter('(lepton_pdgId[0]*lepton_pdgId[1]!=11*11 || abs(mll-91.2)>15)','zveto selection')\
         .Filter('jet_pt[0]>30 && jet_pt[1]>30 && mjj>500 && abs(detajj)>2.5','jet selection') \
         .Filter('met>40','met selection')\
         .Filter('lepton_zep[0]<0.75 && lepton_zep[1]<0.75','zepp selection')\
@@ -243,7 +243,7 @@ def ssww_region(datasets,sample,df):
     allCutsReport.Print()
 
     if sample in datasets['data']:
-        df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')
+        df2=df1.Filter('lepton_pdgId[0]*lepton_pdgId[1]>0','same sign')
         df_base=df2.Filter("lepton_tight[0] && lepton_tight[1]")\
             .Define("weight","1.;")
         df_single_fake=df2.Filter("(lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0])")\
@@ -258,7 +258,7 @@ def ssww_region(datasets,sample,df):
         plot_variables(sample,'ssww_region',df_double_fake,'2fake')
 
     elif sample in datasets['mc']:
-        df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')
+        df2=df1.Filter('lepton_pdgId[0]*lepton_pdgId[1]>0','same sign')
         df_base=df2.Filter("lepton_real[0] && lepton_real[1] && lepton_tight[0] && lepton_tight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]*puWeight*PrefireWeight")
         df_single_fake=df2.Filter("lepton_real[0] && lepton_real[1] && ((lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0]))") \
             .Define('fake_weight',"-1*lepton_fake_weight[0]*lepton_fake_weight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]*fake_weight")
@@ -270,7 +270,7 @@ def ssww_region(datasets,sample,df):
         plot_variables(sample,'ssww_region',df_double_fake,'2fake')
 
     elif sample in datasets['vgamma']:
-        df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign')
+        df2=df1.Filter('lepton_pdgId[0]*lepton_pdgId[1]>0','same sign')
         df_base=df2.Filter("lepton_tight[0] && lepton_tight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]")
         df_single_fake=df2.Filter("((lepton_fakeable[0] && !lepton_tight[0] && lepton_tight[1]) || (lepton_fakeable[1] && !lepton_tight[1] && lepton_tight[0]))") \
             .Define('fake_weight',"-1*lepton_fake_weight[0]*lepton_fake_weight[1]").Define("weight","xsweight*lepton_sf[0]*lepton_sf[1]*fake_weight")
@@ -282,7 +282,7 @@ def ssww_region(datasets,sample,df):
         plot_variables(sample,'ssww_region',df_double_fake,'2fake')
 
     elif sample in datasets['chargeflip']:
-        df2=df1.Filter('lepton_pdg_id[0]*lepton_pdg_id[1]<0','opposite sign')
+        df2=df1.Filter('lepton_pdgId[0]*lepton_pdgId[1]<0','opposite sign')
         df_base=df2.Filter("lepton_real[0] && lepton_real[1] && lepton_tight[0] && lepton_tight[1]")\
             .Define('chargeflip_weight',"lepton_chargeflip_weight[0]*lepton_chargeflip_weight[1]").Define("weight","1.")
 
@@ -293,7 +293,7 @@ def ssww_region(datasets,sample,df):
 def top_region(datasets,sample,df):
     df1=df.Filter('nlepton==2 && njet>1','basic selection') \
         .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && mll>20','lepton selection') \
-        .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign') \
+        .Filter('lepton_pdgId[0]*lepton_pdgId[1]>0','same sign') \
         .Filter('jet_pt[0]>30 && jet_pt[1]>30 && mjj>500 && abs(detajj)>2.5','jet selection') \
         .Filter('met>40','met selection')
 
@@ -305,7 +305,7 @@ def top_region(datasets,sample,df):
 def lowmjj_region(datasets,sample,df):
     df1=df.Filter('nlepton==2 && njet>1','basic selection') \
         .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && mll>20','lepton selection') \
-        .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign') \
+        .Filter('lepton_pdgId[0]*lepton_pdgId[1]>0','same sign') \
         .Filter('jet_pt[0]>30 && jet_pt[1]>30 && mjj<500 && mjj>150 && abs(detajj)>2.5','jet selection') \
         .Filter('met>40','met selection')
 
@@ -317,7 +317,7 @@ def lowmjj_region(datasets,sample,df):
 def wz_region(datasets,sample,df):
     df1=df.Filter('nlepton==3 && njet>1','basic selection') \
         .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && lepton_pt[2]>10','lepton selection') \
-        .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign') \
+        .Filter('lepton_pdgId[0]*lepton_pdgId[1]>0','same sign') \
         .Filter('jet_pt[0]>30 && jet_pt[1]>30 && mjj>500 && abs(detajj)>2.5','jet selection') \
         .Filter('met>40','met selection')
 
@@ -329,7 +329,7 @@ def wz_region(datasets,sample,df):
 def zz_region(datasets,sample,df):
     df1=df.Filter('nlepton==4 && njet>1','basic selection') \
         .Filter('lepton_pt[0]>25 && lepton_pt[1]>20 && lepton_pt[2]>10','lepton selection') \
-        .Filter('lepton_pdg_id[0]*lepton_pdg_id[1]>0','same sign') \
+        .Filter('lepton_pdgId[0]*lepton_pdgId[1]>0','same sign') \
         .Filter('jet_pt[0]>30 && jet_pt[1]>30 && mjj>500 && abs(detajj)>2.5','jet selection') \
         .Filter('met>40','met selection')
 

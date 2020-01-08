@@ -66,7 +66,7 @@ class sswwProducer(Module):
         self.out.branch("n_tight_leptons", "I")
         self.out.branch("n_fakeable_leptons", "I")
         self.out.branch("lepton_idx", "I", lenVar="nlepton")
-        self.out.branch("lepton_pdg_id", "I", lenVar="nlepton")
+        self.out.branch("lepton_pdgId", "I", lenVar="nlepton")
         self.out.branch("lepton_tight", "B", lenVar="nlepton")
         self.out.branch("lepton_fakeable", "B", lenVar="nlepton")
         self.out.branch("lepton_pt", "F", lenVar="nlepton")
@@ -109,10 +109,6 @@ class sswwProducer(Module):
         self.out.branch("btagDeepBTight", "B")
 
         self.out.branch("mjj", "F")
-        self.out.branch("met", "F")
-        self.out.branch("met_phi", "F")
-        self.out.branch("puppimet", "F")
-        self.out.branch("puppimet_phi", "F")
 
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         pass
@@ -456,7 +452,7 @@ class sswwProducer(Module):
         #isdirectprompttaudecayproduct_mask = (1 << 5)  # isDirectPromptTauDecayProduct
 
         lepton_idx = []
-        lepton_pdg_id = []
+        lepton_pdgId = []
         lepton_tight = []
         lepton_fakeable = []
         lepton_pt = []
@@ -495,7 +491,7 @@ class sswwProducer(Module):
                 lepton_softmu.append(False)
                 lepton_mishits.append(leptons[loose_leptons[i]][0].lostHits)
 
-            lepton_pdg_id.append(leptons[loose_leptons[i]][0].pdgId)
+            lepton_pdgId.append(leptons[loose_leptons[i]][0].pdgId)
             lepton_tight.append(is_tight[i])
             lepton_fakeable.append(is_fakeable[i])
             lepton_pt.append(leptons[loose_leptons[i]][0].pt)
@@ -602,7 +598,7 @@ class sswwProducer(Module):
         self.out.fillBranch("n_tight_leptons", n_tight_leptons)
         self.out.fillBranch("n_fakeable_leptons", n_fakeable_leptons)
         self.out.fillBranch("lepton_idx", lepton_idx)
-        self.out.fillBranch("lepton_pdg_id", lepton_pdg_id)
+        self.out.fillBranch("lepton_pdgId", lepton_pdgId)
         self.out.fillBranch("lepton_tight", lepton_tight)
         self.out.fillBranch("lepton_fakeable", lepton_fakeable)
         self.out.fillBranch("lepton_pt", lepton_pt)
@@ -669,11 +665,6 @@ class sswwProducer(Module):
         self.out.fillBranch("btagDeepBTight", btagDeepBTight)
 
         self.out.fillBranch("mjj", mjj)
-        self.out.fillBranch("met", event.MET_pt)
-        self.out.fillBranch("met_phi", event.MET_phi)
-        self.out.fillBranch("puppimet", event.PuppiMET_pt)
-        self.out.fillBranch("puppimet_phi", event.PuppiMET_phi)
-
         return True
 
 
