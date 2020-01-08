@@ -99,7 +99,7 @@ class sswwProducer(Module):
         self.out.branch("jet_btagDeepB", "F", lenVar="njet")
         self.out.branch("jet_hadronFlavour", "I", lenVar="njet")
         self.out.branch("jet_partonFlavour", "I", lenVar="njet")
-        self.out.branch("jet_rawFactor", "I", lenVar="njet")
+        self.out.branch("jet_rawFactor", "F", lenVar="njet")
         # b tag
         self.out.branch("btagCSVV2Loose", "B")
         self.out.branch("btagCSVV2Medium", "B")
