@@ -2,7 +2,7 @@
 import os, sys
 import subprocess
 
-from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties import *
+from PhysicsTools.NanoAODTools.postprocessing.modules.jme.jetmetUncertainties_ssww import *
 from PhysicsTools.NanoAODTools.postprocessing.modules.jme.fatJetUncertainties import *
 
 # JEC dict
