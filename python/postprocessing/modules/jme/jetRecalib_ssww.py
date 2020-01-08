@@ -14,7 +14,7 @@ class jetRecalib(Module):
         self.redoJEC = redoJEC
 
         if "AK4" in jetType : 
-            self.jetBranchName = "Jet"
+            self.jetBranchName = "jet"
         elif "AK8" in jetType :
             self.jetBranchName = "FatJet"
             self.subJetBranchName = "SubJet"
