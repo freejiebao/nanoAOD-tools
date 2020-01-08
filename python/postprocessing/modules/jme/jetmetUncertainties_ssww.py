@@ -166,10 +166,19 @@ class jetmetUncertaintiesProducer(Module):
         """process event, return True (go to next module) or False (fail, go to next event)"""
         jets      = Collection(event, self.jetBranchName )
         nJet      = event.njet
+        Jets      = Collection(event, 'Jet' )
         lowPtJets = Collection(event, "CorrT1METJet" ) if self.isV5NanoAOD else []
         muons     = Collection(event, "Muon" ) # to subtract out of the jets for proper type-1 MET corrections
         if not self.isData:
             genJets   = Collection(event, self.genJetBranchName )
+        # I use user defined collection jet, several value are needed from Jet collection
+        for jet in jets:
+            jet.rawFactor=Jets[jet.idx].rawFactor
+            jet.muonSubtrFactor=Jets[jet.idx].muonSubtrFactor
+            jet.muonIdx1=Jets[jet.idx].muonIdx1
+            jet.muonIdx2=Jets[jet.idx].muonIdx2
+            jet.neEmEF=Jets[jet.idx].neEmEF
+            jet.chEmEF=Jets[jet.idx].chEmEF
 
         # prepare the low pt jets (they don't have a rawFactor)
         for jet in lowPtJets:
