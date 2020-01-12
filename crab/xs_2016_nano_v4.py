@@ -48,7 +48,7 @@ XSDB["ZZZ"]      = {'xs': 0.01398, 'accuracy': 'un', 'kFactor': 1.0}
 XSDB["WZZ"]      = {'xs': 0.05565, 'accuracy': 'un', 'kFactor': 1.0}
 XSDB["WWZ"]      = {'xs': 0.1651, 'accuracy': 'un', 'kFactor': 1.0}
 XSDB["WWW"]      = {'xs': 0.2086, 'accuracy': 'un', 'kFactor': 1.0}
-XSDB["WmWmJJ"]      = {'xs': 0.007868, 'accuracy': 'NLO', 'kFactor': 1.0}
+XSDB["WmWmJJ_powheg"]      = {'xs': 0.007868, 'accuracy': 'NLO', 'kFactor': 1.0}
 XSDB["TTWJetsToLNu"]      = {'xs': 0.2001, 'accuracy': 'un', 'kFactor': 1.0}
 XSDB["TTWJetsToQQ"]      = {'xs': 0.405, 'accuracy': 'un', 'kFactor': 1.0}
 
