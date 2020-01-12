@@ -403,7 +403,7 @@ RVec<int> order_zz(rvec_i lepton_pdgId, rvec_f lepton_pt, rvec_f lepton_eta, rve
         }
     }
 
-    if (!(caseflag[0] || caseflag[1] || caseflag[3])) {
+    if (!(caseflag[0] || caseflag[1] || caseflag[2])) {
         return valid_order;
     }
 
