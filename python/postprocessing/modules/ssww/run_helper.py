@@ -237,7 +237,7 @@ if __name__ == '__main__':
                 elif args.poststep=='skim_l4':
                     print '>>>>> skim_l4'
                     df2 = df.Filter('nlepton==4','common cuts for four leptons') \
-                        .Filter("(MET_pt > 30 || MET_pt_nom>30 || MET_pt_jerUp>30 || MET_pt_jerDown>30 || MET_pt_jesTotalUp >30 || MET_pt_jesTotalDown >30)") \
+                        .Filter("(MET_ptr > 30 || MET_pt_nom>30 || MET_pt_jerUp>30 || MET_pt_jerDown>30 || MET_pt_jesTotalUp >30 || MET_pt_jesTotalDown >30)") \
                         .Define("valid_lepton_order","order_zz(lepton_pdgId,lepton_pt,lepton_eta,lepton_phi,lepton_mass)") \
                         .Define("mZ0","invariant_mass_zz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,0)") \
                         .Define("mZ1","invariant_mass_zz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,1)") \
@@ -254,7 +254,6 @@ if __name__ == '__main__':
                         .Define("mjj_jesTotalDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])") \
                         .Filter("(mjj > 400 || mjj_nom > 400 || mjj_jerUp > 400 || mjj_jerDown > 400 || mjj_jesTotalUp > 400 || mjj_jesTotalDown > 400)","common cuts for two jets") \
                         .Filter("abs(detajj)>2.4")
-
                         #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
                 else:
                     assert(0)
@@ -292,17 +291,97 @@ if __name__ == '__main__':
                         .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt") \
                         .Filter("jet_pt[0]>30","cut jet1_pt") \
                         .Filter("jet_pt[1]>30","cut jet2_pt")
+
                 elif args.poststep=='skim_l1':
                     print '>>>>> skim_l1'
                     df2 = df.Filter('nlepton==1','common cuts for one lepton')
                 elif args.poststep=='skim_l2':
-                    df2 = df.Filter("nlepton==2").Filter("MET_pt>30 && mll>20 && mjj>100","common cuts for two leptons")
+                    print '>>>>> skim_l2'
+                    branch_list=df.GetColumnNames()
+                    # trigger cut
+                    if 'MuonEG' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"MuonEG")  # type: str
+                    elif 'SingleMuon' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"SingleMuon")
+                    elif 'SingleElectron' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"SingleElectron")
+                    elif 'DoubleMuon' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"DoubleMuon")
+                    elif 'DoubleEG' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"DoubleEG")
+                    elif 'EGamma' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"EGamma")
+                    df1=df.Filter(trigger_cut,"trigger cut")
+                    df2 = df1.Filter("nlepton==2 && MET_pt > 30") \
+                        .Filter("lepton_pt[0]>25 || lepton_corrected_pt[0]>25 || lepton_correctedUp_pt[0]>25 || lepton_correctedDown_pt[0]>25","cut lep1_pt") \
+                        .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt")
+                elif args.poststep=='vbs_l2' and args.prestep=='skim_l2':
+                    print '>>>>> skim_l2 -> vbs'
+                    df2 = df.Filter("njet>1") \
+                        .Filter("jet_pt[0]>30 && jet_pt[1]>30 && mjj>500","vbs selections")
+                elif args.poststep=='lowmjj_l2' and args.prestep=='skim_l2':
+                    print '>>>>> skim_l2 -> lowmjj'
+                    df2 = df.Filter("njet>1") \
+                        .Filter("jet_pt[0]>30 && jet_pt[1]>30 && mjj > 100 && mjj < 500","low mjj selections")
+
                 elif args.poststep=='skim_l3':
-                    df2 = df.Filter('nlepton==3','common cuts for three leptons')
+                    print '>>>>> skim_l3'
+                    branch_list=df.GetColumnNames()
+                    # trigger cut
+                    if 'MuonEG' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"MuonEG")  # type: str
+                    elif 'SingleMuon' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"SingleMuon")
+                    elif 'SingleElectron' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"SingleElectron")
+                    elif 'DoubleMuon' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"DoubleMuon")
+                    elif 'DoubleEG' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"DoubleEG")
+                    elif 'EGamma' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"EGamma")
+                    df1=df.Filter(trigger_cut,"trigger cut")
+                    df2 = df1.Filter('nlepton==3 && MET_pt > 30','common cuts for three leptons') \
+                        .Define("valid_lepton_order","order_wz(lepton_pdgId,lepton_pt,lepton_eta,lepton_phi,lepton_mass)") \
+                        .Filter("valid_lepton_order[0]>0","WZ selections") \
+                        .Define("ml1l2","invariant_mass_wz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,0)") \
+                        .Filter("abs(ml1l2-91.1876)<15","in Z pole") \
+                        .Define("ml1l3","invariant_mass_wz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,1)") \
+                        .Define("ml2l3","invariant_mass_wz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,2)") \
+                        .Define("mlll","invariant_mass_wz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,3)")
+                elif args.poststep=='vbs_l3' and args.prestep=='skim_l3':
+                    print '>>>>> skim_l3 -> vbs'
+                    df2 = df.Filter("njet>1") \
+                        .Filter("jet_pt[0]>30 && jet_pt[1]>30 && mjj > 500 && abs(detajj)>2.5","vbs selections")
+
                     #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
                 elif args.poststep=='skim_l4':
-                    df2 = df.Filter('nlepton==4','common cuts for four leptons')
-                    #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
+                    print '>>>>> skim_l4'
+                    branch_list=df.GetColumnNames()
+                    # trigger cut
+                    if 'MuonEG' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"MuonEG")  # type: str
+                    elif 'SingleMuon' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"SingleMuon")
+                    elif 'SingleElectron' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"SingleElectron")
+                    elif 'DoubleMuon' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"DoubleMuon")
+                    elif 'DoubleEG' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"DoubleEG")
+                    elif 'EGamma' in idata:
+                        trigger_cut=SAMPLE.trigger_maker(args.year,branch_list,"EGamma")
+                    df1=df.Filter(trigger_cut,"trigger cut")
+                    df2 = df1.Filter('nlepton==4 && MET_pt> 30','common cuts for four leptons') \
+                        .Define("valid_lepton_order","order_zz(lepton_pdgId,lepton_pt,lepton_eta,lepton_phi,lepton_mass)") \
+                        .Define("mZ0","invariant_mass_zz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,0)") \
+                        .Define("mZ1","invariant_mass_zz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,1)") \
+                        .Define("mllll","invariant_mass_zz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,2)")
+                elif args.poststep=='vbs_l4' and args.prestep=='skim_l4':
+                    print '>>>>> skim_l4 -> vbs'
+                    df2 = df.Filter("njet>1") \
+                        .Filter("jet_pt[0]>30 && jet_pt[1]>30","jet cut") \
+                        .Filter("mjj > 400 && abs(detajj)>2.4","vbs cuts")
                 else:
                     assert(0)
 
