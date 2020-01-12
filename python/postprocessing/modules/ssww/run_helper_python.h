@@ -306,7 +306,7 @@ RVec<int> order_wz(rvec_i lepton_pdgId, rvec_f lepton_pt, rvec_f lepton_eta, rve
         }
     }
     // mlll cut
-    if((parts[0] + parts[1]+parts[2]).M()<=100){
+    if ((parts[0] + parts[1] + parts[2]).M() <= 100) {
         return valid_order;
     }
 
@@ -379,7 +379,7 @@ RVec<int> order_zz(rvec_i lepton_pdgId, rvec_f lepton_pt, rvec_f lepton_eta, rve
     int             Zb_lep1[]          = {2, 1, 1};
     int             Zb_lep2[]          = {3, 3, 2};
     RVec<RVec<int>> _order{_order1, _order2, _order3};
-    bool case[] = {false, false, false};
+    bool            caseflag[] = {false, false, false};
 
     int idx = 0;
     // case1: p1 pair with p2
@@ -388,40 +388,42 @@ RVec<int> order_zz(rvec_i lepton_pdgId, rvec_f lepton_pt, rvec_f lepton_eta, rve
         Zb_mass[i] = (parts[Zb_lep1[i]] + parts[Zb_lep2[i]]).M();
         if ((lepton_pdgId[Za_lep1[i]] + lepton_pdgId[Za_lep2[i]] == 0) && (lepton_pdgId[Zb_lep1[i]] + lepton_pdgId[Zb_lep2[i]] == 0) && Za_mass[i] > 60 && Za_mass[i] < 120 && Zb_mass[i] > 60 && Zb_mass[i] < 120) {  //Z candidates, both are on shell
             if (lepton_pt[Za_lep1[i]] > 20 && lepton_pt[Za_lep2[i]] > 10 && lepton_pt[Zb_lep1[i]] > 20 && lepton_pt[Zb_lep2[i]] > 10) {                                                                                //lepton pt
-                case[i]=true;
+                caseflag[i] = true;
                 if (abs(Za_mass[i] - 91.1876) < abs(Zb_mass[i] - 91.1876)) {
                     Z2_scalar_pt_sum[i] = (lepton_pt[Zb_lep1[i]] + lepton_pt[Zb_lep2[i]]);
                     delta_Zmass_min[i]  = abs(Za_mass[i] - 91.1876);
-                    _order[i]           = {1, Za_lep1[i], Za_lep2[i],Zb_lep1[i], Zb_lep2[i]};
-                }else{
+                    _order[i]           = {1, Za_lep1[i], Za_lep2[i], Zb_lep1[i], Zb_lep2[i]};
+                }
+                else {
                     Z2_scalar_pt_sum[i] = (lepton_pt[Za_lep1[i]] + lepton_pt[Za_lep2[i]]);
                     delta_Zmass_min[i]  = abs(Zb_mass[i] - 91.1876);
-                    _order[i]           = {1, Zb_lep1[i], Zb_lep2[i],Za_lep1[i], Za_lep2[i]};
+                    _order[i]           = {1, Zb_lep1[i], Zb_lep2[i], Za_lep1[i], Za_lep2[i]};
                 }
             }
         }
     }
 
-    if (!(case[0] || case[1] ||case[3])){
+    if (!(caseflag[0] || caseflag[1] || caseflag[3])) {
         return valid_order;
     }
 
-    int who_win=0;
-    float winner_delta_Zmass_min=9999;
-    float winner_sum_pt=-9999;
-    for(int i=0; i<3;i++){
-        if(!case[i]){
+    int   who_win                = 0;
+    float winner_delta_Zmass_min = 9999;
+    float winner_sum_pt          = -9999;
+    for (int i = 0; i < 3; i++) {
+        if (!caseflag[i]) {
             continue;
         }
-        if(winner_delta_Zmass_min>delta_Zmass_min[i]){
-            who_win=i;
-            winner_delta_Zmass_min=delta_Zmass_min[i];
-            winner_sum_pt=Z2_scalar_pt_sum[i];
-        }else(abs(winner_delta_Zmass_min-delta_Zmass_min[i])<0.000001){
-            if(winner_sum_pt<Z2_scalar_pt_sum[i]){
-                who_win=i;
-                winner_delta_Zmass_min=delta_Zmass_min[i];
-                winner_sum_pt=Z2_scalar_pt_sum[i];
+        if (winner_delta_Zmass_min > delta_Zmass_min[i]) {
+            who_win                = i;
+            winner_delta_Zmass_min = delta_Zmass_min[i];
+            winner_sum_pt          = Z2_scalar_pt_sum[i];
+        }
+        else if (abs(winner_delta_Zmass_min - delta_Zmass_min[i]) < 0.000001) {
+            if (winner_sum_pt < Z2_scalar_pt_sum[i]) {
+                who_win                = i;
+                winner_delta_Zmass_min = delta_Zmass_min[i];
+                winner_sum_pt          = Z2_scalar_pt_sum[i];
             }
         }
     }
@@ -502,31 +504,31 @@ RVec<int> order_zz(rvec_i lepton_pdgId, rvec_f lepton_pt, rvec_f lepton_eta, rve
 float invariant_mass_wz(rvec_i lepton_order, rvec_f lepton_pt, rvec_f lepton_eta, rvec_f lepton_phi, rvec_f lepton_mass, int type) {
     float invariant_mass = -9999;
     switch (type) {
-    case 0:
-        // l1 l2
+    case 0: {  // l1 l2
         ROOT::Math::PtEtaPhiMVector p1(lepton_pt[lepton_order[1]], lepton_eta[lepton_order[1]], lepton_phi[lepton_order[1]], lepton_mass[lepton_order[1]]);
         ROOT::Math::PtEtaPhiMVector p2(lepton_pt[lepton_order[2]], lepton_eta[lepton_order[2]], lepton_phi[lepton_order[2]], lepton_mass[lepton_order[2]]);
         invariant_mass = (p1 + p2).M();
         break;
-    case 1:
-        // l1 l3
+    }
+    case 1: {  // l1 l3
         ROOT::Math::PtEtaPhiMVector p1(lepton_pt[lepton_order[1]], lepton_eta[lepton_order[1]], lepton_phi[lepton_order[1]], lepton_mass[lepton_order[1]]);
         ROOT::Math::PtEtaPhiMVector p2(lepton_pt[lepton_order[3]], lepton_eta[lepton_order[3]], lepton_phi[lepton_order[3]], lepton_mass[lepton_order[3]]);
         invariant_mass = (p1 + p2).M();
         break;
-    case 2:
-        // l2 l3
+    }
+    case 2: {  // l2 l3
         ROOT::Math::PtEtaPhiMVector p1(lepton_pt[lepton_order[2]], lepton_eta[lepton_order[2]], lepton_phi[lepton_order[2]], lepton_mass[lepton_order[2]]);
         ROOT::Math::PtEtaPhiMVector p2(lepton_pt[lepton_order[3]], lepton_eta[lepton_order[3]], lepton_phi[lepton_order[3]], lepton_mass[lepton_order[3]]);
         invariant_mass = (p1 + p2).M();
         break;
-    case 3:
-        // l1 l2 l3
+    }
+    case 3: {  // l1 l2 l3
         ROOT::Math::PtEtaPhiMVector p1(lepton_pt[lepton_order[1]], lepton_eta[lepton_order[1]], lepton_phi[lepton_order[1]], lepton_mass[lepton_order[1]]);
         ROOT::Math::PtEtaPhiMVector p2(lepton_pt[lepton_order[2]], lepton_eta[lepton_order[2]], lepton_phi[lepton_order[2]], lepton_mass[lepton_order[2]]);
-        ROOT::Math::PtEtaPhiMVector p1(lepton_pt[lepton_order[3]], lepton_eta[lepton_order[3]], lepton_phi[lepton_order[3]], lepton_mass[lepton_order[3]]);
+        ROOT::Math::PtEtaPhiMVector p3(lepton_pt[lepton_order[3]], lepton_eta[lepton_order[3]], lepton_phi[lepton_order[3]], lepton_mass[lepton_order[3]]);
         invariant_mass = (p1 + p2 + p3).M();
         break;
+    }
     default:
         invariant_mass = -9999;
     }
@@ -536,26 +538,26 @@ float invariant_mass_wz(rvec_i lepton_order, rvec_f lepton_pt, rvec_f lepton_eta
 float invariant_mass_zz(rvec_i lepton_order, rvec_f lepton_pt, rvec_f lepton_eta, rvec_f lepton_phi, rvec_f lepton_mass, int type) {
     float invariant_mass = -9999;
     switch (type) {
-    case 0:
-        // l1 l2
+    case 0: {  // l1 l2
         ROOT::Math::PtEtaPhiMVector p1(lepton_pt[lepton_order[1]], lepton_eta[lepton_order[1]], lepton_phi[lepton_order[1]], lepton_mass[lepton_order[1]]);
         ROOT::Math::PtEtaPhiMVector p2(lepton_pt[lepton_order[2]], lepton_eta[lepton_order[2]], lepton_phi[lepton_order[2]], lepton_mass[lepton_order[2]]);
         invariant_mass = (p1 + p2).M();
         break;
-    case 1:
-        // l3 l4
+    }
+    case 1: {  // l3 l4
         ROOT::Math::PtEtaPhiMVector p1(lepton_pt[lepton_order[3]], lepton_eta[lepton_order[3]], lepton_phi[lepton_order[3]], lepton_mass[lepton_order[3]]);
         ROOT::Math::PtEtaPhiMVector p2(lepton_pt[lepton_order[4]], lepton_eta[lepton_order[4]], lepton_phi[lepton_order[4]], lepton_mass[lepton_order[4]]);
         invariant_mass = (p1 + p2).M();
         break;
-    case 2:
-        // l1 l2 l3 l4
+    }
+    case 2: {  // l1 l2 l3 l4
         ROOT::Math::PtEtaPhiMVector p1(lepton_pt[lepton_order[1]], lepton_eta[lepton_order[1]], lepton_phi[lepton_order[1]], lepton_mass[lepton_order[1]]);
         ROOT::Math::PtEtaPhiMVector p2(lepton_pt[lepton_order[2]], lepton_eta[lepton_order[2]], lepton_phi[lepton_order[2]], lepton_mass[lepton_order[2]]);
         ROOT::Math::PtEtaPhiMVector p3(lepton_pt[lepton_order[3]], lepton_eta[lepton_order[3]], lepton_phi[lepton_order[3]], lepton_mass[lepton_order[3]]);
         ROOT::Math::PtEtaPhiMVector p4(lepton_pt[lepton_order[4]], lepton_eta[lepton_order[4]], lepton_phi[lepton_order[4]], lepton_mass[lepton_order[4]]);
         invariant_mass = (p1 + p2 + p3 + p4).M();
         break;
+    }
     default:
         invariant_mass = -9999;
     }
