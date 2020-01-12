@@ -160,9 +160,10 @@ if __name__ == '__main__':
                 df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+args.prestep+'/'+samples[imc][i])
                 if args.poststep=='skim':
                     # lepton pt > 20, jet pt > 30
-                    df1 = df.Filter("nlepton>1 && njet>1") \
-                        .Filter("lepton_pt[0]>20 || lepton_corrected_pt[0]>20 || lepton_correctedUp_pt[0]>20 || lepton_correctedDown_pt[0]>20","cut lep1_pt") \
+                    df1 = df.Filter("nlepton>1") \
+                        .Filter("lepton_pt[0]>25 || lepton_corrected_pt[0]>25 || lepton_correctedUp_pt[0]>25 || lepton_correctedDown_pt[0]>25","cut lep1_pt") \
                         .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt") \
+                        .Filter("(met > 30 || MET_pt_nom>30 || MET_pt_jerUp>30 || MET_pt_jerDown>30 || MET_pt_jesTotalUp >30 || MET_pt_jesTotalDown >30)")\
                         .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
                         .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt")
                     # new variable for mjj w.r.t jes jer
@@ -180,15 +181,81 @@ if __name__ == '__main__':
                     df2 = df.Filter('nlepton==1','common cuts for one lepton')
                 elif args.poststep=='skim_l2':
                     print '>>>>> skim_l2'
-                    df2 = df.Filter("nlepton==2").Filter("(met > 30 || MET_pt_nom>30 || MET_pt_jerUp>30 || MET_pt_jerDown>30 || MET_pt_jesTotalUp >30 || MET_pt_jesTotalDown >30) && (mjj > 100 || mjj_nom > 100 || mjj_jerUp > 100 || mjj_jerDown > 100 || mjj_jesTotalUp > 100 || mjj_jesTotalDown > 100)","common cuts for two leptons")
+                    df2 = df.Filter("nlepton==2") \
+                        .Filter("lepton_pt[0]>25 || lepton_corrected_pt[0]>25 || lepton_correctedUp_pt[0]>25 || lepton_correctedDown_pt[0]>25","cut lep1_pt") \
+                        .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt") \
+                        .Filter("(met > 30 || MET_pt_nom>30 || MET_pt_jerUp>30 || MET_pt_jerDown>30 || MET_pt_jesTotalUp >30 || MET_pt_jesTotalDown >30)")
+                elif args.poststep=='vbs_l2' and args.prestep=='skim_l2':
+                    print '>>>>> skim_l2 -> vbs'
+                    df2 = df.Filter("njet>1") \
+                        .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
+                        .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt") \
+                        .Define("mjj_nom","calc_mjj(jet_pt_nom[0],jet_eta[0],jet_phi[0],jet_mass_nom[0],jet_pt_nom[1],jet_eta[1],jet_phi[1],jet_mass_nom[1])") \
+                        .Define("mjj_jerUp","calc_mjj(jet_pt_jerUp[0],jet_eta[0],jet_phi[0],jet_mass_jerUp[0],jet_pt_jerUp[1],jet_eta[1],jet_phi[1],jet_mass_jerUp[1])") \
+                        .Define("mjj_jerDown","calc_mjj(jet_pt_jerDown[0],jet_eta[0],jet_phi[0],jet_mass_jerDown[0],jet_pt_jerDown[1],jet_eta[1],jet_phi[1],jet_mass_jerDown[1])") \
+                        .Define("mjj_jesTotalUp","calc_mjj(jet_pt_jesTotalUp[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalUp[0],jet_pt_jesTotalUp[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalUp[1])") \
+                        .Define("mjj_jesTotalDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])") \
+                        .Filter("(mjj > 500 || mjj_nom > 500 || mjj_jerUp > 500 || mjj_jerDown > 500 || mjj_jesTotalUp > 500 || mjj_jesTotalDown > 500)","common cuts for two jets")
+                elif args.poststep=='lowmjj_l2' and args.prestep=='skim_l2':
+                    print '>>>>> skim_l2 -> lowmjj'
+                    df2 = df.Filter("njet>1") \
+                        .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
+                        .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt") \
+                        .Define("mjj_nom","calc_mjj(jet_pt_nom[0],jet_eta[0],jet_phi[0],jet_mass_nom[0],jet_pt_nom[1],jet_eta[1],jet_phi[1],jet_mass_nom[1])") \
+                        .Define("mjj_jerUp","calc_mjj(jet_pt_jerUp[0],jet_eta[0],jet_phi[0],jet_mass_jerUp[0],jet_pt_jerUp[1],jet_eta[1],jet_phi[1],jet_mass_jerUp[1])") \
+                        .Define("mjj_jerDown","calc_mjj(jet_pt_jerDown[0],jet_eta[0],jet_phi[0],jet_mass_jerDown[0],jet_pt_jerDown[1],jet_eta[1],jet_phi[1],jet_mass_jerDown[1])") \
+                        .Define("mjj_jesTotalUp","calc_mjj(jet_pt_jesTotalUp[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalUp[0],jet_pt_jesTotalUp[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalUp[1])") \
+                        .Define("mjj_jesTotalDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])") \
+                        .Filter("(mjj < 500 || mjj_nom < 500 || mjj_jerUp < 500 || mjj_jerDown < 500 || mjj_jesTotalUp < 500 || mjj_jesTotalDown < 500)","common cuts for two jets 1") \
+                        .Filter("(mjj > 100 || mjj_nom > 100 || mjj_jerUp > 100 || mjj_jerDown > 100 || mjj_jesTotalUp > 100 || mjj_jesTotalDown > 100)","common cuts for two jets 2")
+
                 elif args.poststep=='skim_l3':
                     print '>>>>> skim_l3'
-                    df2 = df.Filter('nlepton==3','common cuts for three leptons')
+                    df2 = df.Filter('nlepton==3','common cuts for three leptons') \
+                        .Filter("(met > 30 || MET_pt_nom>30 || MET_pt_jerUp>30 || MET_pt_jerDown>30 || MET_pt_jesTotalUp >30 || MET_pt_jesTotalDown >30)") \
+                        .Define("valid_lepton_order","order_wz(lepton_pdgId,lepton_pt,lepton_eta,lepton_phi,lepton_mass)") \
+                        .Filter("valid_lepton_order[0]>0","WZ selections") \
+                        .Define("ml1l2","invariant_mass_wz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,0)") \
+                        .Filter("abs(ml1l2-91.1876)<15","in Z pole") \
+                        .Define("ml1l3","invariant_mass_wz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,1)") \
+                        .Define("ml2l3","invariant_mass_wz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,2)") \
+                        .Define("mlll","invariant_mass_wz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,3)")
+                elif args.poststep=='vbs_l3' and args.prestep=='skim_l3':
+                    print '>>>>> skim_l3 -> vbs'
+                    df2 = df.Filter("njet>1") \
+                        .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
+                        .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt") \
+                        .Define("mjj_nom","calc_mjj(jet_pt_nom[0],jet_eta[0],jet_phi[0],jet_mass_nom[0],jet_pt_nom[1],jet_eta[1],jet_phi[1],jet_mass_nom[1])") \
+                        .Define("mjj_jerUp","calc_mjj(jet_pt_jerUp[0],jet_eta[0],jet_phi[0],jet_mass_jerUp[0],jet_pt_jerUp[1],jet_eta[1],jet_phi[1],jet_mass_jerUp[1])") \
+                        .Define("mjj_jerDown","calc_mjj(jet_pt_jerDown[0],jet_eta[0],jet_phi[0],jet_mass_jerDown[0],jet_pt_jerDown[1],jet_eta[1],jet_phi[1],jet_mass_jerDown[1])") \
+                        .Define("mjj_jesTotalUp","calc_mjj(jet_pt_jesTotalUp[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalUp[0],jet_pt_jesTotalUp[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalUp[1])") \
+                        .Define("mjj_jesTotalDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])") \
+                        .Filter("(mjj > 500 || mjj_nom > 500 || mjj_jerUp > 500 || mjj_jerDown > 500 || mjj_jesTotalUp > 500 || mjj_jesTotalDown > 500)","common cuts for two jets") \
+                        .Filter("abs(detajj)>2.5")
+
                     #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
                 elif args.poststep=='skim_l4':
                     print '>>>>> skim_l4'
-                    df2 = df.Filter('nlepton==4','common cuts for four leptons')
-                    #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
+                    df2 = df.Filter('nlepton==4','common cuts for four leptons') \
+                        .Filter("(met > 30 || MET_pt_nom>30 || MET_pt_jerUp>30 || MET_pt_jerDown>30 || MET_pt_jesTotalUp >30 || MET_pt_jesTotalDown >30)") \
+                        .Define("valid_lepton_order","order_zz(lepton_pdgId,lepton_pt,lepton_eta,lepton_phi,lepton_mass)") \
+                        .Define("mZ0","invariant_mass_zz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,0)") \
+                        .Define("mZ1","invariant_mass_zz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,1)") \
+                        .Define("mllll","invariant_mass_zz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,2)")
+                elif args.poststep=='vbs_l4' and args.prestep=='skim_l4':
+                    print '>>>>> skim_l4 -> vbs'
+                    df2 = df.Filter("njet>1") \
+                        .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
+                        .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt") \
+                        .Define("mjj_nom","calc_mjj(jet_pt_nom[0],jet_eta[0],jet_phi[0],jet_mass_nom[0],jet_pt_nom[1],jet_eta[1],jet_phi[1],jet_mass_nom[1])") \
+                        .Define("mjj_jerUp","calc_mjj(jet_pt_jerUp[0],jet_eta[0],jet_phi[0],jet_mass_jerUp[0],jet_pt_jerUp[1],jet_eta[1],jet_phi[1],jet_mass_jerUp[1])") \
+                        .Define("mjj_jerDown","calc_mjj(jet_pt_jerDown[0],jet_eta[0],jet_phi[0],jet_mass_jerDown[0],jet_pt_jerDown[1],jet_eta[1],jet_phi[1],jet_mass_jerDown[1])") \
+                        .Define("mjj_jesTotalUp","calc_mjj(jet_pt_jesTotalUp[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalUp[0],jet_pt_jesTotalUp[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalUp[1])") \
+                        .Define("mjj_jesTotalDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])") \
+                        .Filter("(mjj > 400 || mjj_nom > 400 || mjj_jerUp > 400 || mjj_jerDown > 400 || mjj_jesTotalUp > 400 || mjj_jesTotalDown > 400)","common cuts for two jets") \
+                        .Filter("abs(detajj)>2.4")
+
+                        #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
                 else:
                     assert(0)
                 if not os.path.exists(args.input+'/'+args.year+'/'+args.poststep):
