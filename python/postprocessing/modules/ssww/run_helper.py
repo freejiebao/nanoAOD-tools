@@ -61,7 +61,7 @@ if __name__ == '__main__':
                     os.mkdir(tmp_path)
                 print('>>>>>>>>>>>>>>>>>>>> xsweight {}'.format(samples[imc][i]))
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.prestep+'/'+samples[imc][i])
-                if not f.hasattr("Events"):
+                if not hasattr(f,"Events"):
                     print("==================== Cannot find tree with name Events in {}".format(f))
                     with open('no_events_'+ args.year + '.txt','a') as wirtefile:
                         wirtefile.write('{}\n'.format(f))
@@ -110,7 +110,7 @@ if __name__ == '__main__':
                     assert False
 
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.poststep+'/'+samples[imc][i])
-                if not f.hasattr("Events"):
+                if not hasattr(f,"Events"):
                     print("==================== Cannot find tree with name Events in {}".format(f))
                     with open('no_events_'+ args.year + '.txt','a') as wirtefile:
                         wirtefile.write('{}\n'.format(f))
@@ -143,7 +143,7 @@ if __name__ == '__main__':
                     assert False
 
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.poststep+'/'+samples[imc][i])
-                if not f.hasattr("Events"):
+                if not hasattr(f,"Events"):
                     print("==================== Cannot find tree with name Events in {}".format(f))
                     with open('no_events_'+ args.year + '.txt','a') as wirtefile:
                         wirtefile.write('{}\n'.format(f))
@@ -177,7 +177,7 @@ if __name__ == '__main__':
                 print('>>>>>>>>>>>>>>>>>>>> skim {}'.format(samples[imc][i]))
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.prestep+'/'+samples[imc][i])
                 df = ROOT.ROOT.RDataFrame("Events", f)
-                if not f.hasattr("Events"):
+                if not hasattr(f,"Events"):
                     print("==================== Cannot find tree with name Events in {}".format(f))
                     with open('no_events_'+ args.year + '.txt','a') as wirtefile:
                         wirtefile.write('{}\n'.format(f))
@@ -294,7 +294,7 @@ if __name__ == '__main__':
                 print('>>>>>>>>>>>>>>>>>>>> skim %s') % samples[idata][i]
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.prestep+'/'+samples[idata][i])
                 df = ROOT.ROOT.RDataFrame("Events",f)
-                if not f.hasattr("Events"):
+                if not hasattr(f,"Events"):
                     print("==================== Cannot find tree with name Events in {}".format(f))
                     with open('no_events_'+ args.year + '.txt','a') as wirtefile:
                         wirtefile.write('{}\n'.format(f))
@@ -427,7 +427,7 @@ if __name__ == '__main__':
                     assert False
 
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.poststep+'/'+samples[idata][i])
-                if not f.hasattr("Events"):
+                if not hasattr(f,"Events"):
                     print("==================== Cannot find tree with name Events in {}".format(f))
                     with open('no_events_'+ args.year + '.txt','a') as wirtefile:
                         wirtefile.write('{}\n'.format(f))
