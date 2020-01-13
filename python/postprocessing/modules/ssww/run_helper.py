@@ -2,6 +2,7 @@ import argparse
 import os
 import ROOT
 import SAMPLE
+import datetime
 
 parser = argparse.ArgumentParser(description='manual to this script')
 parser.add_argument('-y','--year', help='which year, default is 2016', default= '2016', choices=('2016','2017','2018'))
@@ -48,6 +49,9 @@ def remove_text(a, year):
 
 if __name__ == '__main__':
     samples, data_chain, mc_chain = SAMPLE.set_samples(args.year)
+    with open('no_events_'+ args.year + '.txt','a') as f:
+        f.write('date: {} \n'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M")))
+
     for imc in mc_chain:
         for i in range(0,len(samples[imc])):
             # xs weight must go the first, or the input name will change
@@ -55,12 +59,17 @@ if __name__ == '__main__':
                 tmp_path='/tmp/jixiao%s/' % args.year
                 if not os.path.exists(tmp_path):
                     os.mkdir(tmp_path)
-                print '>>>>>>>>>>>>>>>>>>>> xsweight %s' % samples[imc][i]
+                print('>>>>>>>>>>>>>>>>>>>> xsweight {}'.format(samples[imc][i]))
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.prestep+'/'+samples[imc][i])
+                if not f.hasattr("Events"):
+                    print("==================== Cannot find tree with name Events in {}".format(f))
+                    with open('no_events_'+ args.year + '.txt','a') as wirtefile:
+                        wirtefile.write('{}\n'.format(f))
+                    continue
                 df = ROOT.ROOT.RDataFrame("Events",f)
                 brach_list=df.GetColumnNames()
                 if ("xsweight" in brach_list):
-                    print "==================== Warning: xsweight already exist in %s, please check" %samples[imc][i]
+                    print("==================== Warning: xsweight already exist in {}, please check".format(samples[imc][i]))
                     continue
                 '''
                 if not os.path.exists('xs_' + args.year + '_nano_v4_v1.py'):
@@ -83,9 +92,9 @@ if __name__ == '__main__':
                     df1.Snapshot("Events",tmp_path+'/'+samples[imc][i],DropColumns(df1.GetColumnNames(),['gen_weight']))
                     f.Close()
                     os.system('mv ' +tmp_path+'/'+samples[imc][i]+' '+args.input+args.year+'/'+args.prestep)
-                    print '>>>>>>>>>>>>>>>>>>>> xs weight for %s: %s' % (samples[imc][i],weight)
+                    print('>>>>>>>>>>>>>>>>>>>> xs weight for {}: {}'.format(samples[imc][i],weight))
                 except:
-                    print("==================== Error: cannot find %s in XSDB") % samples[imc][i]
+                    print("==================== Error: cannot find {} in XSDB".format(samples[imc][i]))
                     f.Close()
                     assert False
                 '''
@@ -97,15 +106,21 @@ if __name__ == '__main__':
 
             if args.eff_sf:
                 if not os.path.exists(args.input+'/'+args.year+'/'+args.poststep):
-                    print "==================== Error: directory does not exist"
+                    print("==================== Error: directory does not exist: {}".format(args.input+'/'+args.year+'/'+args.poststep))
                     assert False
 
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.poststep+'/'+samples[imc][i])
+                if not f.hasattr("Events"):
+                    print("==================== Cannot find tree with name Events in {}".format(f))
+                    with open('no_events_'+ args.year + '.txt','a') as wirtefile:
+                        wirtefile.write('{}\n'.format(f))
+                    continue
                 df = ROOT.ROOT.RDataFrame("Events",f)
                 brach_list=df.GetColumnNames()
                 if ("lepton_sf" in brach_list) or ("lepton_sf_up" in brach_list) or ("lepton_sf_down" in brach_list):
-                    print "==================== Warning: lepton_sf already exist in %s, please check" %samples[imc][i]
+                    print("==================== Warning: lepton_sf already exist in {}, please check".format(samples[imc][i]))
                     continue
+                print(">>>>> eff sf: {}".format(samples[imc][i]))
                 df1=df.Define("lepton_sf","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"nom\")")\
                     .Define("lepton_sf_muon_id_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"muon_id_up\")")\
                     .Define("lepton_sf_muon_id_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"muon_id_down\")")\
@@ -115,9 +130,7 @@ if __name__ == '__main__':
                     .Define("lepton_sf_electron_id_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"electron_id_down\")") \
                     .Define("lepton_sf_electron_reco_up","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"electron_reco_up\")") \
                     .Define("lepton_sf_electron_reco_down","efficiency_scale_factor(lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"electron_reco_down\")")
-
                 #df1=df.Define("lepton_sf","efficiency_scale_factor(lepton_pt,lepton_eta,\""+args.year+"\",\"nom\")")
-
                 tmp_path='/tmp/jixiao%s/' % args.year
                 if not os.path.exists(tmp_path):
                     os.mkdir(tmp_path)
@@ -126,16 +139,21 @@ if __name__ == '__main__':
 
             if args.fake_weight:
                 if not os.path.exists(args.input+'/'+args.year+'/'+args.poststep):
-                    print "==================== Error: directory does not exist"
+                    print("==================== Error: directory does not exist: {}".format(args.input+'/'+args.year+'/'+args.poststep))
                     assert False
 
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.poststep+'/'+samples[imc][i])
+                if not f.hasattr("Events"):
+                    print("==================== Cannot find tree with name Events in {}".format(f))
+                    with open('no_events_'+ args.year + '.txt','a') as wirtefile:
+                        wirtefile.write('{}\n'.format(f))
+                    continue
                 df = ROOT.ROOT.RDataFrame("Events",f)
                 brach_list=df.GetColumnNames()
                 if ("lepton_fake_weight" in brach_list):
-                    print "==================== Warning: lepton_fake_weight already exist in %s, please check" %samples[imc][i]
+                    print("==================== Warning: lepton_fake_weight already exist in {}, please check".format(samples[imc][i]))
                     continue
-
+                print(">>>>> fake weight: {}".format(samples[imc][i]))
                 df1=df.Define("lepton_fake_weight","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"nominal\")") \
                     .Define("lepton_fake_weight_up","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"up\")")\
                     .Define("lepton_fake_weight_down","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"down\")")
@@ -148,7 +166,7 @@ if __name__ == '__main__':
 
             # theoretic uncertainties using nanoAOD framework
             if args.theory:
-                print '>>>>>>>>>>>>>>>>>>>> theoretic uncertainty for %s' % samples[imc][i]
+                print('>>>>>>>>>>>>>>>>>>>> theoretic uncertainty for {}'.format(samples[imc][i]))
                 run_command='python ../../../../scripts/nano_postproc.py '
                 run_command+=args.input+args.year+' '
                 run_command+=args.input+args.year+'/'+samples[imc][i]
@@ -156,8 +174,14 @@ if __name__ == '__main__':
                 os.system(run_command)
                 # python ../../../../scripts/nano_postproc.py . /afs/cern.ch/work/j/jixiao/nano/2016/CMSSW_10_2_13/src/PhysicsTools/NanoAODTools/2016_WZ_nanoAOD.root -I PhysicsTools.NanoAODTools.postprocessing.modules.ssww.helper_ssww helper_thoeretic -s _thoeretic
             if args.skim:
-                print '>>>>>>>>>>>>>>>>>>>> skim %s' % samples[imc][i]
-                df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+args.prestep+'/'+samples[imc][i])
+                print('>>>>>>>>>>>>>>>>>>>> skim {}'.format(samples[imc][i]))
+                f=ROOT.TFile.Open(args.input+args.year+'/'+args.prestep+'/'+samples[imc][i])
+                df = ROOT.ROOT.RDataFrame("Events", f)
+                if not f.hasattr("Events"):
+                    print("==================== Cannot find tree with name Events in {}".format(f))
+                    with open('no_events_'+ args.year + '.txt','a') as wirtefile:
+                        wirtefile.write('{}\n'.format(f))
+                    continue
                 if args.poststep=='skim':
                     # lepton pt > 20, jet pt > 30
                     df1 = df.Filter("nlepton>1") \
@@ -168,25 +192,25 @@ if __name__ == '__main__':
                         .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt")
                     # new variable for mjj w.r.t jes jer
                     df2 = df1.Define("mjj_nom","calc_mjj(jet_pt_nom[0],jet_eta[0],jet_phi[0],jet_mass_nom[0],jet_pt_nom[1],jet_eta[1],jet_phi[1],jet_mass_nom[1])") \
-                                .Define("mjj_jerUp","calc_mjj(jet_pt_jerUp[0],jet_eta[0],jet_phi[0],jet_mass_jerUp[0],jet_pt_jerUp[1],jet_eta[1],jet_phi[1],jet_mass_jerUp[1])") \
-                                .Define("mjj_jerDown","calc_mjj(jet_pt_jerDown[0],jet_eta[0],jet_phi[0],jet_mass_jerDown[0],jet_pt_jerDown[1],jet_eta[1],jet_phi[1],jet_mass_jerDown[1])") \
-                                .Define("mjj_jesTotalUp","calc_mjj(jet_pt_jesTotalUp[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalUp[0],jet_pt_jesTotalUp[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalUp[1])") \
-                                .Define("mjj_jesTotalDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])")
-                                #.Define("mll_corrected","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])") \
-                                #.Define("mll_correctedUp","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])") \
-                                #.Define("mll_correctedDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])")
+                        .Define("mjj_jerUp","calc_mjj(jet_pt_jerUp[0],jet_eta[0],jet_phi[0],jet_mass_jerUp[0],jet_pt_jerUp[1],jet_eta[1],jet_phi[1],jet_mass_jerUp[1])") \
+                        .Define("mjj_jerDown","calc_mjj(jet_pt_jerDown[0],jet_eta[0],jet_phi[0],jet_mass_jerDown[0],jet_pt_jerDown[1],jet_eta[1],jet_phi[1],jet_mass_jerDown[1])") \
+                        .Define("mjj_jesTotalUp","calc_mjj(jet_pt_jesTotalUp[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalUp[0],jet_pt_jesTotalUp[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalUp[1])") \
+                        .Define("mjj_jesTotalDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])")
+                        #.Define("mll_corrected","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])") \
+                        #.Define("mll_correctedUp","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])") \
+                        #.Define("mll_correctedDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])")
 
                 elif args.poststep=='skim_l1':
-                    print '>>>>> skim_l1'
+                    print('>>>>> skim_l1')
                     df2 = df.Filter('nlepton==1','common cuts for one lepton')
                 elif args.poststep=='skim_l2':
-                    print '>>>>> skim_l2'
+                    print('>>>>> skim_l2')
                     df2 = df.Filter("nlepton==2") \
                         .Filter("lepton_pt[0]>25 || lepton_corrected_pt[0]>25 || lepton_correctedUp_pt[0]>25 || lepton_correctedDown_pt[0]>25","cut lep1_pt") \
                         .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt") \
                         .Filter("(MET_pt > 30 || MET_pt_nom>30 || MET_pt_jerUp>30 || MET_pt_jerDown>30 || MET_pt_jesTotalUp >30 || MET_pt_jesTotalDown >30)")
                 elif args.poststep=='vbs_l2' and args.prestep=='skim_l2':
-                    print '>>>>> skim_l2 -> vbs'
+                    print('>>>>> skim_l2 -> vbs')
                     df2 = df.Filter("njet>1") \
                         .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
                         .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt") \
@@ -197,7 +221,7 @@ if __name__ == '__main__':
                         .Define("mjj_jesTotalDown","calc_mjj(jet_pt_jesTotalDown[0],jet_eta[0],jet_phi[0],jet_mass_jesTotalDown[0],jet_pt_jesTotalDown[1],jet_eta[1],jet_phi[1],jet_mass_jesTotalDown[1])") \
                         .Filter("(mjj > 500 || mjj_nom > 500 || mjj_jerUp > 500 || mjj_jerDown > 500 || mjj_jesTotalUp > 500 || mjj_jesTotalDown > 500)","common cuts for two jets")
                 elif args.poststep=='lowmjj_l2' and args.prestep=='skim_l2':
-                    print '>>>>> skim_l2 -> lowmjj'
+                    print('>>>>> skim_l2 -> lowmjj')
                     df2 = df.Filter("njet>1") \
                         .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
                         .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt") \
@@ -210,7 +234,7 @@ if __name__ == '__main__':
                         .Filter("(mjj > 100 || mjj_nom > 100 || mjj_jerUp > 100 || mjj_jerDown > 100 || mjj_jesTotalUp > 100 || mjj_jesTotalDown > 100)","common cuts for two jets 2")
 
                 elif args.poststep=='skim_l3':
-                    print '>>>>> skim_l3'
+                    print('>>>>> skim_l3')
                     df2 = df.Filter('nlepton==3','common cuts for three leptons') \
                         .Filter("(MET_pt > 30 || MET_pt_nom>30 || MET_pt_jerUp>30 || MET_pt_jerDown>30 || MET_pt_jesTotalUp >30 || MET_pt_jesTotalDown >30)") \
                         .Define("valid_lepton_order","order_wz(lepton_pdgId,lepton_pt,lepton_eta,lepton_phi,lepton_mass)") \
@@ -221,7 +245,7 @@ if __name__ == '__main__':
                         .Define("ml2l3","invariant_mass_wz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,2)") \
                         .Define("mlll","invariant_mass_wz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,3)")
                 elif args.poststep=='vbs_l3' and args.prestep=='skim_l3':
-                    print '>>>>> skim_l3 -> vbs'
+                    print('>>>>> skim_l3 -> vbs')
                     df2 = df.Filter("njet>1") \
                         .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
                         .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt") \
@@ -235,15 +259,15 @@ if __name__ == '__main__':
 
                     #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
                 elif args.poststep=='skim_l4':
-                    print '>>>>> skim_l4'
+                    print('>>>>> skim_l4')
                     df2 = df.Filter('nlepton==4','common cuts for four leptons') \
-                        .Filter("(MET_ptr > 30 || MET_pt_nom>30 || MET_pt_jerUp>30 || MET_pt_jerDown>30 || MET_pt_jesTotalUp >30 || MET_pt_jesTotalDown >30)") \
+                        .Filter("(MET_pt > 30 || MET_pt_nom>30 || MET_pt_jerUp>30 || MET_pt_jerDown>30 || MET_pt_jesTotalUp >30 || MET_pt_jesTotalDown >30)") \
                         .Define("valid_lepton_order","order_zz(lepton_pdgId,lepton_pt,lepton_eta,lepton_phi,lepton_mass)") \
                         .Define("mZ0","invariant_mass_zz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,0)") \
                         .Define("mZ1","invariant_mass_zz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,1)") \
                         .Define("mllll","invariant_mass_zz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,2)")
                 elif args.poststep=='vbs_l4' and args.prestep=='skim_l4':
-                    print '>>>>> skim_l4 -> vbs'
+                    print('>>>>> skim_l4 -> vbs')
                     df2 = df.Filter("njet>1") \
                         .Filter("jet_pt[0]>30 || jet_pt_nom[0]>30 || jet_pt_jerUp[0]>30 || jet_pt_jesTotalUp[0]>30 || jet_pt_jerDown[0]>30 || jet_pt_jesTotalDown[0]>30","cut jet1_pt") \
                         .Filter("jet_pt[1]>30 || jet_pt_nom[1]>30 || jet_pt_jerUp[1]>30 || jet_pt_jesTotalUp[1]>30 || jet_pt_jerDown[1]>30 || jet_pt_jesTotalDown[1]>30","cut jet2_pt") \
@@ -267,8 +291,14 @@ if __name__ == '__main__':
     for idata in data_chain:
         for i in range(0,len(samples[idata])):
             if args.skim:
-                print '>>>>>>>>>>>>>>>>>>>> skim %s' % samples[idata][i]
-                df = ROOT.ROOT.RDataFrame("Events", args.input+args.year+'/'+args.prestep+'/'+samples[idata][i])
+                print('>>>>>>>>>>>>>>>>>>>> skim %s') % samples[idata][i]
+                f=ROOT.TFile.Open(args.input+args.year+'/'+args.prestep+'/'+samples[idata][i])
+                df = ROOT.ROOT.RDataFrame("Events",f)
+                if not f.hasattr("Events"):
+                    print("==================== Cannot find tree with name Events in {}".format(f))
+                    with open('no_events_'+ args.year + '.txt','a') as wirtefile:
+                        wirtefile.write('{}\n'.format(f))
+                    continue
                 if args.poststep=='skim':
                     branch_list=df.GetColumnNames()
                     # trigger cut
@@ -293,10 +323,10 @@ if __name__ == '__main__':
                         .Filter("jet_pt[1]>30","cut jet2_pt")
 
                 elif args.poststep=='skim_l1':
-                    print '>>>>> skim_l1'
+                    print('>>>>> skim_l1')
                     df2 = df.Filter('nlepton==1','common cuts for one lepton')
                 elif args.poststep=='skim_l2':
-                    print '>>>>> skim_l2'
+                    print('>>>>> skim_l2')
                     branch_list=df.GetColumnNames()
                     # trigger cut
                     if 'MuonEG' in idata:
@@ -316,16 +346,16 @@ if __name__ == '__main__':
                         .Filter("lepton_pt[0]>25 || lepton_corrected_pt[0]>25 || lepton_correctedUp_pt[0]>25 || lepton_correctedDown_pt[0]>25","cut lep1_pt") \
                         .Filter("lepton_pt[1]>20 || lepton_corrected_pt[1]>20 || lepton_correctedUp_pt[1]>20 || lepton_correctedDown_pt[1]>20","cut lep2_pt")
                 elif args.poststep=='vbs_l2' and args.prestep=='skim_l2':
-                    print '>>>>> skim_l2 -> vbs'
+                    print('>>>>> skim_l2 -> vbs')
                     df2 = df.Filter("njet>1") \
                         .Filter("jet_pt[0]>30 && jet_pt[1]>30 && mjj>500","vbs selections")
                 elif args.poststep=='lowmjj_l2' and args.prestep=='skim_l2':
-                    print '>>>>> skim_l2 -> lowmjj'
+                    print('>>>>> skim_l2 -> lowmjj')
                     df2 = df.Filter("njet>1") \
                         .Filter("jet_pt[0]>30 && jet_pt[1]>30 && mjj > 100 && mjj < 500","low mjj selections")
 
                 elif args.poststep=='skim_l3':
-                    print '>>>>> skim_l3'
+                    print('>>>>> skim_l3')
                     branch_list=df.GetColumnNames()
                     # trigger cut
                     if 'MuonEG' in idata:
@@ -350,13 +380,13 @@ if __name__ == '__main__':
                         .Define("ml2l3","invariant_mass_wz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,2)") \
                         .Define("mlll","invariant_mass_wz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,3)")
                 elif args.poststep=='vbs_l3' and args.prestep=='skim_l3':
-                    print '>>>>> skim_l3 -> vbs'
+                    print('>>>>> skim_l3 -> vbs')
                     df2 = df.Filter("njet>1") \
                         .Filter("jet_pt[0]>30 && jet_pt[1]>30 && mjj > 500 && abs(detajj)>2.5","vbs selections")
 
                     #df2 = df1.Filter("lepton_pt[2]>10 || lepton_corrected_pt[2]>10 || lepton_correctedUp_pt[2]>10 || lepton_correctedDown_pt[2]>10","cut lep2_pt")
                 elif args.poststep=='skim_l4':
-                    print '>>>>> skim_l4'
+                    print('>>>>> skim_l4')
                     branch_list=df.GetColumnNames()
                     # trigger cut
                     if 'MuonEG' in idata:
@@ -378,7 +408,7 @@ if __name__ == '__main__':
                         .Define("mZ1","invariant_mass_zz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,1)") \
                         .Define("mllll","invariant_mass_zz(valid_lepton_order,lepton_pt,lepton_eta,lepton_phi,lepton_mass,2)")
                 elif args.poststep=='vbs_l4' and args.prestep=='skim_l4':
-                    print '>>>>> skim_l4 -> vbs'
+                    print('>>>>> skim_l4 -> vbs')
                     df2 = df.Filter("njet>1") \
                         .Filter("jet_pt[0]>30 && jet_pt[1]>30","jet cut") \
                         .Filter("mjj > 400 && abs(detajj)>2.4","vbs cuts")
@@ -393,16 +423,21 @@ if __name__ == '__main__':
 
             if args.fake_weight:
                 if not os.path.exists(args.input+'/'+args.year+'/'+args.poststep):
-                    print "==================== Error: directory does not exist"
+                    print("==================== Error: directory does not exist {}".format(args.input+'/'+args.year+'/'+args.poststep))
                     assert False
 
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.poststep+'/'+samples[idata][i])
+                if not f.hasattr("Events"):
+                    print("==================== Cannot find tree with name Events in {}".format(f))
+                    with open('no_events_'+ args.year + '.txt','a') as wirtefile:
+                        wirtefile.write('{}\n'.format(f))
+                    continue
                 df = ROOT.ROOT.RDataFrame("Events",f)
                 brach_list=df.GetColumnNames()
                 if ("lepton_fake_weight" in brach_list):
-                    print "==================== Warning: lepton_fake_weight already exist in %s, please check" %samples[idata][i]
+                    print("==================== Warning: lepton_fake_weight already exist in {}, please check".format(samples[idata][i]))
                     continue
-
+                print(">>>>> fake weight: {}".format(samples[idata][i]))
                 df1=df.Define("lepton_fake_weight","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"nominal\")") \
                     .Define("lepton_fake_weight_up","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"up\")") \
                     .Define("lepton_fake_weight_down","get_fake_lepton_weight(lepton_fakeable,lepton_tight,lepton_pt,lepton_eta,lepton_pdgId,\""+args.year+"\",\"down\")")
