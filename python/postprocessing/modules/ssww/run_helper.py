@@ -176,12 +176,12 @@ if __name__ == '__main__':
             if args.skim:
                 print('>>>>>>>>>>>>>>>>>>>> skim {}'.format(samples[imc][i]))
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.prestep+'/'+samples[imc][i])
-                df = ROOT.ROOT.RDataFrame("Events", f)
                 if not hasattr(f,"Events"):
                     print("==================== Cannot find tree with name Events in {}".format(f))
                     with open('no_events_'+ args.year + '.txt','a') as wirtefile:
                         wirtefile.write('{}\n'.format(f))
                     continue
+                df = ROOT.ROOT.RDataFrame("Events", f)
                 if args.poststep=='skim':
                     # lepton pt > 20, jet pt > 30
                     df1 = df.Filter("nlepton>1") \
@@ -293,12 +293,12 @@ if __name__ == '__main__':
             if args.skim:
                 print('>>>>>>>>>>>>>>>>>>>> skim %s') % samples[idata][i]
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.prestep+'/'+samples[idata][i])
-                df = ROOT.ROOT.RDataFrame("Events",f)
                 if not hasattr(f,"Events"):
                     print("==================== Cannot find tree with name Events in {}".format(f))
                     with open('no_events_'+ args.year + '.txt','a') as wirtefile:
                         wirtefile.write('{}\n'.format(f))
                     continue
+                df = ROOT.ROOT.RDataFrame("Events",f)
                 if args.poststep=='skim':
                     branch_list=df.GetColumnNames()
                     # trigger cut
