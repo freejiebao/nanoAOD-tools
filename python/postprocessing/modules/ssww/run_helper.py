@@ -108,7 +108,8 @@ if __name__ == '__main__':
                 if not os.path.exists(args.input+'/'+args.year+'/'+args.poststep):
                     print("==================== Error: directory does not exist: {}".format(args.input+'/'+args.year+'/'+args.poststep))
                     assert False
-
+                if not os.path.exists(args.input+args.year+'/'+args.poststep+'/'+samples[imc][i]):
+                    continue
                 f=ROOT.TFile.Open(args.input+args.year+'/'+args.poststep+'/'+samples[imc][i])
                 if not hasattr(f,"Events"):
                     print("==================== Cannot find tree with name Events in {}".format(f))
